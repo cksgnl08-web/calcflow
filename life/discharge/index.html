@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>군 전역일 계산기 - calcflow</title>
+<meta name="description" content="입대일과 군별을 고르면 전역일, 남은 일수, 복무율을 바로 계산해요. 육군·해병대 18개월, 해군 20개월, 공군 21개월 기준.">
+<link rel="canonical" href="https://calcflow.kr/life/discharge/">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/">calc<span>flow</span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">사진·글자 도구</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h1>군 전역일 계산기</h1>
+    <p class="lede">입대일과 군별만 고르면 전역일과 남은 일수, 지금까지의 복무율을 계산해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="row">
+        <div class="field">
+          <label for="enlist">입대일 (소집일)</label>
+          <input type="date" id="enlist">
+        </div>
+        <div class="field">
+          <label for="branch">군별</label>
+          <select id="branch">
+            <option value="18">육군 · 해병대 · 카투사 (18개월)</option>
+            <option value="20">해군 (20개월)</option>
+            <option value="21">공군 (21개월)</option>
+            <option value="21">사회복무요원 (21개월)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" id="calc-btn" type="button">전역일 계산하기</button>
+      <div id="error" class="error" hidden></div>
+      <div id="result" class="result" hidden>
+        <div>
+          <div class="headline">전역일</div>
+          <div class="big" id="out-date">—</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><span class="k">전역까지</span><span class="v" id="out-left">—</span></div>
+          <div class="stat"><span class="k">복무한 날</span><span class="v" id="out-done">—</span></div>
+          <div class="stat"><span class="k">총 복무일</span><span class="v" id="out-total">—</span></div>
+          <div class="stat"><span class="k">복무율</span><span class="v" id="out-rate">—</span></div>
+        </div>
+        <div class="track"><i id="out-bar"></i></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>지점</th><th>날짜</th></tr></thead>
+            <tbody id="out-milestones"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 광고 자리: 승인 후 애드센스 코드로 교체 -->
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>전역일은 이렇게 계산해요</h2>
+    <p>입대한 날이 복무 첫날이에요. 그래서 전역일은 <strong>입대일에서 복무 개월수만큼 지난 날의 하루 전날</strong>이 돼요.</p>
+    <p class="muted">예를 들어 2026년 3월 10일에 육군으로 입대하면, 18개월 뒤인 2027년 9월 10일의 하루 전인 <strong>2027년 9월 9일</strong>이 전역일이에요.</p>
+    <p>입대일이 말일이라 같은 날짜가 없는 달로 넘어가면, 그 달의 마지막 날을 기준으로 계산해요.</p>
+  </section>
+
+  <section>
+    <h2>군별 복무기간</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>복무기간</th></tr></thead>
+        <tbody>
+          <tr><td>육군 · 해병대 · 카투사</td><td class="num">18개월</td></tr>
+          <tr><td>해군</td><td class="num">20개월</td></tr>
+          <tr><td>공군</td><td class="num">21개월</td></tr>
+          <tr><td>사회복무요원</td><td class="num">21개월</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">2026년 9월 기준이에요. 복무기간은 제도가 바뀌면 달라질 수 있어요.</p>
+  </section>
+
+  <section>
+    <h2>계산 예시</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>입대일</th><th>군별</th><th>전역일</th></tr></thead>
+        <tbody>
+          <tr><td class="num">2026-03-10</td><td>육군 (18개월)</td><td class="num">2027-09-09</td></tr>
+          <tr><td class="num">2026-03-10</td><td>해군 (20개월)</td><td class="num">2027-11-09</td></tr>
+          <tr><td class="num">2026-03-10</td><td>공군 (21개월)</td><td class="num">2027-12-09</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <details>
+      <summary>계산한 전역일이 하루 차이 나요.</summary>
+      <p>입대한 날을 복무 첫날로 세느냐 아니냐의 차이예요. 입대일이 첫날이기 때문에 전역일은 개월수를 더한 날의 하루 전이 맞아요.</p>
+    </details>
+    <details>
+      <summary>입대일이 8월 31일인데 어떻게 계산되나요?</summary>
+      <p>개월수를 더한 달에 31일이 없으면 그 달의 마지막 날로 맞춘 뒤 하루를 빼서 계산해요.</p>
+    </details>
+    <details>
+      <summary>조기 전역이나 복무 연장도 반영되나요?</summary>
+      <p>아니요. 이 계산기는 정해진 복무기간만으로 계산해요. 개인 사정에 따른 전역일 변동은 소속 부대나 병무청 안내를 확인해 주세요.</p>
+    </details>
+    <details>
+      <summary>사회복무요원은 어떤 날짜를 넣나요?</summary>
+      <p>복무를 시작한 소집일을 입대일 칸에 넣으면 돼요.</p>
+    </details>
+  </section>
+
+  <section>
+    <h2>참고</h2>
+    <p class="source">출처: 병무청 복무기간 안내 · 기준일 2026년 9월</p>
+    <div class="notice">이 계산 결과는 참고용이에요. 실제 전역일은 소속 부대의 공식 안내를 따라요.</div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related">
+      <a href="/life/">날짜·생활 계산기 전체</a>
+      <a href="/">전체 계산기 보기</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var DAY = 86400000;
+
+  function addMonths(date, months){
+    var y = date.getFullYear(), m = date.getMonth(), d = date.getDate();
+    var target = new Date(y, m + months, 1);
+    var lastDay = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+    target.setDate(Math.min(d, lastDay));
+    return target;
+  }
+  function fmt(date){
+    var w = ['일','월','화','수','목','금','토'][date.getDay()];
+    return date.getFullYear() + '년 ' + (date.getMonth()+1) + '월 ' + date.getDate() + '일 (' + w + ')';
+  }
+  function today(){
+    var n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  }
+
+  function calculate(){
+    var value = $('enlist').value;
+    var months = parseInt($('branch').value, 10);
+    var err = $('error'), res = $('result');
+
+    if(!value){
+      err.textContent = '입대일을 선택해 주세요.';
+      err.hidden = false; res.hidden = true;
+      return;
+    }
+    var parts = value.split('-');
+    var start = new Date(+parts[0], +parts[1]-1, +parts[2]);
+    if(isNaN(start.getTime())){
+      err.textContent = '입대일을 다시 확인해 주세요.';
+      err.hidden = false; res.hidden = true;
+      return;
+    }
+    err.hidden = true;
+
+    var end = new Date(addMonths(start, months).getTime() - DAY);
+    var total = Math.round((end - start) / DAY) + 1;
+    var now = today();
+    var done = Math.round((now - start) / DAY) + 1;
+    if(done < 0) done = 0;
+    if(done > total) done = total;
+    var left = Math.round((end - now) / DAY);
+
+    $('out-date').textContent = fmt(end);
+    $('out-left').textContent = left > 0 ? ('D-' + left) : (left === 0 ? '오늘 전역' : '전역 완료');
+    $('out-done').textContent = done.toLocaleString() + '일';
+    $('out-total').textContent = total.toLocaleString() + '일';
+    var rate = Math.round(done / total * 1000) / 10;
+    $('out-rate').textContent = rate + '%';
+    $('out-bar').style.width = Math.min(rate, 100) + '%';
+
+    var rows = '';
+    [25, 50, 75].forEach(function(p){
+      var day = Math.round(total * p / 100);
+      var date = new Date(start.getTime() + (day - 1) * DAY);
+      rows += '<tr><td>' + p + '% 지점</td><td class="num">' + fmt(date) + '</td></tr>';
+    });
+    rows += '<tr><td>전역</td><td class="num">' + fmt(end) + '</td></tr>';
+    $('out-milestones').innerHTML = rows;
+
+    res.hidden = false;
+  }
+
+  $('calc-btn').addEventListener('click', calculate);
+  $('enlist').addEventListener('change', calculate);
+  $('branch').addEventListener('change', function(){ if($('enlist').value) calculate(); });
+})();
+</script>
+</body>
+</html>
