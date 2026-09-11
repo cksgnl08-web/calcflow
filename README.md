@@ -1,5 +1,7 @@
 # calcflow.kr
 
+배포: Cloudflare Pages (https://calcflow-2o7.pages.dev) · 도메인 연결 예정: calcflow.kr
+
 생활 계산기 모음 사이트. 빌드 과정이 없는 정적 HTML이라, 파일을 올리면 그대로 사이트가 됩니다.
 
 ## 폴더 구조
