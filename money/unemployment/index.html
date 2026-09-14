@@ -172,6 +172,30 @@ function calc(){
   $("res").hidden=false;
 }
 CF.linkFields(F);
+
+/* 퇴직금 계산기에서 넘어온 입사일·마지막 근무일로 고용보험 가입기간을 자동으로 맞춰요.
+   (주소에 insured 값이 직접 들어온 경우에는 그 값을 그대로 씁니다.) */
+(function(){
+  var q=new URLSearchParams(location.search);
+  if(q.get("insured")!==null) return;
+  var prof=(CF.getProfile&&CF.getProfile())||{};
+  var hire=q.get("hire")||prof.hire, leave=q.get("leave")||prof.leave;
+  if(!hire||!leave) return;
+  var a=new Date(hire), b=new Date(leave);
+  if(isNaN(a)||isNaN(b)||b<=a) return;
+  var yrs=(b-a)/(365.25*24*3600*1000);
+  var v = yrs>=10?"10" : yrs>=5?"5" : yrs>=3?"3" : yrs>=1?"1" : "0";
+  $("insured").value=v;
+  var note=document.getElementById("insured-note");
+  if(!note){
+    note=document.createElement("p");
+    note.className="hint";
+    note.id="insured-note";
+    $("insured").parentNode.appendChild(note);
+  }
+  note.textContent="퇴직금 계산기에 넣은 입사일·퇴사일(약 "+yrs.toFixed(1)+"년)로 자동 선택했어요. 실제 고용보험 가입기간이 다르면 직접 바꿔 주세요.";
+})();
+
 F.forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
 CF.renderSet("quit","unemployment",F);
 calc();
