@@ -6,28 +6,35 @@
 <title>페이지를 찾을 수 없어요 - calcflow</title>
 <meta name="description" content="요청한 페이지가 없어요.">
 <link rel="canonical" href="https://calcflow.kr/404.html">
+<meta property="og:title" content="페이지를 찾을 수 없어요 - calcflow">
+<meta property="og:description" content="요청한 페이지가 없어요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/404.html">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="/">calc<span>flow</span></a>
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
     <nav class="site-nav">
       <a href="/money/">돈·금융</a>
       <a href="/life/">날짜·생활</a>
       <a href="/health/">건강</a>
-      <a href="/tools/">사진·글자 도구</a>
+      <a href="/tools/">도구</a>
     </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
-  <section>
+  <section class="hero">
     <h1>페이지를 찾을 수 없어요</h1>
-    <p class="lede">주소가 바뀌었거나 아직 만들지 않은 페이지예요.</p>
-    <div class="related">
-      <a href="/">전체 계산기 보기</a>
-    </div>
+    <p>주소가 바뀌었거나 아직 만들지 않은 페이지예요.</p>
+    <div class="related"><a href="/">전체 계산기 보기</a></div>
   </section>
 
 </main>
@@ -35,13 +42,17 @@
 <footer class="site-footer">
   <div class="wrap">
     <nav>
+      <a href="/">전체 계산기</a>
       <a href="/about/">소개</a>
       <a href="/contact/">문의</a>
       <a href="/privacy/">개인정보처리방침</a>
       <a href="/terms/">이용약관</a>
     </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
     <p>&copy; 2026 calcflow.kr</p>
   </div>
 </footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
 </body>
 </html>

@@ -3,149 +3,375 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>군 전역일 계산기 - calcflow</title>
-<meta name="description" content="입대일과 군별을 고르면 전역일, 남은 일수, 복무율을 바로 계산해요. 육군·해병대 18개월, 해군 20개월, 공군 21개월 기준.">
+<title>군 전역일 계산기 - 실시간 복무율 트래커 | calcflow</title>
+<meta name="description" content="입대일을 넣으면 소수점 7자리 실시간 복무율, 전역 D-day, 진급 타임라인, 누적 봉급과 장병내일준비적금 만기액까지 한 번에 계산해요.">
 <link rel="canonical" href="https://calcflow.kr/life/discharge/">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css">
+<style>
+:root{
+  --bg:#090E12; --panel:#111A20; --panel-2:#16222A; --raise:#1B2A33;
+  --line:#223440; --ink:#E7F2F5; --muted:#8AA3AE; --dim:#5E7681;
+  --accent:#18E39B; --accent-2:#38BDF8; --warn:#FFB454; --danger:#FF7A6B;
+  --sans:var(--font-sans);
+  --mono:var(--font-num);
+  --r:14px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65;
+  background-image:linear-gradient(rgba(34,52,64,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(34,52,64,.35) 1px,transparent 1px);
+  background-size:52px 52px;background-position:center top;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin-inline:auto;padding-inline:16px}
+h1,h2,h3{margin:0;line-height:1.3;text-wrap:balance}
+p{margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* 헤더 */
+header.top{position:sticky;top:0;z-index:20;background:rgba(9,14,18,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.brand:hover{text-decoration:none}
+.mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(140deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#04221A;font-weight:700;font-family:var(--mono);font-size:15px}
+.brand b{font-size:17px;font-weight:700;letter-spacing:-.01em;display:block;line-height:1.15}
+.brand span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.top-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;border-radius:9px;padding:9px 14px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--dim)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#12C7A0);border-color:transparent;color:#04221A}
+.btn.primary:hover{filter:brightness(1.07)}
+
+main{padding-block:26px 64px;display:flex;flex-direction:column;gap:22px}
+
+/* 패널 공통 */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.panel-h{display:flex;align-items:center;gap:9px;margin-bottom:16px;flex-wrap:wrap}
+.panel-h h2{font-size:16px;font-weight:700}
+.panel-h .tag{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);background:rgba(24,227,155,.1);border:1px solid rgba(24,227,155,.25);border-radius:999px;padding:3px 10px}
+.ico{width:18px;height:18px;flex:none;color:var(--accent)}
+
+/* 입력 */
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px}
+select,input[type="date"],input[type="number"]{
+  font:inherit;font-size:15px;color:var(--ink);background:var(--panel-2);border:1px solid var(--line);
+  border-radius:10px;padding:12px 13px;width:100%;font-variant-numeric:tabular-nums;
+}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 19px) 21px,calc(100% - 13px) 21px;background-size:6px 6px;background-repeat:no-repeat}
+
+/* 티커 */
+.ticker{background:radial-gradient(120% 140% at 50% 0%,#123 0%,var(--panel) 55%);border:1px solid var(--line);border-radius:var(--r);padding:28px 20px 24px;text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center}
+.live{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--accent);border:1px solid rgba(24,227,155,.3);background:rgba(24,227,155,.07);border-radius:999px;padding:5px 13px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(24,227,155,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(24,227,155,0)}100%{box-shadow:0 0 0 0 rgba(24,227,155,0)}}
+.rate{font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;
+  font-size:clamp(38px,9vw,72px);letter-spacing:-.02em;
+  background:linear-gradient(180deg,#EFFFF9,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.rate .pct{font-size:.42em;color:var(--muted);-webkit-text-fill-color:var(--muted);margin-left:4px}
+.dday-pill{display:inline-flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px 15px;font-family:var(--mono);font-size:14px;color:var(--accent-2)}
+.dday-pill b{color:var(--ink);font-weight:600}
+.bar{width:100%;height:9px;border-radius:5px;background:var(--raise);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .4s ease}
+.stats{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px 12px;display:flex;flex-direction:column;gap:3px}
+.stat .v{font-family:var(--mono);font-size:clamp(17px,2.4vw,22px);font-weight:700;font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat.hi .v{color:var(--accent)}
+
+/* 응원 멘트 */
+.quote{display:flex;gap:12px;align-items:flex-start;background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:11px;padding:15px 16px;width:100%;text-align:left}
+.quote .q{flex:1;min-width:0}
+.quote .label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:4px}
+.quote p{font-size:14.5px}
+
+/* 2열 그리드 */
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;align-items:start}
+
+/* 진급 타임라인 */
+.next-rank{display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;margin-bottom:12px;flex-wrap:wrap}
+.next-rank .t{font-size:13.5px;color:var(--muted)}
+.next-rank .d{margin-left:auto;font-family:var(--mono);font-size:14px;color:var(--accent)}
+ul.timeline{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.rank{display:flex;align-items:center;gap:13px;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:13px 14px}
+.rank.now{border-color:rgba(24,227,155,.55);background:rgba(24,227,155,.06)}
+.rank.done{opacity:.62}
+.rank .badge{width:36px;height:36px;flex:none;border-radius:9px;background:var(--raise);display:grid;place-items:center;font-weight:700;font-size:14px;color:var(--muted)}
+.rank.now .badge{background:rgba(24,227,155,.16);color:var(--accent)}
+.rank .info{min-width:0}
+.rank .info b{display:block;font-size:14.5px}
+.rank .info span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.rank .state{margin-left:auto;font-size:12px;font-family:var(--mono);color:var(--accent);white-space:nowrap}
+
+/* 재미 데이터 */
+.funs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fun{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.fun .v{font-family:var(--mono);font-size:20px;font-weight:700}
+.fun .k{font-size:12px;color:var(--muted);line-height:1.45}
+.inline-field{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.inline-field label{font-size:13px;color:var(--muted);white-space:nowrap}
+.inline-field input{width:92px;padding:8px 10px;text-align:right}
+
+/* 금융 */
+.slider-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.slider-row .cur{margin-left:auto;font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent)}
+input[type="range"]{width:100%;accent-color:var(--accent);height:26px}
+.scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:16px}
+.money{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mo{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px}
+.mo .k{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+.mo .v{font-family:var(--mono);font-size:18px;font-weight:700}
+.mo .v.plus{color:var(--accent)}
+.total{margin-top:12px;background:linear-gradient(120deg,rgba(24,227,155,.12),rgba(56,189,248,.10));border:1px solid rgba(24,227,155,.3);border-radius:12px;padding:18px}
+.total .k{font-size:12.5px;color:var(--muted)}
+.total .v{font-family:var(--mono);font-size:clamp(24px,4.5vw,32px);font-weight:700;color:var(--accent)}
+
+/* 체크리스트 */
+.item{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;gap:13px;align-items:flex-start}
+.item+.item{margin-top:10px}
+.item .body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.item b{font-size:15px}
+.item p{font-size:13.5px;color:var(--muted)}
+.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.links a{font-size:12.5px;border:1px solid var(--line);background:var(--raise);border-radius:8px;padding:6px 11px;color:var(--ink)}
+.links a:hover{border-color:var(--accent);text-decoration:none}
+input[type="checkbox"]{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;margin:2px 0 0;border:1.5px solid var(--dim);border-radius:6px;background:var(--panel);cursor:pointer;display:grid;place-content:center}
+input[type="checkbox"]::after{content:"";width:10px;height:5.5px;border-left:2px solid #04221A;border-bottom:2px solid #04221A;transform:rotate(-45deg) translate(1px,-1px);opacity:0}
+input[type="checkbox"]:checked{background:var(--accent);border-color:var(--accent)}
+input[type="checkbox"]:checked::after{opacity:1}
+.item.checked b{text-decoration:line-through;color:var(--muted)}
+.musts{margin-top:14px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.22);border-radius:12px;padding:16px}
+.musts .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.must{display:flex;gap:10px;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px}
+.must.checked span{text-decoration:line-through;color:var(--muted)}
+
+/* 가이드/FAQ */
+.guide h3{font-size:14.5px;color:var(--accent-2);margin-bottom:6px;margin-top:18px}
+.guide h3:first-of-type{margin-top:0}
+.guide p{font-size:14px;color:var(--muted)}
+details{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+details+details{margin-top:9px}
+summary{cursor:pointer;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font-family:var(--mono);color:var(--muted)}
+details[open] summary::after{content:"−"}
+details p{margin-top:10px;font-size:14px;color:var(--muted)}
+.notice{background:rgba(255,180,84,.08);border:1px solid rgba(255,180,84,.28);color:#F5C888;border-radius:10px;padding:13px 15px;font-size:13.5px}
+.source{font-size:12.5px;color:var(--dim)}
+
+/* 토스트 */
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--raise);border:1px solid var(--accent);color:var(--ink);border-radius:10px;padding:12px 18px;font-size:14px;opacity:0;pointer-events:none;transition:.25s ease;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 세트 바 (다크) */
+.set-bar{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px;margin-bottom:4px}
+.set-bar .title{font-size:13px;font-weight:600;color:var(--muted)}
+.set-steps{display:flex;gap:8px;flex-wrap:wrap}
+.set-steps a{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel-2);border-radius:9px;padding:8px 12px;font-size:14px;color:var(--ink);flex:1;min-width:150px}
+.set-steps a:hover{border-color:var(--accent);text-decoration:none}
+.set-steps a[aria-current="page"]{border-color:var(--accent);background:rgba(24,227,155,.09);color:var(--accent);font-weight:600}
+.set-steps .n{width:20px;height:20px;flex:none;border-radius:50%;background:var(--raise);color:var(--muted);font-size:12px;font-weight:700;display:grid;place-items:center}
+.set-steps a[aria-current="page"] .n{background:var(--accent);color:#04221A}
+.set-next{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:rgba(24,227,155,.07);border:1px solid rgba(24,227,155,.28);border-radius:var(--r);padding:16px 18px}
+.set-next .t{flex:1;min-width:220px;font-size:14px;color:var(--muted)}
+.set-next .t b{display:block;font-size:15px;color:var(--ink);margin-bottom:2px}
+.carry{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--accent);background:rgba(24,227,155,.09);border:1px solid rgba(24,227,155,.28);border-radius:999px;padding:5px 12px}
+.share-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
+
+footer.site{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--muted);font-size:13.5px}
+footer.site .wrap{display:flex;flex-direction:column;gap:9px}
+footer.site nav{display:flex;gap:14px;flex-wrap:wrap}
+footer.site a{color:var(--muted)}
+
+@media (max-width:860px){
+  .cols{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .money{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .controls{grid-template-columns:1fr}
+  .funs{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .dot{animation:none}
+  .bar i{transition:none}
+}
+</style>
 </head>
 <body>
-<header class="site-header">
+
+<header class="top">
   <div class="wrap">
-    <a class="logo" href="/">calc<span>flow</span></a>
-    <nav class="site-nav">
-      <a href="/money/">돈·금융</a>
-      <a href="/life/">날짜·생활</a>
-      <a href="/health/">건강</a>
-      <a href="/tools/">사진·글자 도구</a>
-    </nav>
+    <a class="brand" href="/">
+      <span class="mark">CF</span>
+      <span><b>전역일 트래커</b><span>calcflow · military d-day</span></span>
+    </a>
+    <div class="top-actions">
+      <button class="btn" type="button" id="reset-btn">초기화</button>
+      <button class="btn primary" type="button" id="share-btn">📸 전역 카드 저장</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
-  <section>
-    <h1>군 전역일 계산기</h1>
-    <p class="lede">입대일과 군별만 고르면 전역일과 남은 일수, 지금까지의 복무율을 계산해요.</p>
-  </section>
 
-  <section>
-    <div class="calc">
-      <div class="row">
-        <div class="field">
-          <label for="enlist">입대일 (소집일)</label>
-          <input type="date" id="enlist">
-        </div>
-        <div class="field">
-          <label for="branch">군별</label>
-          <select id="branch">
-            <option value="18">육군 · 해병대 · 카투사 (18개월)</option>
-            <option value="20">해군 (20개월)</option>
-            <option value="21">공군 (21개월)</option>
-            <option value="21">사회복무요원 (21개월)</option>
-          </select>
-        </div>
+  <div id="set-bar"></div>
+
+  <section class="panel">
+    <h1 style="font-size:20px;margin-bottom:4px">🪖 군 전역일 계산기</h1>
+    <p class="muted small" style="margin-bottom:16px">입대일과 군종을 넣으면 실시간 복무율, 진급 일정, 봉급과 적금까지 한 번에 계산해요. 입력값은 이 브라우저에만 저장돼요.</p>
+    <div class="controls">
+      <div class="field">
+        <label for="branch">🎖️ 군종 선택</label>
+        <select id="branch">
+          <option value="18">육군 (18개월)</option>
+          <option value="18">해병대 (18개월)</option>
+          <option value="18">카투사 (18개월)</option>
+          <option value="20">해군 (20개월)</option>
+          <option value="21">공군 (21개월)</option>
+          <option value="21">사회복무요원 (21개월)</option>
+        </select>
       </div>
-      <button class="btn" id="calc-btn" type="button">전역일 계산하기</button>
-      <div id="error" class="error" hidden></div>
-      <div id="result" class="result" hidden>
-        <div>
-          <div class="headline">전역일</div>
-          <div class="big" id="out-date">—</div>
-        </div>
-        <div class="stats">
-          <div class="stat"><span class="k">전역까지</span><span class="v" id="out-left">—</span></div>
-          <div class="stat"><span class="k">복무한 날</span><span class="v" id="out-done">—</span></div>
-          <div class="stat"><span class="k">총 복무일</span><span class="v" id="out-total">—</span></div>
-          <div class="stat"><span class="k">복무율</span><span class="v" id="out-rate">—</span></div>
-        </div>
-        <div class="track"><i id="out-bar"></i></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>지점</th><th>날짜</th></tr></thead>
-            <tbody id="out-milestones"></tbody>
-          </table>
-        </div>
+      <div class="field">
+        <label for="enlist">📅 입대일 (소집일)</label>
+        <input type="date" id="enlist">
+      </div>
+      <div class="share-row">
+        <button class="btn" type="button" id="share-link">🔗 결과 링크 복사</button>
+        <span class="carry" id="carry-badge" hidden>이전 계산기에서 입력값을 가져왔어요</span>
       </div>
     </div>
   </section>
 
-  <!-- 광고 자리: 승인 후 애드센스 코드로 교체 -->
-  <div class="ad-slot">광고 자리</div>
-
-  <section>
-    <h2>전역일은 이렇게 계산해요</h2>
-    <p>입대한 날이 복무 첫날이에요. 그래서 전역일은 <strong>입대일에서 복무 개월수만큼 지난 날의 하루 전날</strong>이 돼요.</p>
-    <p class="muted">예를 들어 2026년 3월 10일에 육군으로 입대하면, 18개월 뒤인 2027년 9월 10일의 하루 전인 <strong>2027년 9월 9일</strong>이 전역일이에요.</p>
-    <p>입대일이 말일이라 같은 날짜가 없는 달로 넘어가면, 그 달의 마지막 날을 기준으로 계산해요.</p>
-  </section>
-
-  <section>
-    <h2>군별 복무기간</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>구분</th><th>복무기간</th></tr></thead>
-        <tbody>
-          <tr><td>육군 · 해병대 · 카투사</td><td class="num">18개월</td></tr>
-          <tr><td>해군</td><td class="num">20개월</td></tr>
-          <tr><td>공군</td><td class="num">21개월</td></tr>
-          <tr><td>사회복무요원</td><td class="num">21개월</td></tr>
-        </tbody>
-      </table>
+  <section class="ticker" id="ticker">
+    <span class="live"><i class="dot"></i>REAL-TIME LIVE TICKER</span>
+    <div class="rate" id="rate">0.0000000<span class="pct">%</span></div>
+    <div class="dday-pill">예상 전역일 · <b id="out-date">입대일을 입력해 주세요</b></div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="stats">
+      <div class="stat hi"><span class="v" id="s-dday">—</span><span class="k">🎯 전역 D-Day</span></div>
+      <div class="stat"><span class="v" id="s-done">—</span><span class="k">✅ 복무 완료일</span></div>
+      <div class="stat"><span class="v" id="s-left">—</span><span class="k">⏳ 남은 복무일</span></div>
+      <div class="stat"><span class="v" id="s-total">—</span><span class="k">📆 총 복무일수</span></div>
     </div>
-    <p class="small muted">2026년 9월 기준이에요. 복무기간은 제도가 바뀌면 달라질 수 있어요.</p>
-  </section>
-
-  <section>
-    <h2>계산 예시</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>입대일</th><th>군별</th><th>전역일</th></tr></thead>
-        <tbody>
-          <tr><td class="num">2026-03-10</td><td>육군 (18개월)</td><td class="num">2027-09-09</td></tr>
-          <tr><td class="num">2026-03-10</td><td>해군 (20개월)</td><td class="num">2027-11-09</td></tr>
-          <tr><td class="num">2026-03-10</td><td>공군 (21개월)</td><td class="num">2027-12-09</td></tr>
-        </tbody>
-      </table>
+    <div class="quote">
+      <div class="q">
+        <span class="label">💬 한줄 응원 멘트</span>
+        <p id="quote-text">입대일을 넣으면 지금 상황에 맞는 멘트를 골라드려요.</p>
+      </div>
+      <button class="btn" type="button" id="quote-btn">새 멘트</button>
     </div>
   </section>
 
-  <section>
-    <h2>자주 묻는 질문</h2>
-    <details>
-      <summary>계산한 전역일이 하루 차이 나요.</summary>
-      <p>입대한 날을 복무 첫날로 세느냐 아니냐의 차이예요. 입대일이 첫날이기 때문에 전역일은 개월수를 더한 날의 하루 전이 맞아요.</p>
-    </details>
-    <details>
-      <summary>입대일이 8월 31일인데 어떻게 계산되나요?</summary>
-      <p>개월수를 더한 달에 31일이 없으면 그 달의 마지막 날로 맞춘 뒤 하루를 빼서 계산해요.</p>
-    </details>
-    <details>
-      <summary>조기 전역이나 복무 연장도 반영되나요?</summary>
-      <p>아니요. 이 계산기는 정해진 복무기간만으로 계산해요. 개인 사정에 따른 전역일 변동은 소속 부대나 병무청 안내를 확인해 주세요.</p>
-    </details>
-    <details>
-      <summary>사회복무요원은 어떤 날짜를 넣나요?</summary>
-      <p>복무를 시작한 소집일을 입대일 칸에 넣으면 돼요.</p>
-    </details>
-  </section>
+  <div id="set-next"></div>
 
-  <section>
-    <h2>참고</h2>
-    <p class="source">출처: 병무청 복무기간 안내 · 기준일 2026년 9월</p>
-    <div class="notice">이 계산 결과는 참고용이에요. 실제 전역일은 소속 부대의 공식 안내를 따라요.</div>
-  </section>
+  <div class="cols">
+    <section class="panel" id="rank-panel">
+      <div class="panel-h">
+        <h2>🎖️ 계급 및 진급 타임라인</h2>
+        <span class="tag" id="rank-now">—</span>
+      </div>
+      <div class="next-rank">
+        <span class="t" id="next-rank-label">다음 진급</span>
+        <span class="d" id="next-rank-d">—</span>
+      </div>
+      <ul class="timeline" id="timeline"></ul>
+      <p class="source" style="margin-top:12px">이병 2개월 · 일병 6개월 · 상병 6개월 복무 후 매월 1일 진급하는 기준이에요. 부대 사정에 따라 달라질 수 있어요.</p>
+    </section>
 
-  <section>
-    <h2>이런 계산기도 있어요</h2>
-    <div class="related">
-      <a href="/life/">날짜·생활 계산기 전체</a>
-      <a href="/">전체 계산기 보기</a>
+    <section class="panel">
+      <div class="panel-h"><h2>🏖️ 휴가 차감 &amp; 실복무 데이터</h2></div>
+      <div class="inline-field">
+        <label for="vacation">총 휴가 일수</label>
+        <input type="number" id="vacation" min="0" max="120" step="1" value="24">
+        <span class="muted small">일</span>
+      </div>
+      <div class="funs">
+        <div class="fun"><span class="v" id="f-stay">—</span><span class="k">🏕️ 부대 실 상주일 (휴가 차감)</span></div>
+        <div class="fun"><span class="v" id="f-meal">—</span><span class="k">🍚 남은 짬밥 (하루 3끼)</span></div>
+        <div class="fun"><span class="v" id="f-weekend">—</span><span class="k">🗓️ 남은 주말 (토·일)</span></div>
+        <div class="fun"><span class="v" id="f-guard">—</span><span class="k">🔦 추정 불침번·경계근무</span></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="panel-h">
+      <h2>💰 월급 &amp; 내일준비적금 계산기</h2>
+      <span class="tag">2026년 기준</span>
     </div>
+    <div class="slider-row">
+      <span class="small muted">월 적금 납입액 (장병내일준비적금)</span>
+      <span class="cur" id="save-cur">40만원 / 월</span>
+    </div>
+    <input type="range" id="save" min="0" max="55" step="5" value="40" aria-label="월 적금 납입액">
+    <div class="scale"><span>0원</span><span>20만원</span><span>40만원(추천)</span><span>55만원(최대)</span></div>
+    <div class="money">
+      <div class="mo"><span class="k">💵 예상 누적 봉급 총액</span><span class="v" id="m-pay">—</span></div>
+      <div class="mo"><span class="k">🏦 적금 본인 납입 원금</span><span class="v" id="m-principal">—</span></div>
+      <div class="mo"><span class="k">🎁 정부 매칭 지원금 (100%)</span><span class="v plus" id="m-match">—</span></div>
+    </div>
+    <div class="total">
+      <span class="k">🚀 전역 시 최종 예상 자산 (봉급 + 정부 매칭 + 적금 이자)</span>
+      <div class="v" id="m-total">—</div>
+      <p class="small muted" style="margin-top:6px">적금 본인 납입금은 봉급에서 나가는 돈이라 중복으로 더하지 않았어요. 이자는 기본금리 연 5% 단리로 어림한 값이에요.</p>
+    </div>
+    <p class="source" style="margin-top:12px">2026년 병 봉급 기준: 이병 75만원 · 일병 90만원 · 상병 120만원 · 병장 150만원. 장병내일준비적금은 월 최대 55만원 납입, 정부가 납입액의 100%를 매칭해요.</p>
+  </section>
+
+  <section class="panel">
+    <div class="panel-h"><h2>🎒 군생활 꿀템 &amp; 입대 체크리스트</h2></div>
+    <div id="gear"></div>
+    <div class="musts">
+      <b style="font-size:14.5px">📦 입대 당일 필수품</b>
+      <div class="grid" id="musts"></div>
+      <p class="small muted" style="margin-top:10px">입영 부대마다 반입 가능 물품이 다를 수 있으니 입영 안내문을 꼭 확인하세요.</p>
+    </div>
+  </section>
+
+  <section class="panel guide">
+    <div class="panel-h"><h2>📖 군 복무 가이드 &amp; 자주 묻는 질문</h2></div>
+    <h3>군종별 복무기간과 전역일 산정</h3>
+    <p>현재 병 복무기간은 육군·해병대 18개월, 해군 20개월, 공군 21개월, 사회복무요원 21개월이에요. 입대한 날이 복무 첫날로 계산되기 때문에, 전역일은 복무 개월수를 더한 날의 하루 전날이 돼요. 전역 당일에는 보통 오전에 신고하고 전역 처리를 해요.</p>
+    <h3>계급 진급 기준</h3>
+    <p>이병 2개월, 일병 6개월, 상병 6개월을 복무하면 다음 계급으로 올라가고, 진급일은 매월 1일이에요. 징계나 특이사항이 있으면 늦어질 수 있어요. 호봉은 해당 계급으로 복무한 개월 수에 따라 올라가요.</p>
+
+    <details>
+      <summary>복무율은 어떻게 계산하나요?</summary>
+      <p>(지금까지 지난 시간 ÷ 전체 복무 기간) × 100이에요. 이 페이지는 날짜가 아니라 시간 단위로 계산해서 소수점 일곱 자리까지 실시간으로 올라가요.</p>
+    </details>
+    <details>
+      <summary>전역일이 다른 계산기와 하루 차이가 나요.</summary>
+      <p>입대한 날을 복무 첫날로 세느냐 아니냐의 차이예요. 입대일이 첫날이므로 전역일은 개월수를 더한 날의 하루 전이 맞아요. 입대일이 말일이라 같은 날짜가 없는 달로 넘어가면 그 달의 마지막 날을 기준으로 계산해요.</p>
+    </details>
+    <details>
+      <summary>장병내일준비적금 정부 매칭은 얼마인가요?</summary>
+      <p>본인이 납입한 금액의 100%를 정부가 더해줘요. 월 최대 55만원까지 납입할 수 있고, 이자소득은 비과세예요. 은행 우대금리를 받으면 기본금리보다 조금 더 받을 수 있어요.</p>
+    </details>
+    <details>
+      <summary>휴가를 넣으면 전역일이 바뀌나요?</summary>
+      <p>아니요. 정기 휴가는 복무 기간에 포함되기 때문에 전역일은 그대로예요. 휴가 일수는 부대에서 실제로 지내는 날이 며칠인지 보여주기 위한 계산에만 써요.</p>
+    </details>
+
+    <div class="notice" style="margin-top:16px">계산 결과는 참고용이에요. 실제 전역일과 지급액은 소속 부대와 병무청, 은행의 공식 안내를 따라요.</div>
+    <p class="source" style="margin-top:10px">출처: 병무청 복무기간 안내, 국방부 병 봉급 기준, 장병내일준비적금 안내 · 기준일 2026년 9월</p>
   </section>
 </main>
 
-<footer class="site-footer">
+<footer class="site">
   <div class="wrap">
     <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/life/">날짜·생활</a>
       <a href="/about/">소개</a>
       <a href="/contact/">문의</a>
       <a href="/privacy/">개인정보처리방침</a>
@@ -155,77 +381,423 @@
   </div>
 </footer>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/assets/data.js"></script>
+<script src="/assets/profile.js"></script>
 <script>
 (function(){
-  var $ = function(id){ return document.getElementById(id); };
-  var DAY = 86400000;
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var DAY=86400000, KEY="calcflow-discharge-v1";
 
-  function addMonths(date, months){
-    var y = date.getFullYear(), m = date.getMonth(), d = date.getDate();
-    var target = new Date(y, m + months, 1);
-    var lastDay = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
-    target.setDate(Math.min(d, lastDay));
-    return target;
-  }
-  function fmt(date){
-    var w = ['일','월','화','수','목','금','토'][date.getDay()];
-    return date.getFullYear() + '년 ' + (date.getMonth()+1) + '월 ' + date.getDate() + '일 (' + w + ')';
-  }
-  function today(){
-    var n = new Date();
-    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
-  }
+/* ---------- 데이터 ---------- */
+var PAY={이병:750000,일병:900000,상병:1200000,병장:1500000}; // 2026년 기준
+var RANKS=[
+  {name:"이병",short:"이",from:0},   // 입대월 기준 경과 개월
+  {name:"일병",short:"일",from:2},
+  {name:"상병",short:"상",from:8},
+  {name:"병장",short:"병",from:14}
+];
+/* ===== 쿠팡파트너스 링크 =====
+   따옴표 안에 내 파트너스 링크를 붙여넣으면 버튼이 자동으로 나타나요.
+   비워두면 그 버튼은 표시되지 않아요. 링크를 하나라도 넣으면
+   화면 아래에 제휴 문구(공정위 필수 표기)가 자동으로 붙어요.        */
+var LINK={
+  lotion:"https://link.coupang.com/a/gYltt6yRcz",   // 올인원 로션
+  wash:"https://link.coupang.com/a/gYlv9klisC",     // 올인원 워시
+  watch:"https://link.coupang.com/a/gYlxBAGjMO",    // 전자 손목시계
+  insole:"",      // 기능성 깔창·보호대
+  sunstick:""     // 스틱형 선크림
+};
+var GEAR=[
+  {id:"g1",emoji:"🧴",name:"올인원 로션 / 워시",desc:"훈련소 샤워 시간은 3~5분이에요. 머리부터 발끝까지 한 번에 씻고 바르는 올인원 제품이 시간을 아껴줘요.",
+   links:[{t:"올인원 로션 보기",u:LINK.lotion},{t:"올인원 워시 보기",u:LINK.wash}]},
+  {id:"g2",emoji:"⌚",name:"전자 손목시계 (라이트·방수)",desc:"야간 불침번과 경계근무에서 시간을 봐야 해요. 비싼 시계보다 튼튼하고 방수되는 라이트 기능 제품이 좋아요.",
+   links:[{t:"전자시계 보기",u:LINK.watch}]},
+  {id:"g3",emoji:"🦶",name:"기능성 깔창 &amp; 보호대",desc:"행군에서 물집이 잡히면 남은 일정이 전부 고통이에요. 깔창과 무릎·팔꿈치 보호대는 몸을 지키는 투자예요.",
+   links:[{t:"깔창·보호대 보기",u:LINK.insole}]},
+  {id:"g4",emoji:"☀️",name:"스틱형 선크림",desc:"손에 묻지 않고 쓱쓱 바를 수 있어요. 위장 크림을 바르기 전 베이스로도 써요.",
+   links:[{t:"선스틱 보기",u:LINK.sunstick}]}
+];
+var MUSTS=[
+  {id:"m1",t:"🪪 신분증 (주민등록증·운전면허증)"},
+  {id:"m2",t:"📄 입영통지서"},
+  {id:"m3",t:"💳 나라사랑카드 (잔액 확인)"},
+  {id:"m4",t:"👓 여분 안경 &amp; 안경 닦이"},
+  {id:"m5",t:"💊 복용 중인 처방약 &amp; 처방전"}
+];
+var QUOTES={
+  pre:["아직 시작 전이에요. 지금 할 수 있는 걸 하나씩 정리해 두면 마음이 편해져요.","입대 전 마지막 시간, 하고 싶었던 것부터 챙기세요."],
+  early:["처음 한 달이 제일 길게 느껴져요. 그 시기는 누구나 지나가요.","적응이 곧 실력이에요. 지금 속도면 충분해요.","달력을 하루씩 지우는 재미가 생기는 시기예요."],
+  mid:["절반을 향해 가는 중이에요. 여기까지 온 게 이미 대단해요.","이제 요령이 붙었을 때예요. 몸 상하지 않게만 하세요.","남은 날이 지나온 날보다 적어지는 순간이 곧 와요."],
+  late:["후반부는 체감 속도가 달라요. 눈 깜짝할 사이예요.","이제 후임에게 노하우를 전수해 주는 위치예요.","전역 후 계획을 슬슬 적어둘 때예요."],
+  final:["카운트다운 구간이에요. 마무리까지 안전하게.","곧 사회에서 만나요. 마지막까지 방심은 금물.","지금부터는 하루가 정말 빠르게 지나가요."],
+  done:["전역을 축하해요. 정말 고생 많았어요.","이제 진짜 시작이에요. 다음 목표로 가볼까요?"]
+};
 
-  function calculate(){
-    var value = $('enlist').value;
-    var months = parseInt($('branch').value, 10);
-    var err = $('error'), res = $('result');
+/* ---------- 상태 ---------- */
+var state={branchIdx:0,months:18,enlist:"",vacation:24,save:40,checks:{}};
+try{var raw=localStorage.getItem(KEY); if(raw){state=Object.assign(state,JSON.parse(raw)||{});}}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 
-    if(!value){
-      err.textContent = '입대일을 선택해 주세요.';
-      err.hidden = false; res.hidden = true;
-      return;
+/* ---------- 날짜 유틸 ---------- */
+function addMonths(d,m){
+  var t=new Date(d.getFullYear(),d.getMonth()+m,1);
+  var last=new Date(t.getFullYear(),t.getMonth()+1,0).getDate();
+  t.setDate(Math.min(d.getDate(),last));
+  return t;
+}
+function parseDate(v){
+  if(!v) return null;
+  var p=v.split("-");
+  if(p.length!==3) return null;
+  var d=new Date(+p[0],+p[1]-1,+p[2]);
+  return isNaN(d.getTime())?null:d;
+}
+function fmt(d){
+  var w=["일","월","화","수","목","금","토"][d.getDay()];
+  return d.getFullYear()+"년 "+pad(d.getMonth()+1)+"월 "+pad(d.getDate())+"일 ("+w+")";
+}
+function fmtShort(d){return d.getFullYear()+"."+pad(d.getMonth()+1)+"."+pad(d.getDate())}
+function pad(n){return n<10?"0"+n:""+n}
+function midnight(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function num(n){return n.toLocaleString("ko-KR")}
+function man(won){
+  var m=Math.round(won/10000);
+  return num(m)+"만원";
+}
+
+/* ---------- 핵심 계산 ---------- */
+function compute(){
+  var start=parseDate(state.enlist);
+  if(!start) return null;
+  var months=state.months;
+  var endExclusive=addMonths(start,months);          // 전역 다음날 0시
+  var end=new Date(endExclusive.getTime()-DAY);      // 전역일
+  var total=Math.round((endExclusive-start)/DAY);    // 총 복무일수
+  var now=new Date();
+  var today=midnight(now);
+  var elapsedMs=now-start;
+  var totalMs=endExclusive-start;
+  var ratio=Math.max(0,Math.min(1,elapsedMs/totalMs));
+  var done=Math.min(total,Math.max(0,Math.round((today-start)/DAY)+1));
+  var left=Math.max(0,Math.round((end-today)/DAY));
+  return {start:start,end:end,endExclusive:endExclusive,total:total,now:now,today:today,
+          ratio:ratio,done:done,left:left,months:months,before:now<start,after:ratio>=1};
+}
+
+/* 진급 타임라인: 입대월 + N개월의 1일에 진급 */
+function buildRanks(c){
+  var list=[];
+  for(var i=0;i<RANKS.length;i++){
+    var r=RANKS[i];
+    var from=r.from===0?c.start:new Date(c.start.getFullYear(),c.start.getMonth()+r.from,1);
+    if(from>c.end) continue;
+    list.push({name:r.name,short:r.short,from:from});
+  }
+  for(var j=0;j<list.length;j++){
+    list[j].to=(j+1<list.length)?new Date(list[j+1].from.getTime()-DAY):c.end;
+  }
+  return list;
+}
+function weekendsBetween(from,to){
+  var n=0,d=new Date(from.getTime()+DAY);
+  while(d<=to){var w=d.getDay(); if(w===0||w===6) n++; d=new Date(d.getTime()+DAY);}
+  return n;
+}
+function payTotal(c){
+  // 계급별 복무 개월수 × 월 봉급 (사회복무요원도 동일 기준 적용)
+  var m=c.months, sum=0;
+  var seg=[["이병",Math.min(2,m)],["일병",Math.min(6,Math.max(0,m-2))],["상병",Math.min(6,Math.max(0,m-8))],["병장",Math.max(0,m-14)]];
+  for(var i=0;i<seg.length;i++) sum+=PAY[seg[i][0]]*seg[i][1];
+  return sum;
+}
+
+/* ---------- 렌더 ---------- */
+var tickTimer=null;
+function renderAll(){
+  var c=compute();
+  renderMoney(c);
+  if(!c){
+    $("out-date").textContent="입대일을 입력해 주세요";
+    $("rate").innerHTML='0.0000000<span class="pct">%</span>';
+    ["s-dday","s-done","s-left","s-total","f-stay","f-meal","f-weekend","f-guard"].forEach(function(id){$(id).textContent="—"});
+    $("bar").style.width="0%";
+    $("rank-panel").hidden=true;
+    return;
+  }
+  $("rank-panel").hidden=false;
+  $("out-date").textContent=fmt(c.end);
+  $("s-dday").textContent=c.after?"전역 완료":(c.before?"입대 전":(c.left===0?"오늘 전역":"D-"+c.left));
+  $("s-done").textContent=num(c.before?0:c.done)+"일";
+  $("s-left").textContent=num(c.left)+"일";
+  $("s-total").textContent=num(c.total)+"일";
+  $("bar").style.width=(c.ratio*100).toFixed(3)+"%";
+
+  // 휴가 차감 데이터
+  var vac=Math.max(0,Math.min(120,state.vacation||0));
+  var stay=Math.max(0,c.left-vac);
+  $("f-stay").textContent=num(stay)+"일";
+  $("f-meal").textContent=num(stay*3)+"끼";
+  $("f-weekend").textContent=num(weekendsBetween(c.today,c.end))+"일";
+  $("f-guard").textContent="약 "+num(Math.round(stay/3.5))+"회";
+
+  renderRanks(c);
+  startTicker(c);
+}
+
+function renderRanks(c){
+  var list=buildRanks(c), now=c.today, html="", cur=null, next=null;
+  for(var i=0;i<list.length;i++){
+    var r=list[i];
+    var isNow=now>=r.from&&now<=r.to;
+    var isDone=now>r.to;
+    if(isNow) cur=r;
+    if(!next&&r.from>now) next=r;
+    var stateTxt="";
+    if(isNow){
+      var mo=(now.getFullYear()-r.from.getFullYear())*12+(now.getMonth()-r.from.getMonth())+1;
+      stateTxt='<span class="state">복무 중 ('+mo+'호봉)</span>';
+      $("rank-now").textContent="현재 "+r.name+" "+mo+"호봉";
     }
-    var parts = value.split('-');
-    var start = new Date(+parts[0], +parts[1]-1, +parts[2]);
-    if(isNaN(start.getTime())){
-      err.textContent = '입대일을 다시 확인해 주세요.';
-      err.hidden = false; res.hidden = true;
-      return;
-    }
-    err.hidden = true;
-
-    var end = new Date(addMonths(start, months).getTime() - DAY);
-    var total = Math.round((end - start) / DAY) + 1;
-    var now = today();
-    var done = Math.round((now - start) / DAY) + 1;
-    if(done < 0) done = 0;
-    if(done > total) done = total;
-    var left = Math.round((end - now) / DAY);
-
-    $('out-date').textContent = fmt(end);
-    $('out-left').textContent = left > 0 ? ('D-' + left) : (left === 0 ? '오늘 전역' : '전역 완료');
-    $('out-done').textContent = done.toLocaleString() + '일';
-    $('out-total').textContent = total.toLocaleString() + '일';
-    var rate = Math.round(done / total * 1000) / 10;
-    $('out-rate').textContent = rate + '%';
-    $('out-bar').style.width = Math.min(rate, 100) + '%';
-
-    var rows = '';
-    [25, 50, 75].forEach(function(p){
-      var day = Math.round(total * p / 100);
-      var date = new Date(start.getTime() + (day - 1) * DAY);
-      rows += '<tr><td>' + p + '% 지점</td><td class="num">' + fmt(date) + '</td></tr>';
-    });
-    rows += '<tr><td>전역</td><td class="num">' + fmt(end) + '</td></tr>';
-    $('out-milestones').innerHTML = rows;
-
-    res.hidden = false;
+    html+='<li class="rank'+(isNow?" now":"")+(isDone?" done":"")+'">'+
+      '<span class="badge">'+r.short+'</span>'+
+      '<span class="info"><b>'+r.name+'</b><span>'+fmtShort(r.from)+' ~ '+fmtShort(r.to)+'</span></span>'+
+      stateTxt+'</li>';
   }
+  $("timeline").innerHTML=html;
+  if(!cur) $("rank-now").textContent=c.before?"입대 전":"전역";
+  if(next){
+    var d=Math.round((next.from-now)/DAY);
+    $("next-rank-label").textContent="다음 진급 ("+next.name+")";
+    $("next-rank-d").textContent="D-"+d+" · "+fmtShort(next.from);
+  }else{
+    $("next-rank-label").textContent="다음 진급";
+    $("next-rank-d").textContent=c.after?"전역 완료":"병장까지 진급 완료";
+  }
+}
 
-  $('calc-btn').addEventListener('click', calculate);
-  $('enlist').addEventListener('change', calculate);
-  $('branch').addEventListener('change', function(){ if($('enlist').value) calculate(); });
+function renderMoney(c){
+  var months=c?c.months:state.months;
+  var pay=payTotal({months:months});
+  var monthly=state.save*10000;
+  var principal=monthly*months;
+  var match=principal;                       // 정부 매칭 100%
+  var interest=monthly*(months*(months+1)/2)*(0.05/12); // 기본금리 5% 단리 근사
+  $("save-cur").textContent=state.save+"만원 / 월";
+  $("m-pay").textContent=man(pay);
+  $("m-principal").textContent=man(principal);
+  $("m-match").textContent="+"+man(match);
+  $("m-total").textContent="약 "+man(pay+match+interest);
+}
+
+function startTicker(c){
+  if(tickTimer) clearInterval(tickTimer);
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var draw=function(){
+    var now=new Date();
+    var r=Math.max(0,Math.min(1,(now-c.start)/(c.endExclusive-c.start)));
+    $("rate").innerHTML=(r*100).toFixed(7)+'<span class="pct">%</span>';
+  };
+  draw();
+  tickTimer=setInterval(draw,reduce?1000:70);
+}
+
+function pickQuote(){
+  var c=compute(), key="early";
+  if(!c) key="pre";
+  else if(c.before) key="pre";
+  else if(c.after) key="done";
+  else if(c.ratio<0.25) key="early";
+  else if(c.ratio<0.5) key="mid";
+  else if(c.ratio<0.85) key="late";
+  else key="final";
+  var arr=QUOTES[key];
+  $("quote-text").textContent=arr[Math.floor(Math.random()*arr.length)];
+}
+
+function renderLists(){
+  var g="";
+  var hasLink=false;
+  GEAR.forEach(function(it){
+    var checked=!!state.checks[it.id];
+    var live=(it.links||[]).filter(function(l){return l.u&&l.u.trim()});
+    if(live.length) hasLink=true;
+    var links=live.length?'<span class="links">'+live.map(function(l){
+        return '<a href="'+l.u+'" target="_blank" rel="nofollow sponsored noopener">'+l.t+' ↗</a>';
+      }).join("")+'</span>':"";
+    g+='<div class="item'+(checked?" checked":"")+'" data-item="'+it.id+'">'+
+       '<input type="checkbox" id="'+it.id+'" data-check="'+it.id+'"'+(checked?" checked":"")+' aria-label="'+it.name.replace(/&amp;/g,"&")+'">'+
+       '<span class="body"><b>'+it.emoji+' '+it.name+'</b><p>'+it.desc+'</p>'+links+'</span></div>';
+  });
+  if(hasLink) g+='<p class="source" style="margin-top:12px">이 페이지는 쿠팡파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>';
+  $("gear").innerHTML=g;
+
+  var m="";
+  MUSTS.forEach(function(it){
+    var checked=!!state.checks[it.id];
+    m+='<label class="must'+(checked?" checked":"")+'" data-item="'+it.id+'">'+
+       '<input type="checkbox" data-check="'+it.id+'"'+(checked?" checked":"")+'><span>'+it.t+'</span></label>';
+  });
+  $("musts").innerHTML=m;
+}
+
+function toast(msg){
+  var t=$("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(function(){t.classList.remove("show")},2200);
+}
+
+/* ---------- 이벤트 ---------- */
+$("branch").addEventListener("change",function(){
+  state.branchIdx=this.selectedIndex;
+  state.months=parseInt(this.value,10);
+  persist(); renderAll(); pickQuote();
+});
+$("enlist").addEventListener("change",function(){
+  state.enlist=this.value; persist(); renderAll(); pickQuote();
+});
+$("vacation").addEventListener("input",function(){
+  state.vacation=parseInt(this.value,10)||0; persist(); renderAll();
+});
+$("save").addEventListener("input",function(){
+  state.save=parseInt(this.value,10)||0; persist(); renderMoney(compute());
+});
+$("quote-btn").addEventListener("click",pickQuote);
+$("reset-btn").addEventListener("click",function(){
+  state={branchIdx:0,months:18,enlist:"",vacation:24,save:40,checks:{}};
+  persist(); sync(); renderLists(); renderAll(); pickQuote();
+  toast("입력값을 초기화했어요.");
+});
+document.addEventListener("change",function(e){
+  var id=e.target.getAttribute&&e.target.getAttribute("data-check");
+  if(!id) return;
+  state.checks[id]=e.target.checked; persist();
+  var box=document.querySelector('[data-item="'+id+'"]');
+  if(box) box.classList.toggle("checked",e.target.checked);
+});
+/* ---------- 전역 카드 이미지 ---------- */
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+function drawCard(c){
+  var W=1080,H=1350,F=getComputedStyle(document.documentElement).getPropertyValue("--font-sans")||"sans-serif";
+  var cv=document.createElement("canvas"); cv.width=W; cv.height=H;
+  var x=cv.getContext("2d");
+
+  var bg=x.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,"#0B131A"); bg.addColorStop(.55,"#0A1016"); bg.addColorStop(1,"#0E1D22");
+  x.fillStyle=bg; x.fillRect(0,0,W,H);
+  x.strokeStyle="rgba(34,52,64,.55)"; x.lineWidth=1;
+  for(var g=0;g<W;g+=60){x.beginPath();x.moveTo(g+.5,0);x.lineTo(g+.5,H);x.stroke();}
+  for(var g2=0;g2<H;g2+=60){x.beginPath();x.moveTo(0,g2+.5);x.lineTo(W,g2+.5);x.stroke();}
+
+  var glow=x.createRadialGradient(W/2,430,40,W/2,430,620);
+  glow.addColorStop(0,"rgba(24,227,155,.16)"); glow.addColorStop(1,"rgba(24,227,155,0)");
+  x.fillStyle=glow; x.fillRect(0,0,W,H);
+
+  x.textAlign="center";
+  x.fillStyle="#8AA3AE"; x.font="600 30px "+F;
+  x.fillText("🪖 "+$("branch").options[state.branchIdx].text,W/2,150);
+
+  x.fillStyle="#18E39B"; x.font="600 30px "+F;
+  x.fillText("복무 진행률",W/2,260);
+  x.font="800 150px "+F;
+  var grad=x.createLinearGradient(0,290,0,430);
+  grad.addColorStop(0,"#EFFFF9"); grad.addColorStop(1,"#18E39B");
+  x.fillStyle=grad;
+  x.fillText((c.ratio*100).toFixed(4)+"%",W/2,420);
+
+  var bx=110,bw=W-220,by=490,bh=22;
+  x.fillStyle="#1B2A33"; roundRect(x,bx,by,bw,bh,11); x.fill();
+  var pg=x.createLinearGradient(bx,0,bx+bw,0);
+  pg.addColorStop(0,"#18E39B"); pg.addColorStop(1,"#38BDF8");
+  x.fillStyle=pg; roundRect(x,bx,by,Math.max(22,bw*c.ratio),bh,11); x.fill();
+
+  x.fillStyle="#E7F2F5"; x.font="800 88px "+F;
+  x.fillText(c.left>0?("D-"+c.left):(c.after?"전역 완료":"오늘 전역"),W/2,640);
+  x.fillStyle="#8AA3AE"; x.font="500 34px "+F;
+  x.fillText("전역일 "+fmt(c.end),W/2,700);
+
+  var cards=[["복무 완료",num(c.done)+"일"],["남은 복무",num(c.left)+"일"],["총 복무",num(c.total)+"일"]];
+  var cw=(W-220-40)/3;
+  cards.forEach(function(it,i){
+    var cx2=110+i*(cw+20);
+    x.fillStyle="rgba(22,34,42,.92)"; roundRect(x,cx2,770,cw,150,20); x.fill();
+    x.strokeStyle="#223440"; x.lineWidth=2; roundRect(x,cx2,770,cw,150,20); x.stroke();
+    x.fillStyle="#8AA3AE"; x.font="500 26px "+F; x.fillText(it[0],cx2+cw/2,822);
+    x.fillStyle="#E7F2F5"; x.font="700 44px "+F; x.fillText(it[1],cx2+cw/2,882);
+  });
+
+  var rankTxt=$("rank-now").textContent;
+  x.fillStyle="rgba(24,227,155,.10)"; roundRect(x,110,960,W-220,120,20); x.fill();
+  x.strokeStyle="rgba(24,227,155,.35)"; x.lineWidth=2; roundRect(x,110,960,W-220,120,20); x.stroke();
+  x.fillStyle="#18E39B"; x.font="700 42px "+F;
+  x.fillText("🎖️ "+rankTxt,W/2,1035);
+
+  x.fillStyle="#C8DBE2"; x.font="500 32px "+F;
+  var q=$("quote-text").textContent;
+  if(q.length>30) q=q.slice(0,29)+"…";
+  x.fillText("“"+q+"”",W/2,1150);
+
+  x.fillStyle="#5E7681"; x.font="600 28px "+F;
+  x.fillText("calcflow.kr · 군 전역일 계산기",W/2,1265);
+  return cv;
+}
+function shareCard(){
+  var c=compute();
+  if(!c){toast("먼저 입대일을 입력해 주세요.");return;}
+  var run=function(){
+    var cv=drawCard(c);
+    var name="calcflow-dday-"+fmtShort(c.end).replace(/\./g,"")+".png";
+    cv.toBlob(function(blob){
+      if(!blob){toast("이미지를 만들지 못했어요.");return;}
+      var file=null;
+      try{file=new File([blob],name,{type:"image/png"});}catch(e){}
+      if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
+        navigator.share({files:[file],title:"전역 카드",text:"내 전역까지 "+(c.left>0?"D-"+c.left:"완료")+" · calcflow.kr"})
+          .catch(function(){download(blob,name)});
+      }else{
+        download(blob,name);
+      }
+    },"image/png");
+  };
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(run).catch(run);}else{run();}
+}
+function download(blob,name){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url; a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1000);
+  toast("전역 카드를 저장했어요 📸");
+}
+$("share-btn").addEventListener("click",shareCard);
+
+/* ---------- 초기화 ---------- */
+function sync(){
+  $("branch").selectedIndex=state.branchIdx||0;
+  state.months=parseInt($("branch").value,10);
+  $("enlist").value=state.enlist||"";
+  $("vacation").value=state.vacation;
+  $("save").value=state.save;
+}
+sync();
+if(window.CF){
+  CF.linkFields(["enlist","branch","save"]);
+  state.enlist=$("enlist").value;
+  state.branchIdx=$("branch").selectedIndex;
+  state.months=parseInt($("branch").value,10)||state.months;
+  state.save=parseInt($("save").value,10);
+  if(isNaN(state.save)) state.save=40;
+  persist();
+}
+renderLists(); renderAll(); pickQuote();
+if(window.CF) CF.renderSet("military","discharge",["enlist","branch","save"]);
 })();
 </script>
 </body>

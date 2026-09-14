@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기초대사량·유지 칼로리(TDEE) 계산기 | calcflow</title>
+<meta name="description" content="Mifflin-St Jeor 공식으로 기초대사량과 하루 유지 칼로리를 계산해요. 감량·증량 목표별 섭취량과 권장 단백질까지 알려줘요.">
+<link rel="canonical" href="https://calcflow.kr/health/bmr-tdee/">
+<meta property="og:title" content="기초대사량·유지 칼로리(TDEE) 계산기 | calcflow">
+<meta property="og:description" content="Mifflin-St Jeor 공식으로 기초대사량과 하루 유지 칼로리를 계산해요. 감량·증량 목표별 섭취량과 권장 단백질까지 알려줘요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/health/bmr-tdee/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/health/">건강</a></nav>
+
+  <section>
+    <h1>🔥 기초대사량·TDEE 계산기</h1>
+    <p class="muted">하루에 얼마나 먹어야 유지되는지, 빼려면 얼마나 줄여야 하는지 계산해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="seg" role="group" aria-label="성별">
+        <button type="button" id="g-m" aria-pressed="true">남성</button>
+        <button type="button" id="g-f" aria-pressed="false">여성</button>
+      </div>
+      <div class="grid3">
+        <div class="field"><label for="age2">나이 (만)</label><input type="number" id="age2" min="10" max="100" value="30" inputmode="numeric"></div>
+        <div class="field"><label for="height">키 (cm)</label><input type="number" id="height" min="100" max="230" value="175" inputmode="decimal"></div>
+        <div class="field"><label for="weight">몸무게 (kg)</label><input type="number" id="weight" min="25" max="250" value="70" inputmode="decimal"></div>
+      </div>
+      <div class="field"><label for="act">활동량</label>
+        <select id="act">
+          <option value="1.2">거의 안 움직임 (사무직, 운동 안 함)</option>
+          <option value="1.375" selected>가벼운 활동 (주 1~3회 운동)</option>
+          <option value="1.55">보통 활동 (주 3~5회 운동)</option>
+          <option value="1.725">활발함 (주 6~7회 운동)</option>
+          <option value="1.9">매우 활발함 (육체노동, 하루 2회 운동)</option>
+        </select></div>
+      <div class="result" id="res">
+        <div><div class="head">유지 칼로리 (TDEE)</div><div class="big" id="r-tdee">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">기초대사량 (BMR)</span><span class="v" id="r-bmr">—</span></div>
+          <div class="cell"><span class="k">체중 감량 (-500)</span><span class="v pos" id="r-cut">—</span></div>
+          <div class="cell"><span class="k">체중 증가 (+500)</span><span class="v" id="r-bulk">—</span></div>
+          <div class="cell"><span class="k">권장 단백질</span><span class="v" id="r-protein">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>기초대사량과 유지 칼로리</h2>
+    <p>기초대사량(BMR)은 하루 종일 누워만 있어도 쓰는 열량이에요. 여기에 활동량 계수를 곱한 값이 유지 칼로리(TDEE)이고, 이만큼 먹으면 체중이 유지돼요.</p>
+    <p>이 계산기는 <strong>Mifflin-St Jeor 공식</strong>을 써요. 남성은 (10 × 체중) + (6.25 × 키) − (5 × 나이) + 5, 여성은 마지막 항이 −161이에요. 여러 공식 중 일반인 대상 오차가 가장 적다고 알려진 방식이에요.</p>
+    <h2>감량은 하루 500kcal가 기준이에요</h2>
+    <p>지방 1kg은 약 7,700kcal예요. 하루 500kcal씩 덜 먹으면 일주일에 약 0.5kg이 줄어드는 계산이에요. 다만 기초대사량보다 적게 먹는 식단은 근손실과 요요로 이어지기 쉬워서 권하지 않아요.</p>
+  </section>
+
+  <section>
+    <h2>활동량 계수 고르는 법</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>계수</th><th>이런 경우예요</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1.2</td><td>앉아서 일하고 따로 운동하지 않아요</td></tr>
+        <tr><td class="n">1.375</td><td>주 1~3회 가벼운 운동이나 산책을 해요</td></tr>
+        <tr><td class="n">1.55</td><td>주 3~5회 규칙적으로 운동해요</td></tr>
+        <tr><td class="n">1.725</td><td>거의 매일 강도 있게 운동해요</td></tr>
+        <tr><td class="n">1.9</td><td>몸 쓰는 일을 하거나 하루 두 번 훈련해요</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="notice">건강 상태나 복용 중인 약에 따라 필요한 열량은 달라질 수 있어요. 체중 조절 계획은 의사나 영양 전문가와 상의하는 게 안전해요.</div>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>계산 결과대로 먹으면 정말 그만큼 빠지나요?</summary><p>공식은 평균값이라 사람마다 10% 안팎의 차이가 나요. 2~3주 먹어보고 체중 변화를 보면서 조정하는 게 정확해요.</p></details><details><summary>근육량이 많으면 결과가 다른가요?</summary><p>네. 이 공식은 체지방률을 반영하지 않아서, 근육량이 많은 편이면 실제 기초대사량이 더 높게 나와요.</p></details><details><summary>단백질은 왜 이 정도로 나오나요?</summary><p>일반적인 활동을 하는 성인 기준 체중 1kg당 1.2~1.6g을 권장하는 범위를 적용했어요. 근력 운동을 많이 하면 더 높게 잡기도 해요.</p></details><details><summary>기초대사량보다 적게 먹어도 되나요?</summary><p>권하지 않아요. 장기적으로 근손실, 호르몬 변화, 요요로 이어질 수 있어요. 감량은 유지 칼로리에서 조금씩 줄이는 방식이 안전해요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="bmr-tdee"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var sex="m";
+function kcal(n){return Math.round(n).toLocaleString("ko-KR")+" kcal"}
+function calc(){
+  var a=parseFloat($("age2").value), h=parseFloat($("height").value), w=parseFloat($("weight").value),
+      act=parseFloat($("act").value);
+  if(!(a>0&&h>0&&w>0)) return;
+  var bmr=10*w+6.25*h-5*a+(sex==="m"?5:-161);
+  var tdee=bmr*act;
+  $("r-bmr").textContent=kcal(bmr);
+  $("r-tdee").textContent=kcal(tdee);
+  $("r-cut").textContent=kcal(Math.max(bmr,tdee-500));
+  $("r-bulk").textContent=kcal(tdee+500);
+  $("r-protein").textContent=Math.round(w*1.2)+"~"+Math.round(w*1.6)+"g";
+  $("r-sub").textContent="이만큼 먹으면 체중이 유지돼요. 활동량 계수 "+act+" 기준이에요.";
+}
+$("g-m").addEventListener("click",function(){sex="m";$("g-m").setAttribute("aria-pressed",true);$("g-f").setAttribute("aria-pressed",false);calc()});
+$("g-f").addEventListener("click",function(){sex="f";$("g-f").setAttribute("aria-pressed",true);$("g-m").setAttribute("aria-pressed",false);calc()});
+["age2","height","weight","act"].forEach(function(id){$(id).addEventListener("input",calc)});
+calc();
+})();
+</script>
+</body>
+</html>

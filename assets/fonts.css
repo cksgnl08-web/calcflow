@@ -1,0 +1,20 @@
+/* ============================================================
+   calcflow 폰트 설정 — 사이트 전체 폰트는 이 파일 하나만 고치면 바뀝니다.
+   (모든 페이지가 이 파일을 통해 폰트를 받습니다)
+
+   바꾸는 방법
+   1) 아래 @import 주소를 새 웹폰트 CSS 주소로 교체
+   2) --font-sans / --font-display / --font-num 값의 맨 앞 이름을 새 폰트 이름으로 교체
+   fallback(뒤쪽 목록)은 그대로 두는 걸 권장해요. 폰트가 안 불러와져도 화면이 깨지지 않아요.
+   ============================================================ */
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+:root{
+  /* 본문용 */
+  --font-sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  /* 제목용 (본문과 다른 폰트를 쓰고 싶을 때만 바꾸세요) */
+  --font-display:var(--font-sans);
+  /* 숫자·결과값용 (고정폭 숫자가 필요한 곳) */
+  --font-num:var(--font-sans);
+}

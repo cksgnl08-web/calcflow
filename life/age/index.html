@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>만 나이 계산기 - 연 나이·세는 나이 비교 | calcflow</title>
+<meta name="description" content="생년월일을 넣으면 만 나이와 연 나이, 세는 나이를 한 번에 계산해요. 다음 생일까지 남은 날도 알려줘요.">
+<link rel="canonical" href="https://calcflow.kr/life/age/">
+<meta property="og:title" content="만 나이 계산기 - 연 나이·세는 나이 비교 | calcflow">
+<meta property="og:description" content="생년월일을 넣으면 만 나이와 연 나이, 세는 나이를 한 번에 계산해요. 다음 생일까지 남은 날도 알려줘요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/life/age/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/life/">날짜·생활</a></nav>
+
+  <section>
+    <h1>🎂 만 나이 계산기</h1>
+    <p class="muted">생년월일만 넣으면 만 나이와 연 나이, 세는 나이를 한 번에 보여줘요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="grid2">
+        <div class="field"><label for="birth">생년월일</label><input type="date" id="birth"></div>
+        <div class="field"><label for="base">기준일</label><input type="date" id="base"><span class="hint">비워두면 오늘 기준이에요</span></div>
+      </div>
+      <div id="err" class="error" hidden></div>
+      <div class="result" id="res" hidden>
+        <div><div class="head">만 나이</div><div class="big" id="r-age">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">연 나이 (한국식 세는 방식 아님)</span><span class="v" id="r-year">—</span></div>
+          <div class="cell"><span class="k">세는 나이</span><span class="v" id="r-old">—</span></div>
+          <div class="cell"><span class="k">다음 생일까지</span><span class="v pos" id="r-next">—</span></div>
+          <div class="cell"><span class="k">태어난 지</span><span class="v" id="r-days">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>만 나이는 이렇게 계산해요</h2>
+    <p>생일이 지났으면 <strong>기준 연도 − 태어난 연도</strong>, 아직 안 지났으면 여기서 1을 빼요. 2023년 6월 28일부터 법령과 행정, 계약에서 나이는 모두 만 나이가 기준이에요.</p>
+    <p>연 나이는 생일과 관계없이 연도만 빼는 방식으로, 병역법과 청소년보호법 같은 일부 법에서 써요. 세는 나이는 태어나자마자 한 살이 되는 예전 방식이에요.</p>
+  </section>
+
+  <section>
+    <h2>세 가지 나이 비교</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>계산 방법</th><th>쓰이는 곳</th></tr></thead>
+      <tbody>
+        <tr><td>만 나이</td><td>생일이 지나면 +1</td><td>법령, 계약, 병원, 대부분의 서류</td></tr>
+        <tr><td>연 나이</td><td>올해 − 태어난 해</td><td>병역, 청소년보호법, 학년 구분</td></tr>
+        <tr><td>세는 나이</td><td>태어나면 1살, 해가 바뀌면 +1</td><td>일상 대화</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>생일 당일에는 나이가 어떻게 되나요?</summary><p>생일 당일부터 한 살을 더해요. 그래서 이 계산기도 생일 당일이면 이미 올라간 나이로 보여줘요.</p></details><details><summary>만 나이 통일법 이후에 달라진 게 뭔가요?</summary><p>2023년 6월 28일부터 법령이나 계약서에 나이가 '몇 세'로만 적혀 있으면 만 나이로 해석해요. 따로 적혀 있지 않아도요.</p></details><details><summary>연 나이와 만 나이가 다른 이유가 뭔가요?</summary><p>연 나이는 생일을 따지지 않고 연도만 빼기 때문이에요. 생일이 지나지 않은 사람은 만 나이보다 한 살 많게 나와요.</p></details><details><summary>초등학교 입학 나이는 어떻게 세나요?</summary><p>연 나이 기준이에요. 그 해에 만 6세가 되는 아이가 입학해요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="age"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var DAY=86400000;
+function pd(v){if(!v)return null;var p=v.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d)?null:d}
+function today(){var n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())}
+function fmt(d){return d.getFullYear()+"년 "+(d.getMonth()+1)+"월 "+d.getDate()+"일"}
+function calc(){
+  var b=pd($("birth").value), base=pd($("base").value)||today();
+  if(!b){$("res").hidden=true;$("err").hidden=true;return;}
+  if(b>base){$("err").textContent="생년월일이 기준일보다 뒤예요. 날짜를 확인해 주세요.";$("err").hidden=false;$("res").hidden=true;return;}
+  $("err").hidden=true;
+  var age=base.getFullYear()-b.getFullYear();
+  var passed=(base.getMonth()>b.getMonth())||(base.getMonth()===b.getMonth()&&base.getDate()>=b.getDate());
+  if(!passed) age--;
+  var yearAge=base.getFullYear()-b.getFullYear();
+  var korAge=yearAge+1;
+  var nb=new Date(base.getFullYear(),b.getMonth(),b.getDate());
+  if(nb<base) nb=new Date(base.getFullYear()+1,b.getMonth(),b.getDate());
+  var dleft=Math.round((nb-base)/DAY);
+  $("r-age").textContent=age+"세";
+  $("r-sub").textContent=fmt(base)+" 기준이에요. 생일은 "+(b.getMonth()+1)+"월 "+b.getDate()+"일이에요.";
+  $("r-year").textContent=yearAge+"세";
+  $("r-old").textContent=korAge+"세";
+  $("r-next").textContent=dleft===0?"오늘이 생일":"D-"+dleft;
+  $("r-days").textContent=Math.round((base-b)/DAY).toLocaleString("ko-KR")+"일";
+  $("res").hidden=false;
+}
+$("birth").addEventListener("input",calc);
+$("base").addEventListener("input",calc);
+calc();
+})();
+</script>
+</body>
+</html>

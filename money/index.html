@@ -4,40 +4,47 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>돈·금융 계산기 - calcflow</title>
-<meta name="description" content="퇴직금, 예적금 이자, 실업급여, 연봉 실수령액 등 돈과 관련된 계산기 모음이에요.">
+<meta name="description" content="적금 이자, 퇴직금, 실업급여, 연봉 실수령액 등 돈과 관련된 계산기 모음이에요.">
 <link rel="canonical" href="https://calcflow.kr/money/">
+<meta property="og:title" content="돈·금융 계산기 - calcflow">
+<meta property="og:description" content="적금 이자, 퇴직금, 실업급여, 연봉 실수령액 등 돈과 관련된 계산기 모음이에요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="/">calc<span>flow</span></a>
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
     <nav class="site-nav">
       <a href="/money/">돈·금융</a>
       <a href="/life/">날짜·생활</a>
       <a href="/health/">건강</a>
-      <a href="/tools/">사진·글자 도구</a>
+      <a href="/tools/">도구</a>
     </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › 돈·금융</nav>
   <section>
-    <h1>돈·금융 계산기</h1>
-    <p class="lede">월급, 이자, 퇴직금처럼 돈과 관련된 계산을 모았어요.</p>
+    <h1>💰 돈·금융 계산기</h1>
+    <p class="muted">월급, 이자, 세금처럼 돈과 관련된 계산을 모았어요.</p>
   </section>
-
   <section>
-    <div class="cards">
-      <a class="card soon" href="#"><b>예·적금 이자 계산기</b><span>세후 수령액까지 계산</span></a>
-      <a class="card soon" href="#"><b>퇴직금 계산기</b><span>평균임금 기준 예상 퇴직금</span></a>
-      <a class="card soon" href="#"><b>실업급여 모의계산</b><span>구직급여 예상액</span></a>
-      <a class="card soon" href="#"><b>연봉 실수령액</b><span>4대보험·세금 공제 후 금액</span></a>
-      <a class="card soon" href="#"><b>주휴수당·시급 계산기</b><span>주 15시간 기준 확인</span></a>
-      <a class="card soon" href="#"><b>대출 이자 계산기</b><span>원리금균등·원금균등 비교</span></a>
-      <a class="card soon" href="#"><b>부가세 계산기</b><span>공급가액과 합계금액 역산</span></a>
-      <a class="card soon" href="#"><b>퍼센트·할인율 계산기</b><span>할인가와 증감률</span></a>
-    </div>
+    <div class="cards" id="cat-cards" data-cat="money"></div>
+  </section>
+  <section class="prose">
+    <h2>돈 계산이 유독 헷갈리는 이유</h2>
+    <p>돈과 관련된 계산은 공식보다 <strong>기준값</strong>이 문제예요. 4대보험 요율, 최저임금, 실업급여 상·하한액, 기준금리는 해마다 바뀌고, 어떤 항목은 법이 바뀌면 중간에도 달라져요. 작년 기준으로 계산하면 월 수만 원씩 차이가 나요.</p>
+    <p>여기 있는 계산기는 모두 <strong>2026년 기준값</strong>을 반영했고, 각 페이지에 적용 기준일을 적어 뒀어요. 국민연금 4.75%, 건강보험 3.595%, 실업급여 상한 68,100원처럼 근거가 되는 숫자를 화면에 그대로 보여줘요.</p>
+    <h2>상황별로 묶어서 계산해요</h2>
+    <p><strong>퇴사 세트</strong>는 퇴직금 → 실업급여 → 다음 직장 연봉 실수령액으로 이어져요. 한 번 입력한 급여가 다음 계산기로 넘어가서 다시 칠 필요가 없어요. <strong>이사 세트</strong>는 전월세 전환 → 중개수수료 → 대출 이자로 이어지고요.</p>
   </section>
 
 </main>
@@ -45,13 +52,17 @@
 <footer class="site-footer">
   <div class="wrap">
     <nav>
+      <a href="/">전체 계산기</a>
       <a href="/about/">소개</a>
       <a href="/contact/">문의</a>
       <a href="/privacy/">개인정보처리방침</a>
       <a href="/terms/">이용약관</a>
     </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
     <p>&copy; 2026 calcflow.kr</p>
   </div>
 </footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
 </body>
 </html>

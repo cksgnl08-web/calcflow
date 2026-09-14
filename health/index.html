@@ -4,38 +4,47 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>건강 계산기 - calcflow</title>
-<meta name="description" content="기초대사량, BMI, 출산예정일, 수면 사이클 등 건강 관련 계산기 모음이에요.">
+<meta name="description" content="기초대사량, BMI, 수면 사이클 등 건강 관련 계산기 모음이에요.">
 <link rel="canonical" href="https://calcflow.kr/health/">
+<meta property="og:title" content="건강 계산기 - calcflow">
+<meta property="og:description" content="기초대사량, BMI, 수면 사이클 등 건강 관련 계산기 모음이에요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/health/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="/">calc<span>flow</span></a>
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
     <nav class="site-nav">
       <a href="/money/">돈·금융</a>
       <a href="/life/">날짜·생활</a>
       <a href="/health/">건강</a>
-      <a href="/tools/">사진·글자 도구</a>
+      <a href="/tools/">도구</a>
     </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › 건강</nav>
   <section>
-    <h1>건강 계산기</h1>
-    <p class="lede">몸 상태와 생활 습관을 숫자로 확인해요.</p>
+    <h1>💪 건강 계산기</h1>
+    <p class="muted">몸 상태와 생활 습관을 숫자로 확인해요.</p>
   </section>
-
   <section>
-    <div class="cards">
-      <a class="card soon" href="#"><b>기초대사량·TDEE 계산기</b><span>하루 필요 열량</span></a>
-      <a class="card soon" href="#"><b>BMI 계산기</b><span>국내 기준 체질량지수</span></a>
-      <a class="card soon" href="#"><b>출산예정일 계산기</b><span>임신 주수 확인</span></a>
-      <a class="card soon" href="#"><b>수면 사이클 계산기</b><span>기상·취침 시각 역산</span></a>
-      <a class="card soon" href="#"><b>하루 물 섭취량</b><span>체중·활동량 기준</span></a>
-      <a class="card soon" href="#"><b>러닝 페이스 계산기</b><span>예상 완주 기록</span></a>
-    </div>
+    <div class="cards" id="cat-cards" data-cat="health"></div>
+  </section>
+  <section class="prose">
+    <h2>숫자는 출발점이에요</h2>
+    <p>기초대사량이나 BMI 같은 지표는 공식으로 구한 <strong>평균값</strong>이에요. 같은 키와 몸무게라도 근육량과 생활 습관에 따라 실제 값은 10% 안팎으로 차이가 나요. 그래서 계산 결과를 목표로 삼기보다, 2~3주 지켜보면서 조정하는 기준선으로 쓰는 게 좋아요.</p>
+    <p>어떤 공식을 썼는지도 함께 적어요. 기초대사량은 일반인 대상 오차가 가장 적다고 알려진 Mifflin-St Jeor 공식을, BMI는 국내 기준(대한비만학회)을 써요.</p>
+    <h2>건강 계산기를 볼 때 주의할 점</h2>
+    <p>지병이 있거나 약을 복용 중이라면 필요한 열량과 적정 체중이 달라질 수 있어요. 체중 조절이나 식단 계획은 의사, 영양 전문가와 상의하는 게 안전해요.</p>
   </section>
 
 </main>
@@ -43,13 +52,17 @@
 <footer class="site-footer">
   <div class="wrap">
     <nav>
+      <a href="/">전체 계산기</a>
       <a href="/about/">소개</a>
       <a href="/contact/">문의</a>
       <a href="/privacy/">개인정보처리방침</a>
       <a href="/terms/">이용약관</a>
     </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
     <p>&copy; 2026 calcflow.kr</p>
   </div>
 </footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
 </body>
 </html>

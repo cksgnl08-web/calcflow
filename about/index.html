@@ -4,38 +4,55 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>소개 - calcflow</title>
-<meta name="description" content="calcflow는 자주 쓰는 생활 계산기를 한곳에 모은 사이트예요.">
+<meta name="description" content="calcflow가 어떤 기준으로 계산기를 만들고 어떻게 검증하는지 설명해요.">
 <link rel="canonical" href="https://calcflow.kr/about/">
+<meta property="og:title" content="소개 - calcflow">
+<meta property="og:description" content="calcflow가 어떤 기준으로 계산기를 만들고 어떻게 검증하는지 설명해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/about/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="/">calc<span>flow</span></a>
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
     <nav class="site-nav">
       <a href="/money/">돈·금융</a>
       <a href="/life/">날짜·생활</a>
       <a href="/health/">건강</a>
-      <a href="/tools/">사진·글자 도구</a>
+      <a href="/tools/">도구</a>
     </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
   <section>
     <h1>calcflow 소개</h1>
-    <p>calcflow는 살면서 한 번씩 찾게 되는 계산을 한곳에 모은 사이트예요. 전역일이 언제인지, 적금 만기에 실제로 얼마를 받는지, 증명사진을 어떤 크기로 맞춰야 하는지 같은 것들이요.</p>
+    <p class="muted">살면서 한 번씩 찾게 되는 계산을 한곳에 모았어요.</p>
   </section>
+  <section class="prose">
+    <h2>왜 만들었나요</h2>
+    <p>퇴사할 때 퇴직금이 얼마인지, 실업급여는 며칠 받는지, 전세를 월세로 바꾸면 매달 얼마인지. 검색하면 계산기는 많이 나오지만 대부분 숫자만 던져주고 끝나요. 어떤 공식을 썼는지, 언제 기준인지, 그래서 다음에 뭘 해야 하는지는 알려주지 않아요.</p>
+    <p>calcflow는 그 뒷부분까지 담으려고 만든 사이트예요. 계산기 하나하나를 낱개로 두지 않고, <strong>퇴사·전역·이사처럼 하나의 상황을 처음부터 끝까지 따라갈 수 있게</strong> 묶었어요. 앞 계산기에 넣은 값이 다음 계산기로 이어지고, 결과 아래에는 신청처와 서류, 놓치기 쉬운 기한을 함께 적어요.</p>
 
-  <section>
-    <h2>이렇게 만들고 있어요</h2>
-    <p>계산기마다 결과 숫자만 보여주지 않고, 어떤 공식과 어떤 기준으로 계산했는지 함께 적어요. 기준이 되는 법이나 요율이 바뀌면 해당 페이지의 기준일을 갱신해요.</p>
-    <p>모든 계산은 이용자의 브라우저 안에서만 이뤄져요. 입력한 값이나 올린 사진은 서버로 전송되지 않아요.</p>
-  </section>
+    <h2>어떻게 검증하나요</h2>
+    <p>계산 공식과 기준값은 <strong>법령과 정부·공공기관 자료를 1차 출처로</strong> 삼아요. 고용노동부, 병무청, 국민건강보험공단, 국세청, 한국은행 같은 곳이에요. 블로그나 다른 계산기 사이트를 근거로 삼지 않아요.</p>
+    <p>기준값이 해마다 바뀌는 항목(4대보험 요율, 최저임금, 실업급여 상·하한액, 병 봉급, 기준금리 등)은 페이지에 <strong>적용 기준일</strong>을 적어 둬요. 제도가 바뀌면 해당 페이지의 숫자와 기준일을 함께 고쳐요.</p>
+    <p>계산 로직은 실제 값을 넣어 손계산과 대조한 뒤 공개해요. 상한·하한처럼 경계가 있는 계산은 경계값을 따로 확인해요.</p>
 
-  <section>
+    <h2>개인정보를 다루는 방식</h2>
+    <p>모든 계산은 이용자의 브라우저 안에서만 이뤄져요. 급여, 생년월일, 보증금처럼 민감할 수 있는 값을 입력해도 <strong>서버로 전송되지 않고 저장되지도 않아요</strong>. 일부 계산기는 편의를 위해 입력값을 그 브라우저에만 기억해 두는데, 이 값도 다른 곳으로 나가지 않아요.</p>
+
+    <h2>운영</h2>
+    <p>1인 개발자가 만들고 운영해요. 광고와 제휴 링크로 운영비를 충당하지만, 그 때문에 계산 결과나 설명을 바꾸지는 않아요. 제휴 링크가 있는 페이지에는 그 사실을 표시해요.</p>
+
     <h2>정확성에 대해</h2>
-    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 관련 기관의 공식 안내를 확인해 주세요. 잘못된 내용을 발견하면 <a href="/contact/">문의</a>로 알려주시면 확인 후 고칠게요.</p>
+    <p>계산 결과는 참고용이에요. 개인의 사정과 회사·기관의 실제 처리 방식에 따라 결과가 다를 수 있어요. 중요한 결정 전에는 관련 기관의 공식 안내를 확인해 주세요. 잘못된 내용을 발견하면 <a href="/contact/">문의</a>로 알려주시면 확인 후 고칠게요.</p>
   </section>
 
 </main>
@@ -43,13 +60,17 @@
 <footer class="site-footer">
   <div class="wrap">
     <nav>
+      <a href="/">전체 계산기</a>
       <a href="/about/">소개</a>
       <a href="/contact/">문의</a>
       <a href="/privacy/">개인정보처리방침</a>
       <a href="/terms/">이용약관</a>
     </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
     <p>&copy; 2026 calcflow.kr</p>
   </div>
 </footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
 </body>
 </html>

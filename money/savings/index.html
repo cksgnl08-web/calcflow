@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>예금·적금 이자 계산기 - 세후 수령액 | calcflow</title>
+<meta name="description" content="적금과 예금의 만기 수령액을 이자소득세 15.4%까지 반영해 계산해요. 단리와 월복리를 비교할 수 있어요.">
+<link rel="canonical" href="https://calcflow.kr/money/savings/">
+<meta property="og:title" content="예금·적금 이자 계산기 - 세후 수령액 | calcflow">
+<meta property="og:description" content="적금과 예금의 만기 수령액을 이자소득세 15.4%까지 반영해 계산해요. 단리와 월복리를 비교할 수 있어요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/savings/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+
+  <section>
+    <h1>🏦 예·적금 이자 계산기</h1>
+    <p class="muted">만기에 실제로 손에 쥐는 금액을 세금까지 빼고 계산해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="seg" role="group" aria-label="상품 종류">
+        <button type="button" id="p-jeok" aria-pressed="true">적금 (매달 납입)</button>
+        <button type="button" id="p-ye" aria-pressed="false">예금 (한 번에 예치)</button>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="amt" id="amt-label">월 납입액 (원)</label><input type="number" id="amt" min="0" step="10000" value="500000" inputmode="numeric"></div>
+        <div class="field"><label for="months">기간 (개월)</label><input type="number" id="months" min="1" max="120" step="1" value="12" inputmode="numeric"></div>
+        <div class="field"><label for="rate">연 이자율 (%)</label><input type="number" id="rate" min="0" max="20" step="0.01" value="3.5" inputmode="decimal"></div>
+        <div class="field"><label for="tax">과세 방식</label>
+          <select id="tax">
+            <option value="15.4">일반과세 15.4%</option>
+            <option value="9.5">세금우대 9.5%</option>
+            <option value="0">비과세 0%</option>
+          </select></div>
+      </div>
+      <div class="seg" role="group" aria-label="이자 계산 방식">
+        <button type="button" id="i-simple" aria-pressed="true">단리</button>
+        <button type="button" id="i-comp" aria-pressed="false">월복리</button>
+      </div>
+      <div class="result" id="res">
+        <div><div class="head">세후 수령액</div><div class="big" id="r-net">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">납입 원금</span><span class="v" id="r-principal">—</span></div>
+          <div class="cell"><span class="k">세전 이자</span><span class="v pos" id="r-interest">—</span></div>
+          <div class="cell"><span class="k">이자과세</span><span class="v" id="r-tax">—</span></div>
+          <div class="cell"><span class="k">실효 수익률</span><span class="v" id="r-yield">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>적금 이자는 생각보다 적게 붙어요</h2>
+    <p>연 3.5% 적금에 매달 50만원을 1년 넣으면 원금은 600만원이지만 이자는 약 11만원이에요. 3.5%인 600만원의 21만원이 아니에요. 첫 달에 넣은 돈만 12개월치 이자를 받고, 마지막 달에 넣은 돈은 한 달치만 받기 때문이에요.</p>
+    <p>그래서 적금 단리 이자는 <strong>월 납입액 × 연이율 ÷ 12 × (개월수 × (개월수+1) ÷ 2)</strong>로 계산해요. 예금은 목돈을 한 번에 넣으니 <strong>원금 × 연이율 × 개월수 ÷ 12</strong>로 훨씬 단순해요.</p>
+    <h2>이자에 붙는 세금</h2>
+    <p>이자소득에는 소득세 14%와 지방소득세 1.4%를 더해 <strong>15.4%</strong>가 붙어요. 세금우대(9.5%)나 비과세는 청년우대형 상품, 조합 예탁금처럼 조건을 갖춘 경우에만 적용돼요.</p>
+  </section>
+
+  <section>
+    <h2>월 50만원 1년 적금 예시 (연 3.5%, 단리)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>항목</th><th class="n">금액</th></tr></thead>
+      <tbody>
+        <tr><td>납입 원금</td><td class="n">6,000,000원</td></tr>
+        <tr><td>세전 이자</td><td class="n">113,750원</td></tr>
+        <tr><td>이자과세 15.4%</td><td class="n">-17,518원</td></tr>
+        <tr><td><strong>세후 수령액</strong></td><td class="n"><strong>6,096,233원</strong></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>은행 앱에서 본 금액과 조금 달라요.</summary><p>은행마다 이자를 일할로 계산하거나 납입일을 다르게 잡아서 며칠치 차이가 날 수 있어요. 이 계산기는 개월 단위 기준이에요.</p></details><details><summary>단리와 월복리 중 뭘 골라야 하나요?</summary><p>가입한 상품 설명서에 적힌 방식을 고르면 돼요. 대부분의 적금은 단리이고, 월복리 상품은 상품명에 복리라고 적혀 있어요.</p></details><details><summary>세금우대 9.5%는 누가 받나요?</summary><p>새마을금고·신협 등의 조합 예탁금이나 일부 청년 대상 상품에서 조건을 만족할 때 적용돼요. 가입 전에 은행에 확인해야 해요.</p></details><details><summary>중도 해지하면 어떻게 되나요?</summary><p>약정 금리 대신 훨씬 낮은 중도해지 금리가 적용돼요. 이 계산기는 만기까지 유지한 경우를 기준으로 계산해요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="savings"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var kind="jeok", method="simple";
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function calc(){
+  var a=parseFloat($("amt").value)||0, n=parseInt($("months").value,10)||0,
+      r=(parseFloat($("rate").value)||0)/100, t=(parseFloat($("tax").value)||0)/100;
+  if(a<=0||n<=0){return}
+  var principal, interest, i=r/12;
+  if(kind==="jeok"){
+    principal=a*n;
+    if(method==="simple"){ interest=a*i*(n*(n+1)/2); }
+    else { var fv=i>0? a*((Math.pow(1+i,n)-1)/i)*(1+i) : a*n; interest=fv-principal; }
+  }else{
+    principal=a;
+    if(method==="simple"){ interest=a*r*(n/12); }
+    else { interest=a*(Math.pow(1+i,n)-1); }
+  }
+  var tax=interest*t, net=principal+interest-tax;
+  $("r-net").textContent=won(net);
+  $("r-sub").textContent=(kind==="jeok"?"매달 "+won(a)+"씩 ":"")+n+"개월 · 연 "+($("rate").value||0)+"% "+(method==="simple"?"단리":"월복리")+" 기준이에요.";
+  $("r-principal").textContent=won(principal);
+  $("r-interest").textContent="+"+won(interest);
+  $("r-tax").textContent="-"+won(tax);
+  $("r-yield").textContent=principal>0?((interest-tax)/principal*100).toFixed(2)+"%":"—";
+}
+function setKind(k){
+  kind=k;
+  $("p-jeok").setAttribute("aria-pressed",k==="jeok");
+  $("p-ye").setAttribute("aria-pressed",k==="ye");
+  $("amt-label").textContent=k==="jeok"?"월 납입액 (원)":"예치 금액 (원)";
+  if(k==="ye"&&parseFloat($("amt").value)<1000000) $("amt").value=10000000;
+  if(k==="jeok"&&parseFloat($("amt").value)>3000000) $("amt").value=500000;
+  calc();
+}
+function setMethod(m){
+  method=m;
+  $("i-simple").setAttribute("aria-pressed",m==="simple");
+  $("i-comp").setAttribute("aria-pressed",m==="comp");
+  calc();
+}
+$("p-jeok").addEventListener("click",function(){setKind("jeok")});
+$("p-ye").addEventListener("click",function(){setKind("ye")});
+$("i-simple").addEventListener("click",function(){setMethod("simple")});
+$("i-comp").addEventListener("click",function(){setMethod("comp")});
+["amt","months","rate","tax"].forEach(function(id){$(id).addEventListener("input",calc)});
+calc();
+})();
+</script>
+</body>
+</html>

@@ -4,37 +4,47 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>사진·글자 도구 - calcflow</title>
-<meta name="description" content="증명사진 리사이저, 글자수 세기, 이미지 용량 줄이기 등 바로 쓰는 도구 모음이에요.">
+<meta name="description" content="글자수 세기, 증명사진 리사이저 등 바로 쓰는 도구 모음이에요.">
 <link rel="canonical" href="https://calcflow.kr/tools/">
+<meta property="og:title" content="사진·글자 도구 - calcflow">
+<meta property="og:description" content="글자수 세기, 증명사진 리사이저 등 바로 쓰는 도구 모음이에요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="/">calc<span>flow</span></a>
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
     <nav class="site-nav">
       <a href="/money/">돈·금융</a>
       <a href="/life/">날짜·생활</a>
       <a href="/health/">건강</a>
-      <a href="/tools/">사진·글자 도구</a>
+      <a href="/tools/">도구</a>
     </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › 도구</nav>
   <section>
-    <h1>사진·글자 도구</h1>
-    <p class="lede">파일을 서버에 올리지 않고 브라우저 안에서 처리해요.</p>
+    <h1>🛠️ 도구 계산기</h1>
+    <p class="muted">브라우저 안에서 바로 처리하는 도구예요.</p>
   </section>
-
   <section>
-    <div class="cards">
-      <a class="card soon" href="#"><b>증명·여권사진 리사이저</b><span>규격에 맞게 자르고 저장</span></a>
-      <a class="card soon" href="#"><b>글자수 세기</b><span>공백 포함·제외, 바이트</span></a>
-      <a class="card soon" href="#"><b>이미지 용량 줄이기</b><span>제출 용량 제한 맞추기</span></a>
-      <a class="card soon" href="#"><b>단위 변환기</b><span>길이·무게·온도·부피</span></a>
-      <a class="card soon" href="#"><b>QR코드 생성기</b><span>URL·텍스트·와이파이</span></a>
-    </div>
+    <div class="cards" id="cat-cards" data-cat="tools"></div>
+  </section>
+  <section class="prose">
+    <h2>파일을 올리지 않아도 되는 도구</h2>
+    <p>글자수를 세거나 사진 크기를 맞추려고 검색하면 대부분 파일을 서버에 올리라고 해요. 자기소개서나 증명사진처럼 남에게 보이고 싶지 않은 파일도 그렇게 처리되죠.</p>
+    <p>여기 있는 도구는 전부 <strong>브라우저 안에서만</strong> 동작해요. 붙여넣은 글과 올린 사진은 어디로도 전송되지 않고, 창을 닫으면 사라져요. 인터넷 연결이 끊겨도 계산은 그대로 돼요.</p>
+    <h2>제출 기준을 함께 정리했어요</h2>
+    <p>자기소개서 글자수는 회사마다 공백 포함·제외 기준이 다르고, 바이트 제한을 쓰는 곳은 인코딩(UTF-8과 EUC-KR)에 따라 숫자가 달라져요. 어떤 기준으로 세는지 한 화면에서 모두 보여줘요.</p>
   </section>
 
 </main>
@@ -42,13 +52,17 @@
 <footer class="site-footer">
   <div class="wrap">
     <nav>
+      <a href="/">전체 계산기</a>
       <a href="/about/">소개</a>
       <a href="/contact/">문의</a>
       <a href="/privacy/">개인정보처리방침</a>
       <a href="/terms/">이용약관</a>
     </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
     <p>&copy; 2026 calcflow.kr</p>
   </div>
 </footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
 </body>
 </html>

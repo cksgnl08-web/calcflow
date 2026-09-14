@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>군인 월급·장병내일준비적금 계산기 2026 | calcflow</title>
+<meta name="description" content="2026년 병 봉급(이병 75만·병장 150만)과 장병내일준비적금 정부 매칭을 반영해 전역할 때 모이는 돈을 계산해요.">
+<link rel="canonical" href="https://calcflow.kr/money/military-pay/">
+<meta property="og:title" content="군인 월급·장병내일준비적금 계산기 2026 | calcflow">
+<meta property="og:description" content="2026년 병 봉급(이병 75만·병장 150만)과 장병내일준비적금 정부 매칭을 반영해 전역할 때 모이는 돈을 계산해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/military-pay/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+  <div id="set-bar"></div>
+
+  <section>
+    <h1>🎖️ 군인 월급·적금 계산기</h1>
+    <p class="muted">복무 기간 동안 받는 봉급과 적금 만기액을 합쳐 전역할 때 얼마가 모이는지 계산해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="grid2">
+        <div class="field"><label for="branch">군종</label>
+          <select id="branch">
+            <option value="18">육군 · 해병대 · 카투사 (18개월)</option>
+            <option value="20">해군 (20개월)</option>
+            <option value="21">공군 (21개월)</option>
+            <option value="21">사회복무요원 (21개월)</option>
+          </select></div>
+        <div class="field"><label for="enlist">입대일 (선택)</label><input type="date" id="enlist"><span class="hint">넣으면 계급별 기간과 지금까지 받은 봉급도 보여줘요</span></div>
+      </div>
+      <div class="field">
+        <label for="save">월 적금 납입액 (장병내일준비적금)</label>
+        <input type="number" id="save" min="0" max="55" step="1" value="40" inputmode="numeric">
+        <span class="hint">만원 단위로 넣어주세요. 최대 55만원까지 넣을 수 있어요.</span>
+      </div>
+      <div class="result" id="res">
+        <div><div class="head">전역 시 예상 자산</div><div class="big" id="r-total">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">누적 봉급 총액</span><span class="v" id="r-pay">—</span></div>
+          <div class="cell"><span class="k">적금 본인 납입</span><span class="v" id="r-principal">—</span></div>
+          <div class="cell"><span class="k">정부 매칭 (100%)</span><span class="v pos" id="r-match">—</span></div>
+          <div class="cell"><span class="k">적금 이자 (비과세)</span><span class="v pos" id="r-interest">—</span></div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>계급</th><th class="n">기간</th><th class="n">월 봉급</th><th class="n">소계</th></tr></thead>
+          <tbody id="r-table"></tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="btn ghost" type="button" id="share-link">🔗 결과 링크 복사</button>
+      <span class="carry" id="carry-badge" hidden>전역일 계산기에서 입력값을 가져왔어요</span>
+    </div>
+  </section>
+
+  <div id="set-next"></div>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>계산 다음에 할 일</h2>
+    <div class="actions">
+      <div class="action"><span class="n">1</span><span class="b"><b>적금은 입대 후 바로 드는 게 이득이에요</b><p>가입이 늦어질수록 넣을 수 있는 개월수가 줄어요. 한 달 늦으면 본인 납입 55만원 + 매칭 55만원, 총 110만원이 사라지는 셈이에요.</p><span class="meta">나라사랑포털 또는 은행 앱에서 가입</span></span></div>
+      <div class="action"><span class="n">2</span><span class="b"><b>여러 은행에 나눠 들 수 있어요</b><p>은행별로 우대금리 조건이 달라요. 월 한도 55만원 안에서 나눠 가입하면 우대금리를 더 챙길 수 있어요.</p></span></div>
+      <div class="action"><span class="n">3</span><span class="b"><b>전역 후 목돈은 바로 예적금으로 옮기세요</b><p>만기 수령액을 통장에 두면 이자가 붙지 않아요. 전역 직후가 목돈을 굴리기 시작하기 가장 좋은 시점이에요.</p></span></div>
+      <div class="action"><span class="n">4</span><span class="b"><b>전역 후 취업하면 청년 대상 자산형성 제도도 확인하세요</b><p>청년도약계좌처럼 정부가 보태주는 상품이 또 있어요. 조건은 소득 기준에 따라 달라요.</p></span></div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>전역할 때 얼마가 모이나요</h2>
+    <p>2026년 병 봉급은 이병 75만원, 일병 90만원, 상병 120만원, 병장 150만원이에요. 육군 18개월이면 계급별로 2·6·6·4개월씩 복무하니 봉급만 2,010만원이에요.</p>
+    <p>여기에 <strong>장병내일준비적금</strong>을 더해요. 월 최대 55만원까지 넣을 수 있고, 정부가 낸 만큼을 <strong>100% 매칭</strong>해 줘요. 이자소득은 비과세이고 은행 기본금리는 연 5% 수준이라, 시중에서 이만한 조건의 적금은 없어요.</p>
+    <p>이 계산기는 <strong>봉급 총액 + 정부 매칭 + 적금 이자</strong>를 더해요. 적금에 넣는 본인 돈은 봉급에서 나가는 것이라 중복해서 더하지 않아요. 다른 계산기가 둘을 그냥 합쳐서 금액이 부풀려지는 경우가 많아요.</p>
+  </section>
+
+  <section>
+    <h2>2026년 병 봉급</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>계급</th><th class="n">월 봉급</th><th>복무 기간(육군 기준)</th></tr></thead>
+      <tbody>
+        <tr><td>이병</td><td class="n">750,000원</td><td>2개월</td></tr>
+        <tr><td>일병</td><td class="n">900,000원</td><td>6개월</td></tr>
+        <tr><td>상병</td><td class="n">1,200,000원</td><td>6개월</td></tr>
+        <tr><td>병장</td><td class="n">1,500,000원</td><td>남은 기간</td></tr>
+      </tbody>
+    </table></div>
+    <p class="source">기준일 2026년 9월 · 병 봉급은 해마다 바뀔 수 있어요.</p>
+  </section>
+
+  <section>
+    <h2>적금 납입액별 전역 자산 (육군 18개월 기준)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th class="n">월 납입</th><th class="n">본인 납입</th><th class="n">정부 매칭</th><th class="n">전역 시 자산</th></tr></thead>
+      <tbody>
+        <tr><td class="n">20만원</td><td class="n">360만원</td><td class="n">360만원</td><td class="n">약 2,384만원</td></tr>
+        <tr><td class="n">40만원</td><td class="n">720만원</td><td class="n">720만원</td><td class="n">약 2,759만원</td></tr>
+        <tr><td class="n">55만원</td><td class="n">990만원</td><td class="n">990만원</td><td class="n">약 3,039만원</td></tr>
+      </tbody>
+    </table></div>
+    <p class="source">봉급 총액 2,010만원 + 정부 매칭 + 이자(연 5% 단리 근사) 기준이에요.</p>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>월 55만원을 다 넣을 수 있나요?</summary><p>봉급이 이병 75만원부터 시작하니 초반에는 부담될 수 있어요. 계급이 오르면 납입액을 올리는 식으로 조절하는 사람이 많아요.</p></details><details><summary>정부 매칭은 언제 받나요?</summary><p>만기 때 원금·이자와 함께 지급돼요. 중도 해지하면 매칭 지원금을 받지 못할 수 있으니 만기까지 유지하는 게 중요해요.</p></details><details><summary>이자에 세금이 붙나요?</summary><p>장병내일준비적금의 이자소득은 비과세예요. 일반 적금은 15.4%를 떼는 것과 다른 점이에요.</p></details><details><summary>이 금액이 실제와 다를 수 있나요?</summary><p>네. 은행 우대금리, 가입 시점, 봉급 인상에 따라 달라져요. 이 계산기는 기본금리 연 5% 단리로 어림한 값이에요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="military-pay"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script src="/assets/profile.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var F=["branch","enlist","save"];
+var PAY={이병:750000,일병:900000,상병:1200000,병장:1500000};
+var DAY=86400000;
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function man(n){return Math.round(n/10000).toLocaleString("ko-KR")+"만원"}
+function segs(m){
+  return [["이병",Math.min(2,m)],["일병",Math.min(6,Math.max(0,m-2))],
+          ["상병",Math.min(6,Math.max(0,m-8))],["병장",Math.max(0,m-14)]];
+}
+function calc(){
+  var m=parseInt($("branch").value,10)||18;
+  var save=Math.max(0,Math.min(55,parseFloat($("save").value)||0))*10000;
+  var rows="", pay=0;
+  segs(m).forEach(function(s){
+    if(s[1]<=0) return;
+    var sub=PAY[s[0]]*s[1]; pay+=sub;
+    rows+='<tr><td>'+s[0]+'</td><td class="n">'+s[1]+'개월</td><td class="n">'+won(PAY[s[0]])+'</td><td class="n">'+won(sub)+'</td></tr>';
+  });
+  rows+='<tr><td><strong>합계</strong></td><td class="n">'+m+'개월</td><td class="n"></td><td class="n"><strong>'+won(pay)+'</strong></td></tr>';
+  var principal=save*m, match=principal;
+  var interest=save*(m*(m+1)/2)*(0.05/12);
+  var total=pay+match+interest;
+  $("r-table").innerHTML=rows;
+  $("r-pay").textContent=man(pay);
+  $("r-principal").textContent=man(principal);
+  $("r-match").textContent="+"+man(match);
+  $("r-interest").textContent="+"+won(interest);
+  $("r-total").textContent="약 "+man(total);
+  var extra="";
+  var e=$("enlist").value;
+  if(e){
+    var p=e.split("-"), st=new Date(+p[0],+p[1]-1,+p[2]);
+    var now=new Date();
+    var mo=(now.getFullYear()-st.getFullYear())*12+(now.getMonth()-st.getMonth());
+    if(mo>0&&mo<=m){
+      var got=0, left=mo;
+      segs(m).forEach(function(s){
+        var take=Math.min(s[1],left); if(take>0){got+=PAY[s[0]]*take; left-=take;}
+      });
+      extra=" 지금까지 받은 봉급은 약 "+man(got)+"이에요.";
+    }
+  }
+  $("r-sub").textContent="복무 "+m+"개월 · 월 "+Math.round(save/10000)+"만원 납입 기준이에요. 본인 납입금은 봉급에서 나가므로 중복 계산하지 않았어요."+extra;
+}
+CF.linkFields(F);
+F.forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
+CF.renderSet("military","military-pay",F);
+calc();
+})();
+</script>
+</body>
+</html>

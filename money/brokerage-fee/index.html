@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>부동산 중개수수료 계산기 - 매매·전세·월세 복비 | calcflow</title>
+<meta name="description" content="거래금액 구간별 상한요율로 중개보수를 계산해요. 월세 환산식과 한도액, 부가세까지 반영해요.">
+<link rel="canonical" href="https://calcflow.kr/money/brokerage-fee/">
+<meta property="og:title" content="부동산 중개수수료 계산기 - 매매·전세·월세 복비 | calcflow">
+<meta property="og:description" content="거래금액 구간별 상한요율로 중개보수를 계산해요. 월세 환산식과 한도액, 부가세까지 반영해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/brokerage-fee/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+  <div id="set-bar"></div>
+
+  <section>
+    <h1>🏘️ 부동산 중개수수료 계산기</h1>
+    <p class="muted">매매·전세·월세별 복비 상한을 계산해요. 상한이라 협의로 낮출 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="seg" role="group" aria-label="거래 종류">
+        <button type="button" id="t-sale" aria-pressed="false">매매·교환</button>
+        <button type="button" id="t-jeonse" aria-pressed="true">전세</button>
+        <button type="button" id="t-month" aria-pressed="false">월세</button>
+      </div>
+      <div class="grid2">
+        <div class="field" id="f-price" hidden><label for="price">매매가 (원)</label><input type="number" id="price" step="1000000" min="0" placeholder="예: 700000000" inputmode="numeric"></div>
+        <div class="field" id="f-jeonse2"><label for="jeonse">전세보증금 (원)</label><input type="number" id="jeonse" step="1000000" min="0" placeholder="예: 300000000" inputmode="numeric"></div>
+        <div class="field" id="f-dep" hidden><label for="deposit">보증금 (원)</label><input type="number" id="deposit" step="1000000" min="0" placeholder="예: 50000000" inputmode="numeric"></div>
+        <div class="field" id="f-rent2" hidden><label for="rent">월세 (원)</label><input type="number" id="rent" step="10000" min="0" placeholder="예: 800000" inputmode="numeric"></div>
+        <div class="field"><label for="vat">부가세</label>
+          <select id="vat"><option value="0" selected>별도 (중개보수만)</option><option value="10">포함 (10% 추가)</option></select>
+          <span class="hint">중개사가 일반과세자면 10%가 붙어요</span></div>
+      </div>
+      <div class="result" id="res" hidden>
+        <div><div class="head">중개보수 상한 (한쪽 부담)</div><div class="big" id="r-fee">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">거래금액</span><span class="v" id="r-amount">—</span></div>
+          <div class="cell"><span class="k">적용 상한요율</span><span class="v" id="r-rate">—</span></div>
+          <div class="cell"><span class="k">한도액</span><span class="v" id="r-cap">—</span></div>
+          <div class="cell"><span class="k">임대인+임차인 합계</span><span class="v" id="r-both">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="btn ghost" type="button" id="share-link">🔗 결과 링크 복사</button>
+      <span class="carry" id="carry-badge" hidden>전월세 전환 계산기에서 입력값을 가져왔어요</span>
+    </div>
+  </section>
+
+  <div id="set-next"></div>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>계산 다음에 할 일</h2>
+    <div class="actions">
+      <div class="action"><span class="n">1</span><span class="b"><b>계약 전에 수수료를 협의하고 금액을 적어두세요</b><p>'상한요율'이라 깎는 게 불법이 아니에요. 계약서 작성 전에 이야기하는 게 핵심이에요.</p></span></div>
+      <div class="action"><span class="n">2</span><span class="b"><b>현금영수증이나 세금계산서를 받으세요</b><p>중개보수는 현금영수증 의무발행 대상이에요. 연말정산 자료로도 쓰여요.</p></span></div>
+      <div class="action"><span class="n">3</span><span class="b"><b>공제증서(손해배상책임 보장)를 확인하세요</b><p>중개사고가 났을 때 보상받을 수 있는 근거예요. 계약할 때 사본을 요청하세요.</p></span></div>
+      <div class="action"><span class="n">4</span><span class="b"><b>과다 청구를 받았다면 신고할 수 있어요</b><p>상한을 넘겨 받은 금액은 반환 대상이에요. 시·군·구청 부동산 담당 부서에 신고하면 돼요.</p></span></div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>중개수수료는 '상한'이에요</h2>
+    <p>표에 있는 요율은 <strong>최대로 받을 수 있는 금액</strong>이에요. 법으로 정한 정액이 아니라서 협의로 낮출 수 있어요. 계약서를 쓰기 전에 미리 이야기해야 하고, 계약서에 도장을 찍은 뒤에는 조정이 어려워요.</p>
+    <p>수수료는 <strong>매도인과 매수인이 각각</strong>, 임대차는 <strong>임대인과 임차인이 각각</strong> 부담해요. 한 사람이 표의 금액을 다 내는 게 아니에요.</p>
+    <h2>월세는 거래금액을 환산해요</h2>
+    <p><strong>보증금 + (월세 × 100)</strong>으로 계산해요. 이 금액이 5천만원 미만이면 <strong>보증금 + (월세 × 70)</strong>으로 다시 계산해요.</p>
+  </section>
+
+  <section>
+    <h2>주택 중개보수 상한요율</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>거래금액</th><th class="n">매매·교환</th><th class="n">임대차</th></tr></thead>
+      <tbody>
+        <tr><td>5천만원 미만</td><td class="n">0.6% (한도 25만원)</td><td class="n">0.5% (한도 20만원)</td></tr>
+        <tr><td>5천만원 ~ 1억원</td><td class="n">0.5% (한도 80만원)</td><td class="n">0.4% (한도 30만원)</td></tr>
+        <tr><td>1억원 ~ 2억원</td><td class="n">0.5% (한도 80만원)</td><td class="n">0.3%</td></tr>
+        <tr><td>2억원 ~ 6억원</td><td class="n">0.4%</td><td class="n">0.3%</td></tr>
+        <tr><td>6억원 ~ 9억원</td><td class="n">0.4%</td><td class="n">0.4%</td></tr>
+        <tr><td>9억원 ~ 12억원</td><td class="n">0.5%</td><td class="n">0.4%</td></tr>
+        <tr><td>12억원 ~ 15억원</td><td class="n">0.6%</td><td class="n">0.5%</td></tr>
+        <tr><td>15억원 이상</td><td class="n">0.7%</td><td class="n">0.6%</td></tr>
+      </tbody>
+    </table></div>
+    <p class="source">주택 기준이에요. 오피스텔(전용 85㎡ 이하 주거용)은 매매 0.5%·임대차 0.4%, 그 밖의 오피스텔과 상가·토지는 0.9% 이내에서 협의해요. 요율은 시·도 조례로 정해져서 지역에 따라 다를 수 있어요.</p>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>복비를 깎아도 되나요?</summary><p>네. 표의 요율은 상한이라 그 안에서 협의할 수 있어요. 다만 계약서를 쓰기 전에 이야기해야 해요.</p></details><details><summary>매도인과 매수인이 각각 내나요?</summary><p>네. 각자 자기 쪽 중개사에게 지급해요. 한 중개사가 양쪽을 중개했다면 양쪽에서 각각 받아요.</p></details><details><summary>부가세는 꼭 내야 하나요?</summary><p>중개사가 일반과세자면 10%가 붙고, 간이과세자면 낮은 세율이 적용돼요. 사업자 유형을 확인하면 돼요.</p></details><details><summary>오피스텔도 이 요율인가요?</summary><p>전용면적 85㎡ 이하이고 주거용 설비를 갖춘 오피스텔은 매매 0.5%, 임대차 0.4%예요. 그 밖에는 0.9% 이내 협의예요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="brokerage-fee"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script src="/assets/profile.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var F=["price","jeonse","deposit","rent","vat"];
+var kind="jeonse";
+var SALE=[[50000000,0.006,250000],[200000000,0.005,800000],[900000000,0.004,0],
+          [1200000000,0.005,0],[1500000000,0.006,0],[Infinity,0.007,0]];
+var LEASE=[[50000000,0.005,200000],[100000000,0.004,300000],[600000000,0.003,0],
+           [1200000000,0.004,0],[1500000000,0.005,0],[Infinity,0.006,0]];
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function pick(t,amt){for(var i=0;i<t.length;i++){if(amt<t[i][0]) return t[i];}return t[t.length-1]}
+function calc(){
+  var amt=0, table, label;
+  if(kind==="sale"){ amt=parseFloat($("price").value)||0; table=SALE; label="매매·교환"; }
+  else if(kind==="jeonse"){ amt=parseFloat($("jeonse").value)||0; table=LEASE; label="전세"; }
+  else {
+    var d=parseFloat($("deposit").value)||0, r=parseFloat($("rent").value)||0;
+    amt=d+r*100;
+    if(amt<50000000) amt=d+r*70;
+    table=LEASE; label="월세";
+  }
+  if(amt<=0){$("res").hidden=true;return;}
+  var row=pick(table,amt);
+  var fee=amt*row[1];
+  var capped=row[2]>0&&fee>row[2];
+  if(capped) fee=row[2];
+  var vat=parseFloat($("vat").value)||0;
+  var total=fee*(1+vat/100);
+  $("r-fee").textContent=won(total);
+  $("r-sub").textContent=label+" 거래금액 "+won(amt)+" 기준 · 상한요율 "+(row[1]*100).toFixed(1)+"%"+(vat?" · 부가세 포함":" · 부가세 별도")+"이에요. 협의로 낮출 수 있어요.";
+  $("r-amount").textContent=won(amt);
+  $("r-rate").textContent=(row[1]*100).toFixed(1)+"%";
+  $("r-cap").textContent=row[2]>0?(won(row[2])+(capped?" (적용됨)":"")):"없음";
+  $("r-both").textContent=won(total*2);
+  $("res").hidden=false;
+}
+function setKind(k){
+  kind=k;
+  $("t-sale").setAttribute("aria-pressed",k==="sale");
+  $("t-jeonse").setAttribute("aria-pressed",k==="jeonse");
+  $("t-month").setAttribute("aria-pressed",k==="month");
+  $("f-price").hidden=k!=="sale";
+  $("f-jeonse2").hidden=k!=="jeonse";
+  $("f-dep").hidden=k!=="month";
+  $("f-rent2").hidden=k!=="month";
+  calc();
+}
+$("t-sale").addEventListener("click",function(){setKind("sale")});
+$("t-jeonse").addEventListener("click",function(){setKind("jeonse")});
+$("t-month").addEventListener("click",function(){setKind("month")});
+CF.linkFields(F);
+if((parseFloat($("rent").value)||0)>0 && (parseFloat($("deposit").value)||0)>0) setKind("month");
+F.forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
+CF.renderSet("move","brokerage-fee",F);
+calc();
+})();
+</script>
+</body>
+</html>

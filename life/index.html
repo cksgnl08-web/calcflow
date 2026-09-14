@@ -4,39 +4,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>날짜·생활 계산기 - calcflow</title>
-<meta name="description" content="전역일, 만 나이, 평수 변환, 공항 주차비 등 생활 속 계산기 모음이에요.">
+<meta name="description" content="전역일, 만 나이, 평수 변환 등 생활 속에서 자주 쓰는 계산기 모음이에요.">
 <link rel="canonical" href="https://calcflow.kr/life/">
+<meta property="og:title" content="날짜·생활 계산기 - calcflow">
+<meta property="og:description" content="전역일, 만 나이, 평수 변환 등 생활 속에서 자주 쓰는 계산기 모음이에요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/life/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="/">calc<span>flow</span></a>
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
     <nav class="site-nav">
       <a href="/money/">돈·금융</a>
       <a href="/life/">날짜·생활</a>
       <a href="/health/">건강</a>
-      <a href="/tools/">사진·글자 도구</a>
+      <a href="/tools/">도구</a>
     </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › 날짜·생활</nav>
   <section>
-    <h1>날짜·생활 계산기</h1>
-    <p class="lede">날짜를 세거나 단위를 바꾸는 계산을 모았어요.</p>
+    <h1>📅 날짜·생활 계산기</h1>
+    <p class="muted">날짜를 세거나 단위를 바꾸는 계산을 모았어요.</p>
   </section>
-
   <section>
-    <div class="cards">
-      <a class="card" href="/life/discharge/"><b>군 전역일 계산기</b><span>입대일로 전역일과 남은 일수 계산</span></a>
-      <a class="card soon" href="#"><b>만 나이 계산기</b><span>만 나이·연 나이 비교</span></a>
-      <a class="card soon" href="#"><b>평수 ↔ ㎡ 변환</b><span>공급면적·전용면적 이해</span></a>
-      <a class="card soon" href="#"><b>D-day·기념일 계산기</b><span>100일, 1000일 계산</span></a>
-      <a class="card soon" href="#"><b>학점 변환 계산기</b><span>4.5 ↔ 4.3 ↔ 100점</span></a>
-      <a class="card soon" href="#"><b>공항 주차비 계산기</b><span>공항별 단기·장기 요금</span></a>
-      <a class="card soon" href="#"><b>전기요금 계산기</b><span>주택용 누진제 기준</span></a>
-    </div>
+    <div class="cards" id="cat-cards" data-cat="life"></div>
+  </section>
+  <section class="prose">
+    <h2>하루 차이로 달라지는 계산들</h2>
+    <p>날짜 계산은 '첫날을 세느냐'에서 결과가 갈려요. 전역일은 입대한 날을 복무 첫날로 세기 때문에 개월수를 더한 날의 하루 전이 되고, 만 나이는 생일 당일부터 한 살이 올라가요. 계산기마다 답이 다른 이유가 대개 여기에 있어서, 각 페이지에 어떤 기준을 썼는지 적어 뒀어요.</p>
+    <h2>단위도 마찬가지예요</h2>
+    <p>부동산에서 쓰는 평은 법정 단위가 아니라 공식 서류에는 ㎡로 적혀요. 34평 아파트의 전용면적이 84㎡, 즉 25평이라는 걸 모르면 매물을 비교할 때 헷갈려요. 변환기에 공급면적과 전용면적의 차이를 함께 정리해 뒀어요.</p>
   </section>
 
 </main>
@@ -44,13 +51,17 @@
 <footer class="site-footer">
   <div class="wrap">
     <nav>
+      <a href="/">전체 계산기</a>
       <a href="/about/">소개</a>
       <a href="/contact/">문의</a>
       <a href="/privacy/">개인정보처리방침</a>
       <a href="/terms/">이용약관</a>
     </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
     <p>&copy; 2026 calcflow.kr</p>
   </div>
 </footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
 </body>
 </html>

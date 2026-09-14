@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>평수 ㎡ 변환 계산기 - 전용면적·공급면적 | calcflow</title>
+<meta name="description" content="평과 제곱미터를 서로 바꿔요. 1평은 3.3058㎡. 전용면적과 공급면적 차이, 자주 쓰는 평수 환산표까지 정리했어요.">
+<link rel="canonical" href="https://calcflow.kr/life/pyeong/">
+<meta property="og:title" content="평수 ㎡ 변환 계산기 - 전용면적·공급면적 | calcflow">
+<meta property="og:description" content="평과 제곱미터를 서로 바꿔요. 1평은 3.3058㎡. 전용면적과 공급면적 차이, 자주 쓰는 평수 환산표까지 정리했어요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/life/pyeong/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/life/">날짜·생활</a></nav>
+
+  <section>
+    <h1>📐 평수 ↔ ㎡ 변환기</h1>
+    <p class="muted">평과 제곱미터를 서로 바꿔요. 아파트 평형이 실제로 몇 제곱미터인지 바로 확인할 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="seg" role="group" aria-label="변환 방향">
+        <button type="button" id="dir-p" aria-pressed="true">평 → ㎡</button>
+        <button type="button" id="dir-m" aria-pressed="false">㎡ → 평</button>
+      </div>
+      <div class="field"><label for="val" id="val-label">평수</label><input type="number" id="val" min="0" step="0.01" placeholder="예: 25" inputmode="decimal"></div>
+      <div class="result" id="res" hidden>
+        <div><div class="head" id="r-head">제곱미터</div><div class="big" id="r-main">—</div><div class="sub" id="r-sub"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>1평은 몇 제곱미터인가요?</h2>
+    <p><strong>1평 = 3.3058㎡</strong>예요. 정확히는 400/121㎡이고, 반대로 1㎡는 약 0.3025평이에요. 평은 법정 계량 단위가 아니라서 공식 문서에는 ㎡로 적지만, 부동산 거래에서는 여전히 평을 많이 써요.</p>
+    <h2>공급면적과 전용면적</h2>
+    <p>흔히 말하는 '34평 아파트'는 공급면적(전용면적 + 주거공용면적) 기준이에요. 실제로 우리 집 안에서 쓰는 공간은 전용면적이고, 34평 아파트의 전용면적은 보통 84㎡, 즉 25평 정도예요.</p>
+  </section>
+
+  <section>
+    <h2>자주 쓰는 평수 환산표</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>평</th><th class="n">제곱미터(㎡)</th><th>보통 이렇게 불러요</th></tr></thead>
+      <tbody>
+        <tr><td>9평</td><td class="n">29.75</td><td>원룸·오피스텔</td></tr>
+        <tr><td>18평</td><td class="n">59.50</td><td>전용 59㎡ (24평형)</td></tr>
+        <tr><td>25평</td><td class="n">82.64</td><td>전용 84㎡ (34평형)</td></tr>
+        <tr><td>34평</td><td class="n">112.40</td><td>공급 34평</td></tr>
+        <tr><td>44평</td><td class="n">145.45</td><td>공급 44평</td></tr>
+        <tr><td>59평</td><td class="n">195.04</td><td>대형 평형</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>왜 전용 84㎡를 34평이라고 하나요?</summary><p>84㎡는 전용면적이고, 34평은 여기에 계단·복도 같은 주거공용면적을 더한 공급면적이기 때문이에요.</p></details><details><summary>평 단위를 공식 문서에 써도 되나요?</summary><p>등기부등본이나 건축물대장 같은 공식 서류는 모두 ㎡로 표기해요. 평은 관행적으로 쓰는 단위예요.</p></details><details><summary>계산 결과를 소수점까지 믿어도 되나요?</summary><p>단위 환산 자체는 정확해요. 다만 부동산 광고의 평수는 반올림된 경우가 많아서 실제 면적과 조금 다를 수 있어요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="pyeong"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var P=400/121, mode="p";
+function calc(){
+  var v=parseFloat($("val").value);
+  if(isNaN(v)||v<0){$("res").hidden=true;return;}
+  if(mode==="p"){
+    $("r-head").textContent="제곱미터";
+    $("r-main").textContent=(v*P).toFixed(2)+" ㎡";
+    $("r-sub").textContent=v+"평은 약 "+(v*P).toFixed(2)+"제곱미터예요. (1평 = 3.3058㎡)";
+  }else{
+    $("r-head").textContent="평";
+    $("r-main").textContent=(v/P).toFixed(2)+" 평";
+    $("r-sub").textContent=v+"㎡는 약 "+(v/P).toFixed(2)+"평이에요. (1㎡ = 0.3025평)";
+  }
+  $("res").hidden=false;
+}
+function setMode(m){
+  mode=m;
+  $("dir-p").setAttribute("aria-pressed",m==="p");
+  $("dir-m").setAttribute("aria-pressed",m==="m");
+  $("val-label").textContent=m==="p"?"평수":"제곱미터(㎡)";
+  calc();
+}
+$("dir-p").addEventListener("click",function(){setMode("p")});
+$("dir-m").addEventListener("click",function(){setMode("m")});
+$("val").addEventListener("input",calc);
+})();
+</script>
+</body>
+</html>

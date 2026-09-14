@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>글자수 세기 - 공백 포함·제외, 바이트, 원고지 | calcflow</title>
+<meta name="description" content="자기소개서 글자수를 공백 포함과 제외, UTF-8과 EUC-KR 바이트, 원고지 매수까지 실시간으로 세요. 입력한 글은 전송되지 않아요.">
+<link rel="canonical" href="https://calcflow.kr/tools/char-count/">
+<meta property="og:title" content="글자수 세기 - 공백 포함·제외, 바이트, 원고지 | calcflow">
+<meta property="og:description" content="자기소개서 글자수를 공백 포함과 제외, UTF-8과 EUC-KR 바이트, 원고지 매수까지 실시간으로 세요. 입력한 글은 전송되지 않아요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/char-count/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">도구</a></nav>
+
+  <section>
+    <h1>🔤 글자수 세기</h1>
+    <p class="muted">붙여넣으면 바로 세요. 자기소개서 제한 글자수를 맞출 때 쓰기 좋아요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="field"><label for="text">글을 붙여넣으세요</label>
+        <textarea id="text" placeholder="여기에 자기소개서나 원고를 붙여넣으면 실시간으로 글자수를 세요."></textarea></div>
+      <div class="rgrid">
+        <div class="cell"><span class="k">공백 포함</span><span class="v pos" id="c-all">0자</span></div>
+        <div class="cell"><span class="k">공백 제외</span><span class="v" id="c-nospace">0자</span></div>
+        <div class="cell"><span class="k">단어 수</span><span class="v" id="c-word">0개</span></div>
+        <div class="cell"><span class="k">줄 수</span><span class="v" id="c-line">0줄</span></div>
+        <div class="cell"><span class="k">바이트 (UTF-8)</span><span class="v" id="c-utf">0B</span></div>
+        <div class="cell"><span class="k">바이트 (EUC-KR)</span><span class="v" id="c-euc">0B</span></div>
+        <div class="cell"><span class="k">원고지 (200자)</span><span class="v" id="c-paper">0매</span></div>
+        <div class="cell"><span class="k">예상 낭독 시간</span><span class="v" id="c-read">0초</span></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" id="copy-btn">본문 복사</button>
+        <button class="btn ghost" type="button" id="clear-btn">지우기</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>자기소개서 글자수는 보통 공백 포함이에요</h2>
+    <p>대부분의 채용 사이트는 <strong>공백 포함</strong> 기준으로 글자수를 세요. 다만 회사마다 다르고, 공백 제외로 세거나 바이트로 제한하는 곳도 있어서 입력창 아래 안내 문구를 꼭 확인해야 해요.</p>
+    <p>바이트로 제한하는 경우에는 인코딩에 따라 값이 달라져요. 한글 한 글자가 EUC-KR에서는 2바이트, UTF-8에서는 3바이트예요. 국내 공공기관 서식은 EUC-KR 기준인 경우가 많아요.</p>
+  </section>
+
+  <section>
+    <h2>글자수 기준 비교</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>기준</th><th>'안녕하세요 calcflow'는</th></tr></thead>
+      <tbody>
+        <tr><td>공백 포함</td><td class="n">14자</td></tr>
+        <tr><td>공백 제외</td><td class="n">13자</td></tr>
+        <tr><td>UTF-8 바이트</td><td class="n">24B</td></tr>
+        <tr><td>EUC-KR 바이트</td><td class="n">19B</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>입력한 글이 서버로 전송되나요?</summary><p>아니요. 글자수 계산은 브라우저 안에서만 이뤄져요. 붙여넣은 글은 어디에도 저장되거나 전송되지 않아요.</p></details><details><summary>줄바꿈도 글자수에 들어가나요?</summary><p>공백 포함 기준에는 줄바꿈이 들어가는 경우가 많아요. 이 계산기는 줄바꿈을 제외한 순수 문자 수를 공백 포함으로 세고, 줄 수를 따로 보여줘요.</p></details><details><summary>원고지 매수는 어떻게 계산하나요?</summary><p>200자 원고지 기준으로 공백 포함 글자수를 200으로 나눠서 올림해요.</p></details><details><summary>낭독 시간은 어떤 기준인가요?</summary><p>성인이 또박또박 읽을 때의 속도인 분당 약 350자를 기준으로 어림한 값이에요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="char-count"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function eucBytes(s){
+  var b=0;
+  for(var i=0;i<s.length;i++){
+    var c=s.charCodeAt(i);
+    b+=(c<128)?1:2;
+  }
+  return b;
+}
+function calc(){
+  var t=$("text").value;
+  var noBreak=t.replace(/[\r\n]/g,"");
+  var all=noBreak.length;
+  var nospace=noBreak.replace(/\s/g,"").length;
+  var words=t.trim()?t.trim().split(/\s+/).length:0;
+  var lines=t?t.split(/\r\n|\r|\n/).length:0;
+  var utf=new Blob([t]).size;
+  var sec=Math.round(all/350*60);
+  $("c-all").textContent=all.toLocaleString("ko-KR")+"자";
+  $("c-nospace").textContent=nospace.toLocaleString("ko-KR")+"자";
+  $("c-word").textContent=words.toLocaleString("ko-KR")+"개";
+  $("c-line").textContent=lines.toLocaleString("ko-KR")+"줄";
+  $("c-utf").textContent=utf.toLocaleString("ko-KR")+"B";
+  $("c-euc").textContent=eucBytes(t).toLocaleString("ko-KR")+"B";
+  $("c-paper").textContent=Math.ceil(all/200)+"매";
+  $("c-read").textContent=sec<60?sec+"초":(Math.floor(sec/60)+"분 "+(sec%60)+"초");
+}
+$("text").addEventListener("input",calc);
+$("clear-btn").addEventListener("click",function(){$("text").value="";calc();$("text").focus()});
+$("copy-btn").addEventListener("click",function(){
+  var v=$("text").value;
+  if(!v){return}
+  if(navigator.clipboard){navigator.clipboard.writeText(v).then(function(){
+    var b=$("copy-btn"); var o=b.textContent; b.textContent="복사했어요"; setTimeout(function(){b.textContent=o},1500);
+  })}
+});
+calc();
+})();
+</script>
+</body>
+</html>

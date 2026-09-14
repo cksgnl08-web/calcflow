@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실업급여 계산기 2026 - 구직급여 예상 수령액 | calcflow</title>
+<meta name="description" content="2026년 상한액 68,100원·하한액 66,048원을 반영해 1일 구직급여와 소정급여일수, 총 수령액을 계산해요.">
+<link rel="canonical" href="https://calcflow.kr/money/unemployment/">
+<meta property="og:title" content="실업급여 계산기 2026 - 구직급여 예상 수령액 | calcflow">
+<meta property="og:description" content="2026년 상한액 68,100원·하한액 66,048원을 반영해 1일 구직급여와 소정급여일수, 총 수령액을 계산해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/unemployment/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+  <div id="set-bar"></div>
+
+  <section>
+    <h1>🧾 실업급여 계산기</h1>
+    <p class="muted">2026년 기준으로 하루에 얼마를, 며칠 동안 받는지 계산해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="grid2">
+        <div class="field"><label for="salary">퇴직 전 3개월 월 평균 세전 급여 (원)</label><input type="number" id="salary" step="10000" min="0" placeholder="예: 3500000" inputmode="numeric"></div>
+        <div class="field"><label for="age">나이 (만, 퇴사일 기준)</label><input type="number" id="age" min="15" max="99" value="35" inputmode="numeric"></div>
+        <div class="field"><label for="insured">고용보험 가입기간</label>
+          <select id="insured">
+            <option value="0">1년 미만</option>
+            <option value="1" selected>1년 이상 3년 미만</option>
+            <option value="3">3년 이상 5년 미만</option>
+            <option value="5">5년 이상 10년 미만</option>
+            <option value="10">10년 이상</option>
+          </select></div>
+        <div class="field"><label for="hours">1일 소정근로시간</label>
+          <select id="hours">
+            <option value="8" selected>8시간 (주 40시간)</option>
+            <option value="6">6시간</option>
+            <option value="4">4시간</option>
+          </select></div>
+      </div>
+      <div class="result" id="res" hidden>
+        <div><div class="head">예상 총 수령액</div><div class="big" id="r-total">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">1일 구직급여</span><span class="v pos" id="r-daily">—</span></div>
+          <div class="cell"><span class="k">소정급여일수</span><span class="v" id="r-days">—</span></div>
+          <div class="cell"><span class="k">월 환산 (30일)</span><span class="v" id="r-month">—</span></div>
+          <div class="cell"><span class="k">적용 기준</span><span class="v" id="r-cap" style="font-size:14px">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="btn ghost" type="button" id="share-link">🔗 결과 링크 복사</button>
+      <span class="carry" id="carry-badge" hidden>이전 계산기에서 입력값을 가져왔어요</span>
+    </div>
+  </section>
+
+  <div id="set-next"></div>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>계산 다음에 할 일</h2>
+    <div class="actions">
+      <div class="action"><span class="n">1</span><span class="b"><b>워크넷에 구직 등록부터 하세요</b><p>실업급여 신청 전에 워크넷 구직 등록이 필요해요. 온라인으로 10분이면 끝나요.</p><span class="meta">work24.go.kr</span></span></div>
+      <div class="action"><span class="n">2</span><span class="b"><b>고용보험 홈페이지에서 수급자격 신청자 교육을 들으세요</b><p>온라인 교육을 듣고 나서 고용센터를 방문해야 해요. 교육 없이 가면 헛걸음이에요.</p><span class="meta">ei.go.kr</span></span></div>
+      <div class="action"><span class="n">3</span><span class="b"><b>퇴사 다음 날부터 12개월 안에 모두 받아야 해요</b><p>신청이 늦어지면 남은 일수가 그대로 사라져요. 소정급여일수가 240일인데 6개월 뒤에 신청하면 다 못 받아요.</p><span class="meta">이게 가장 흔한 손해예요</span></span></div>
+      <div class="action"><span class="n">4</span><span class="b"><b>조기재취업수당도 챙기세요</b><p>소정급여일수의 절반 이상 남기고 재취업해 12개월 이상 근무하면, 남은 급여의 절반을 추가로 받아요.</p></span></div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>실업급여는 이렇게 계산해요</h2>
+    <p>1일 구직급여는 <strong>퇴직 전 3개월 평균임금의 60%</strong>예요. 다만 위아래로 한도가 있어서, 2026년 기준 하루 <strong>68,100원을 넘을 수 없고 66,048원보다 적을 수 없어요</strong>. 하한액은 최저임금(10,320원) × 8시간 × 80%로 정해져요.</p>
+    <p>상한과 하한의 차이가 2,052원밖에 안 되기 때문에, 월급이 340만원을 넘든 600만원을 넘든 받는 금액은 거의 같아요. 소득이 높을수록 체감 보전율이 낮아지는 구조예요.</p>
+    <h2>며칠 동안 받나요</h2>
+    <p>소정급여일수는 나이와 고용보험 가입기간으로 정해져요. 50세 미만은 120~240일, 50세 이상이거나 장애인은 120~270일이에요.</p>
+  </section>
+
+  <section>
+    <h2>2026년 소정급여일수</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>고용보험 가입기간</th><th class="n">50세 미만</th><th class="n">50세 이상·장애인</th></tr></thead>
+      <tbody>
+        <tr><td>1년 미만</td><td class="n">120일</td><td class="n">120일</td></tr>
+        <tr><td>1년 이상 3년 미만</td><td class="n">150일</td><td class="n">180일</td></tr>
+        <tr><td>3년 이상 5년 미만</td><td class="n">180일</td><td class="n">210일</td></tr>
+        <tr><td>5년 이상 10년 미만</td><td class="n">210일</td><td class="n">240일</td></tr>
+        <tr><td>10년 이상</td><td class="n">240일</td><td class="n">270일</td></tr>
+      </tbody>
+    </table></div>
+    <p class="source">2026년 1일 상한액 68,100원 · 하한액 66,048원 기준이에요.</p>
+  </section>
+
+  <section>
+    <div class="notice">받으려면 <strong>이직 전 18개월 동안 고용보험 가입기간이 180일 이상</strong>이어야 하고, <strong>본인 의사와 무관한 퇴사</strong>여야 해요. 자진 퇴사는 원칙적으로 대상이 아니지만 임금체불, 통근 곤란, 질병 등 정당한 사유가 인정되면 받을 수 있어요.</div>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>자진 퇴사인데 받을 수 있나요?</summary><p>원칙적으로는 안 돼요. 다만 임금체불, 회사 이전으로 통근이 왕복 3시간 이상, 질병으로 업무 수행 곤란, 직장 내 괴롭힘 같은 정당한 사유가 인정되면 받을 수 있어요. 고용센터에서 판단해요.</p></details><details><summary>월급이 높으면 더 많이 받나요?</summary><p>거의 아니에요. 상한액이 하루 68,100원이라 월 340만원 정도부터는 상한에 걸려서 금액이 같아져요.</p></details><details><summary>계약직인데 계약이 끝났어요.</summary><p>계약 만료는 비자발적 이직으로 인정돼요. 회사가 재계약을 제안했는데 본인이 거절한 경우가 아니라면 받을 수 있어요.</p></details><details><summary>실업급여를 받는 중에 아르바이트를 하면요?</summary><p>일한 사실을 반드시 신고해야 해요. 신고하지 않으면 부정수급으로 받은 금액의 최대 5배를 반환해야 할 수 있어요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="unemployment"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script src="/assets/profile.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var F=["salary","age","insured","hours"];
+var CAP=68100, MIN_BASE=66048, MINWAGE=10320;
+var TABLE={0:[120,120],1:[150,180],3:[180,210],5:[210,240],10:[240,270]};
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function calc(){
+  var s=parseFloat($("salary").value)||0, age=parseFloat($("age").value)||0,
+      ins=$("insured").value, hrs=parseFloat($("hours").value)||8;
+  if(s<=0){$("res").hidden=true;return;}
+  var daily=s*3/90;               // 3개월 평균임금(1일)
+  var raw=daily*0.6;
+  var min=Math.round(MINWAGE*hrs*0.8);
+  var cap=CAP*(hrs/8);
+  var pay=Math.min(Math.max(raw,min),cap);
+  var note = raw>cap ? "상한액 적용" : (raw<min ? "하한액 적용" : "평균임금의 60%");
+  var days=TABLE[ins][age>=50?1:0];
+  $("r-daily").textContent=won(pay);
+  $("r-days").textContent=days+"일";
+  $("r-month").textContent=won(pay*30);
+  $("r-cap").textContent=note;
+  $("r-total").textContent=won(pay*days);
+  $("r-sub").textContent="1일 평균임금 "+won(daily)+" 기준 · "+(age>=50?"50세 이상":"50세 미만")+" · "+days+"일 동안 받아요.";
+  $("res").hidden=false;
+}
+CF.linkFields(F);
+F.forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
+CF.renderSet("quit","unemployment",F);
+calc();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>대출 이자 계산기 - 원리금균등·원금균등·만기일시 | calcflow</title>
+<meta name="description" content="상환 방식별로 매달 갚는 금액과 총이자를 비교해요. 전세자금대출에 많이 쓰는 만기일시도 지원해요.">
+<link rel="canonical" href="https://calcflow.kr/money/loan/">
+<meta property="og:title" content="대출 이자 계산기 - 원리금균등·원금균등·만기일시 | calcflow">
+<meta property="og:description" content="상환 방식별로 매달 갚는 금액과 총이자를 비교해요. 전세자금대출에 많이 쓰는 만기일시도 지원해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/loan/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+  <div id="set-bar"></div>
+
+  <section>
+    <h1>🏛️ 대출 이자 계산기</h1>
+    <p class="muted">상환 방식을 바꿔가며 매달 부담과 총이자를 비교해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="seg" role="group" aria-label="상환 방식">
+        <button type="button" id="r-equal" aria-pressed="true">원리금균등</button>
+        <button type="button" id="r-principal" aria-pressed="false">원금균등</button>
+        <button type="button" id="r-bullet" aria-pressed="false">만기일시</button>
+      </div>
+      <div class="grid3">
+        <div class="field"><label for="loan">대출금 (원)</label><input type="number" id="loan" step="1000000" min="0" placeholder="예: 200000000" inputmode="numeric"></div>
+        <div class="field"><label for="lrate">연 이자율 (%)</label><input type="number" id="lrate" step="0.01" min="0" max="30" value="4.0" inputmode="decimal"></div>
+        <div class="field"><label for="lmonths">기간 (개월)</label><input type="number" id="lmonths" step="1" min="1" max="600" value="24" inputmode="numeric"></div>
+      </div>
+      <div class="result" id="res" hidden>
+        <div><div class="head" id="r-head">매달 갚는 금액</div><div class="big" id="r-monthly">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">총 이자</span><span class="v" id="r-interest">—</span></div>
+          <div class="cell"><span class="k">총 상환액</span><span class="v" id="r-total">—</span></div>
+          <div class="cell"><span class="k">첫 달 상환액</span><span class="v" id="r-first">—</span></div>
+          <div class="cell"><span class="k">마지막 달</span><span class="v" id="r-last">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="btn ghost" type="button" id="share-link">🔗 결과 링크 복사</button>
+      <span class="carry" id="carry-badge" hidden>이전 계산기에서 입력값을 가져왔어요</span>
+    </div>
+  </section>
+
+  <div id="set-next"></div>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>계산 다음에 할 일</h2>
+    <div class="actions">
+      <div class="action"><span class="n">1</span><span class="b"><b>전세자금대출은 보증기관부터 확인하세요</b><p>HUG·HF·SGI 중 어디 보증인지에 따라 한도와 금리가 달라요. 은행보다 보증기관 조건이 먼저예요.</p></span></div>
+      <div class="action"><span class="n">2</span><span class="b"><b>버팀목·중소기업 청년 전세대출을 먼저 알아보세요</b><p>조건이 되면 시중은행보다 금리가 훨씬 낮아요. 소득과 보증금 기준이 있어요.</p><span class="meta">주택도시기금 nhuf.molit.go.kr</span></span></div>
+      <div class="action"><span class="n">3</span><span class="b"><b>중도상환수수료 조건을 확인하세요</b><p>보통 3년 안에 갚으면 남은 기간에 비례해 수수료가 붙어요. 여유자금으로 미리 갚을 계획이면 꼭 확인하세요.</p></span></div>
+      <div class="action"><span class="n">4</span><span class="b"><b>이자는 연말정산에서 공제받을 수 있어요</b><p>전세자금대출 원리금 상환액은 연 400만원 한도로 40%를 소득공제받아요. 무주택 세대주 조건이 있어요.</p></span></div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>세 가지 상환 방식</h2>
+    <p><strong>원리금균등</strong>은 매달 같은 금액을 갚아요. 초반에는 이자 비중이 크고 뒤로 갈수록 원금 비중이 커져요. 계획 세우기가 쉬워서 가장 많이 쓰여요.</p>
+    <p><strong>원금균등</strong>은 원금을 기간으로 나눠 매달 같은 금액을 갚고, 이자는 남은 원금에 붙어요. 첫 달 부담이 가장 크지만 <strong>총이자는 가장 적어요</strong>.</p>
+    <p><strong>만기일시</strong>는 매달 이자만 내고 원금은 만기에 한 번에 갚아요. 전세자금대출이 대부분 이 방식이에요. 매달 부담은 가볍지만 총이자가 가장 많아요.</p>
+  </section>
+
+  <section>
+    <h2>2억원 · 연 4% · 2년 기준 비교</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>방식</th><th class="n">첫 달</th><th class="n">총 이자</th></tr></thead>
+      <tbody>
+        <tr><td>원리금균등</td><td class="n">8,684,984원</td><td class="n">8,439,626원</td></tr>
+        <tr><td>원금균등</td><td class="n">8,999,999원</td><td class="n">8,333,333원</td></tr>
+        <tr><td>만기일시</td><td class="n">666,667원</td><td class="n">16,000,000원</td></tr>
+      </tbody>
+    </table></div>
+    <p class="source">전세자금대출은 대개 만기일시 방식이라, 2년 계약 동안 이자만 내고 만기에 보증금을 돌려받아 상환해요.</p>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>전세자금대출은 어떤 방식인가요?</summary><p>대부분 만기일시예요. 계약 기간 동안 이자만 내고, 만기에 보증금을 돌려받아 원금을 갚아요.</p></details><details><summary>총이자를 줄이려면 어떤 방식이 좋나요?</summary><p>원금균등이 가장 적어요. 다만 초반 상환액이 커서 현금 흐름에 여유가 있어야 해요.</p></details><details><summary>중도상환하면 얼마나 아끼나요?</summary><p>남은 기간의 이자를 아껴요. 다만 중도상환수수료가 있으면 그만큼 빼고 따져야 해요.</p></details><details><summary>금리가 변동이면 어떻게 계산하나요?</summary><p>이 계산기는 고정금리 기준이에요. 변동금리라면 현재 금리로 계산한 뒤, 금리가 1%p 올랐을 때도 넣어보고 부담을 확인하는 걸 권해요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="loan"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script src="/assets/profile.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var F=["loan","lrate","lmonths"];
+var method="equal";
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function calc(){
+  var P=parseFloat($("loan").value)||0, r=(parseFloat($("lrate").value)||0)/100,
+      n=parseInt($("lmonths").value,10)||0, i=r/12;
+  if(P<=0||n<=0){$("res").hidden=true;return;}
+  var monthly,first,last,interest;
+  if(method==="equal"){
+    monthly = i>0 ? P*i/(1-Math.pow(1+i,-n)) : P/n;
+    interest = monthly*n-P; first=monthly; last=monthly;
+    $("r-head").textContent="매달 갚는 금액";
+    $("r-monthly").textContent=won(monthly);
+  }else if(method==="principal"){
+    var pr=P/n;
+    first=pr+P*i; last=pr+pr*i;
+    interest=P*i*(n+1)/2;
+    $("r-head").textContent="첫 달 상환액 (매달 줄어들어요)";
+    $("r-monthly").textContent=won(first);
+  }else{
+    monthly=P*i; first=monthly; last=monthly+P;
+    interest=P*i*n;
+    $("r-head").textContent="매달 내는 이자";
+    $("r-monthly").textContent=won(monthly);
+  }
+  $("r-interest").textContent=won(interest);
+  $("r-total").textContent=won(P+interest);
+  $("r-first").textContent=won(first);
+  $("r-last").textContent=won(last);
+  $("r-sub").textContent=won(P)+" · 연 "+($("lrate").value||0)+"% · "+n+"개월 · "+
+    (method==="equal"?"원리금균등":method==="principal"?"원금균등":"만기일시")+" 기준이에요.";
+  $("res").hidden=false;
+}
+function setM(m){
+  method=m;
+  $("r-equal").setAttribute("aria-pressed",m==="equal");
+  $("r-principal").setAttribute("aria-pressed",m==="principal");
+  $("r-bullet").setAttribute("aria-pressed",m==="bullet");
+  calc();
+}
+$("r-equal").addEventListener("click",function(){setM("equal")});
+$("r-principal").addEventListener("click",function(){setM("principal")});
+$("r-bullet").addEventListener("click",function(){setM("bullet")});
+CF.linkFields(F);
+F.forEach(function(id){$(id).addEventListener("input",calc)});
+CF.renderSet("move","loan",F);
+calc();
+})();
+</script>
+</body>
+</html>

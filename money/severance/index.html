@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>퇴직금 계산기 - 평균임금 기준 예상 퇴직금 | calcflow</title>
+<meta name="description" content="입사일과 마지막 근무일, 월 급여를 넣으면 평균임금 기준 예상 퇴직금을 계산해요. 상여금·연차수당까지 반영해요.">
+<link rel="canonical" href="https://calcflow.kr/money/severance/">
+<meta property="og:title" content="퇴직금 계산기 - 평균임금 기준 예상 퇴직금 | calcflow">
+<meta property="og:description" content="입사일과 마지막 근무일, 월 급여를 넣으면 평균임금 기준 예상 퇴직금을 계산해요. 상여금·연차수당까지 반영해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/severance/">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+  <div id="set-bar"></div>
+
+  <section>
+    <h1>📤 퇴직금 계산기</h1>
+    <p class="muted">퇴사할 때 받을 금액을 상여금과 연차수당까지 넣어 계산해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="grid2">
+        <div class="field"><label for="hire">입사일</label><input type="date" id="hire"></div>
+        <div class="field"><label for="leave">마지막 근무일</label><input type="date" id="leave"></div>
+        <div class="field"><label for="salary">월 세전 급여 (원)</label><input type="number" id="salary" step="10000" min="0" placeholder="예: 3500000" inputmode="numeric"><span class="hint">기본급 + 각종 수당 (세금 떼기 전)</span></div>
+        <div class="field"><label for="bonus">연간 상여금 (원)</label><input type="number" id="bonus" step="10000" min="0" value="0" inputmode="numeric"><span class="hint">퇴직 전 1년간 받은 상여금 총액</span></div>
+        <div class="field"><label for="annual">연차수당 (원)</label><input type="number" id="annual" step="10000" min="0" value="0" inputmode="numeric"><span class="hint">퇴직 전 1년간 받은 미사용 연차수당</span></div>
+      </div>
+      <div id="err" class="error" hidden></div>
+      <div class="result" id="res" hidden>
+        <div><div class="head">예상 퇴직금 (세전)</div><div class="big" id="r-total">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">1일 평균임금</span><span class="v" id="r-daily">—</span></div>
+          <div class="cell"><span class="k">재직일수</span><span class="v" id="r-days">—</span></div>
+          <div class="cell"><span class="k">3개월 임금총액</span><span class="v" id="r-3m">—</span></div>
+          <div class="cell"><span class="k">근속 연수</span><span class="v" id="r-years">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="btn ghost" type="button" id="share-link">🔗 결과 링크 복사</button>
+      <span class="carry" id="carry-badge" hidden>이전 계산기에서 입력값을 가져왔어요</span>
+    </div>
+  </section>
+
+  <div id="set-next"></div>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>계산 다음에 할 일</h2>
+    <div class="actions">
+      <div class="action"><span class="n">1</span><span class="b"><b>퇴직금은 퇴직일로부터 14일 이내에 받아야 해요</b><p>합의 없이 늦어지면 지연이자(연 20%)를 청구할 수 있어요. 회사가 지급하지 않으면 고용노동부에 임금체불 진정을 넣을 수 있어요.</p><span class="meta">고용노동부 고객상담센터 1350 · 노동포털 labor.moel.go.kr</span></span></div>
+      <div class="action"><span class="n">2</span><span class="b"><b>퇴직연금(DC·DB) 가입자라면 IRP 계좌가 필요해요</b><p>55세 이전에 퇴직금을 받으려면 IRP 계좌로 받아야 해요. 은행·증권사 앱에서 10분이면 만들 수 있어요.</p></span></div>
+      <div class="action"><span class="n">3</span><span class="b"><b>퇴직소득세는 회사가 떼고 지급해요</b><p>근속연수가 길수록 세금이 크게 줄어요. IRP로 받아 55세 이후 연금으로 수령하면 퇴직소득세의 30~40%를 아낄 수 있어요.</p></span></div>
+      <div class="action"><span class="n">4</span><span class="b"><b>이직확인서를 요청해 두세요</b><p>실업급여를 신청하려면 회사가 이직확인서를 제출해야 해요. 퇴사할 때 미리 요청해 두면 신청이 빨라져요.</p></span></div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>퇴직금은 이렇게 계산해요</h2>
+    <p><strong>1일 평균임금 × 30일 × (재직일수 ÷ 365)</strong>예요. 1일 평균임금은 퇴직 전 3개월 동안 받은 임금 총액을 그 기간의 총일수로 나눈 금액이고, 여기에 연간 상여금과 연차수당의 3개월치(각각 ×3/12)를 더해요.</p>
+    <p>계속 근로기간이 <strong>1년 이상</strong>이고 <strong>주 15시간 이상</strong> 일한 근로자라면 정규직·계약직·아르바이트 구분 없이 받을 수 있어요. 사업장 규모도 상관없어요.</p>
+    <h2>평균임금이 통상임금보다 적으면</h2>
+    <p>퇴직 전 3개월에 결근이나 무급휴직이 있어 평균임금이 통상임금보다 낮게 나오면, 법에 따라 <strong>통상임금을 기준</strong>으로 계산해요. 이 계산기는 평균임금 기준이라, 해당한다면 실제 퇴직금이 더 많을 수 있어요.</p>
+  </section>
+
+  <section>
+    <h2>월 350만원 · 3년 근무 예시</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>항목</th><th class="n">금액</th></tr></thead>
+      <tbody>
+        <tr><td>3개월 임금총액 (350만 × 3)</td><td class="n">10,500,000원</td></tr>
+        <tr><td>1일 평균임금 (÷ 90일)</td><td class="n">116,667원</td></tr>
+        <tr><td>30일분</td><td class="n">3,500,000원</td></tr>
+        <tr><td><strong>퇴직금 (재직 1,096일 기준)</strong></td><td class="n"><strong>약 10,509,589원</strong></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>아르바이트도 퇴직금을 받나요?</summary><p>네. 주 15시간 이상, 1년 이상 계속 근무했다면 받을 수 있어요. 5인 미만 사업장도 마찬가지예요.</p></details><details><summary>3개월 안에 상여금을 못 받았어요.</summary><p>연간 상여금 칸에 최근 1년간 받은 총액을 넣으면 돼요. 그중 3개월치가 평균임금에 반영돼요.</p></details><details><summary>육아휴직 기간도 재직일수에 들어가나요?</summary><p>네, 계속 근로기간에 포함돼요. 다만 휴직 기간은 평균임금 계산에서 제외해요. 이 경우 실제 금액이 달라질 수 있어요.</p></details><details><summary>퇴직금과 퇴직연금은 뭐가 다른가요?</summary><p>퇴직연금은 회사가 금융기관에 미리 적립해 두는 제도예요. DB형은 계산 방식이 퇴직금과 같고, DC형은 회사가 매년 넣은 금액과 운용 수익에 따라 달라져요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="severance"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script src="/assets/profile.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var DAY=86400000, F=["hire","leave","salary","bonus","annual"];
+function pd(v){if(!v)return null;var p=v.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d)?null:d}
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function calc(){
+  var h=pd($("hire").value), l=pd($("leave").value), s=parseFloat($("salary").value)||0,
+      b=parseFloat($("bonus").value)||0, a=parseFloat($("annual").value)||0;
+  if(!h||!l||!s){$("res").hidden=true;$("err").hidden=true;return;}
+  var days=Math.round((l-h)/DAY)+1;
+  if(days<=0){$("err").textContent="마지막 근무일이 입사일보다 빨라요.";$("err").hidden=false;$("res").hidden=true;return;}
+  if(days<365){$("err").textContent="재직일수가 "+days+"일이에요. 계속 근로기간이 1년(365일) 이상이어야 퇴직금을 받을 수 있어요.";$("err").hidden=false;}
+  else $("err").hidden=true;
+  // 퇴직 전 3개월 실제 일수
+  var start=new Date(l.getFullYear(),l.getMonth()-3,l.getDate());
+  var periodDays=Math.round((l-start)/DAY);
+  var total3=s*3 + b*3/12 + a*3/12;
+  var daily=total3/periodDays;
+  var pay=daily*30*(days/365);
+  $("r-total").textContent=won(Math.max(0,days>=365?pay:0));
+  $("r-sub").textContent=days>=365
+    ? "재직 "+days.toLocaleString("ko-KR")+"일 · 1일 평균임금 "+won(daily)+" 기준이에요. 세금을 떼기 전 금액이에요."
+    : "1년 미만이라 법정 퇴직금 지급 대상이 아니에요.";
+  $("r-daily").textContent=won(daily);
+  $("r-days").textContent=days.toLocaleString("ko-KR")+"일";
+  $("r-3m").textContent=won(total3);
+  $("r-years").textContent=(days/365).toFixed(2)+"년";
+  $("res").hidden=false;
+}
+CF.linkFields(F);
+F.forEach(function(id){$(id).addEventListener("input",calc)});
+CF.renderSet("quit","severance",F);
+calc();
+})();
+</script>
+</body>
+</html>
