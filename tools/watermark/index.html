@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사진 워터마크 넣기 - 글자·로고 워터마크, 여러 장 한 번에 | calcflow</title>
+<meta name="description" content="사진에 글자나 로고 워터마크를 넣어요. 위치·크기·투명도·반복 패턴을 고르고 여러 장에 한 번에 적용할 수 있어요.">
+<link rel="canonical" href="https://calcflow.kr/tools/watermark/">
+<meta property="og:title" content="사진 워터마크 넣기 - 글자·로고 워터마크, 여러 장 한 번에 | calcflow">
+<meta property="og:description" content="사진에 글자나 로고 워터마크를 넣어요. 위치·크기·투명도·반복 패턴을 고르고 여러 장에 한 번에 적용할 수 있어요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/watermark/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>💧 사진 워터마크 넣기</h1>
+    <p class="muted">블로그·중고거래·포트폴리오 사진에 내 이름이나 로고를 넣어요. 한 번 설정하면 여러 장에 같은 워터마크가 들어가요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>JPG · PNG · WEBP · 여러 장 한 번에 · 붙여넣기(Ctrl+V)도 돼요</span></div>
+      <div class="seg" role="group" aria-label="워터마크 종류"><button type="button" data-kind="text" aria-pressed="true">글자</button><button type="button" data-kind="logo" aria-pressed="false">로고 이미지</button></div>
+      <div class="tool-row" id="f-text">
+        <div class="field" style="flex:2"><label for="txt">글자</label><input type="text" id="txt" value="© calcflow" maxlength="60"></div>
+        <div class="field"><label for="col">색</label><input type="color" id="col" value="#ffffff"></div>
+        <div class="field"><label class="chk" style="margin-top:26px"><input type="checkbox" id="shadow" checked> 그림자</label></div>
+      </div>
+      <div class="drop small" id="logo-drop" hidden><span class="ico">🏷️</span><b id="logo-name">로고 이미지 선택 (투명 PNG 추천)</b></div>
+      <div class="tool-row">
+        <div class="field"><label for="pos">위치</label><select id="pos"><option value="br">오른쪽 아래</option><option value="bl">왼쪽 아래</option><option value="tr">오른쪽 위</option><option value="tl">왼쪽 위</option><option value="c">가운데</option><option value="tile">반복 (대각선)</option></select></div>
+        <div class="field"><label for="size">크기</label><div class="range-row"><input type="range" id="size" min="2" max="40" value="6"><output id="sizev">6%</output></div></div>
+        <div class="field"><label for="op">투명도</label><div class="range-row"><input type="range" id="op" min="10" max="100" value="60"><output id="opv">60%</output></div></div>
+      </div>
+      <div class="stage" id="stage" hidden><canvas id="pv"></canvas><span class="hint">첫 번째 사진 미리보기</span></div>
+      <div class="flist" id="list"></div>
+      <div class="btn-row"><button class="btn" id="run" type="button" disabled>워터마크 넣기</button><button class="btn ghost" id="save" type="button" disabled>저장</button></div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>워터마크, 어디에 얼마나 크게</h2>
+    <p>워터마크는 <strong>내 사진이라는 표시</strong>와 <strong>사진이 보기 좋은 정도</strong> 사이에서 균형을 잡는 일이에요. 블로그나 포트폴리오처럼 사진을 보여 주는 게 목적이면 모서리에 작고 반투명하게(크기 4~6%, 투명도 40~60%) 넣는 게 자연스러워요. 모서리 워터마크는 잘라내기 쉽다는 단점이 있어서, 무단 사용을 막는 게 더 중요하다면 '반복(대각선)'으로 사진 전체에 옅게 까는 방식이 효과적이에요.</p>
+    <p>중고거래 사진에는 판매 날짜나 닉네임을 넣어 두면 다른 사람이 사진을 가져가 사기에 쓰는 걸 어느 정도 막을 수 있어요. 이때는 물건 위에 걸치도록 가운데에 넣는 편이 좋아요.</p>
+    <h2>글자 워터마크와 로고 워터마크</h2>
+    <p>글자 워터마크는 바로 만들 수 있고, 그림자를 켜면 밝은 사진과 어두운 사진 어디에서나 잘 읽혀요. 로고를 쓰려면 배경이 투명한 PNG가 가장 깔끔해요. 흰 배경이 있는 로고는 사진 위에 흰 네모가 함께 찍히니, 투명도를 낮추거나 배경을 지운 로고를 준비하세요. 크기는 사진의 짧은 변을 기준으로 계산해서, 사진마다 해상도가 달라도 비슷한 비율로 들어가요.</p>
+    <p>워터마크를 넣은 사진은 원본과 별도로 저장되고 원본 파일은 바뀌지 않아요. 나중에 다른 워터마크가 필요할 수 있으니 원본은 따로 보관해 두세요.</p>
+    <h2>여러 장에 같은 위치로 넣으려면</h2>
+    <p>사진마다 가로·세로 크기가 달라도 워터마크 크기와 여백은 각 사진의 짧은 변을 기준으로 계산돼요. 그래서 세로 사진과 가로 사진을 섞어 넣어도 모서리에서 떨어진 거리와 글자 크기가 비슷하게 맞춰져요. 미리보기는 첫 번째 사진으로 보여 주니, 가장 밝거나 어두운 사진을 먼저 넣고 글자가 잘 보이는지 확인한 뒤 전체에 적용하면 실패가 적어요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>워터마크를 나중에 지울 수 있나요?</summary><p>저장한 사진에는 워터마크가 픽셀로 합쳐져서 따로 떼어낼 수 없어요. 원본을 보관해 두었다가 새로 만드는 게 가장 깔끔해요.</p></details>
+      <details><summary>한글 글자도 되나요?</summary><p>네. 사이트 기본 글꼴로 한글·영문·숫자·기호(©) 모두 들어가요.</p></details>
+      <details><summary>사진마다 해상도가 다르면 크기가 제각각인가요?</summary><p>크기를 사진의 짧은 변 대비 %로 계산하기 때문에 해상도가 달라도 화면에서 보이는 비율은 비슷해요.</p></details>
+      <details><summary>사진이 서버에 올라가나요?</summary><p>아니요. 사진과 로고 모두 브라우저 안에서만 처리돼요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="watermark"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, kind="text", logo=null;
+function stamp(ctx,W,H){
+  var size=+K.$("#size").value/100, pos=K.$("#pos").value, pad=Math.round(Math.min(W,H)*0.03);
+  ctx.save(); ctx.globalAlpha=+K.$("#op").value/100;
+  var mark, mw, mh;
+  if(kind==="text"){
+    var txt=K.$("#txt").value||" ", fs=Math.max(10,Math.round(Math.min(W,H)*size));
+    ctx.font="700 "+fs+"px "+getComputedStyle(document.body).fontFamily;
+    mw=ctx.measureText(txt).width; mh=fs;
+    mark=function(x,y){ if(K.$("#shadow").checked){ctx.shadowColor="rgba(0,0,0,.45)";ctx.shadowBlur=fs*0.15;ctx.shadowOffsetY=fs*0.04;}
+      ctx.fillStyle=K.$("#col").value; ctx.textBaseline="top"; ctx.fillText(txt,x,y); };
+  } else {
+    if(!logo){ ctx.restore(); return; }
+    mw=Math.max(8,W*size*2.5); mh=mw*logo.h/logo.w;
+    mark=function(x,y){ ctx.drawImage(logo.img,x,y,mw,mh); };
+  }
+  if(pos==="tile"){
+    ctx.translate(W/2,H/2); ctx.rotate(-Math.PI/6);
+    var gx=mw*1.8, gy=mh*3.2, R=Math.hypot(W,H);
+    for(var y=-R;y<R;y+=gy) for(var x=-R+((Math.round(y/gy)%2)?gx/2:0);x<R;x+=gx) mark(x-mw/2,y-mh/2);
+  } else {
+    var x = pos==="bl"||pos==="tl" ? pad : pos==="c" ? (W-mw)/2 : W-mw-pad;
+    var y = pos==="tl"||pos==="tr" ? pad : pos==="c" ? (H-mh)/2 : H-mh-pad;
+    mark(x,y);
+  }
+  ctx.restore();
+}
+function compose(img,w,h,max){
+  var s=max?Math.min(1,max/Math.max(w,h)):1, cv=K.canvas(w*s,h*s), c=cv.getContext("2d");
+  c.drawImage(img,0,0,cv.width,cv.height); stamp(c,cv.width,cv.height); return cv;
+}
+function preview(){
+  var first=b.items.filter(function(i){return i.info})[0]; K.$("#stage").hidden=!first; if(!first) return;
+  var c=compose(first.info.img,first.info.w,first.info.h,900), pv=K.$("#pv"); pv.width=c.width; pv.height=c.height; pv.getContext("2d").drawImage(c,0,0);
+}
+var b=K.batch({drop:K.$("#drop"),list:K.$("#list"),run:K.$("#run"),save:K.$("#save"),zipName:"watermarked-images.zip",onLoad:preview,
+  process:async function(it){
+    if(kind==="logo"&&!logo) throw new Error("로고 이미지를 먼저 선택해 주세요.");
+    var cv=compose(it.info.img,it.info.w,it.info.h,0), f=/png|webp/.test(it.file.type)?it.file.type:"image/jpeg";
+    return {blob:await K.toBlob(cv,f,0.92),w:cv.width,h:cv.height,name:K.baseName(it.file.name)+"_wm."+K.extOf(f)};
+  }});
+K.dropzone(K.$("#logo-drop"),{accept:"image/*",filter:K.isImage,paste:false,onFiles:async function(f){
+  try{ logo=await K.loadImage(f[0]); K.$("#logo-name").textContent=f[0].name; changed(); }catch(e){ K.fail(e); } }});
+function changed(){ K.$("#sizev").textContent=K.$("#size").value+"%"; K.$("#opv").textContent=K.$("#op").value+"%"; b.stale(); preview(); }
+K.$$(".seg button").forEach(function(bt){bt.addEventListener("click",function(){
+  kind=bt.dataset.kind; K.$$(".seg button").forEach(function(x){x.setAttribute("aria-pressed",x===bt)});
+  K.$("#f-text").hidden=kind!=="text"; K.$("#logo-drop").hidden=kind!=="logo"; changed(); });});
+K.$$("#txt,#col,#shadow,#pos,#size,#op").forEach(function(el){el.addEventListener("input",changed);el.addEventListener("change",changed);});
+})();
+
+</script>
+</body>
+</html>

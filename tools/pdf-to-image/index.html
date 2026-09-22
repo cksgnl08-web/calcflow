@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF 이미지 변환 - PDF를 JPG·PNG로, 페이지별 저장 | calcflow</title>
+<meta name="description" content="PDF의 각 페이지를 JPG나 PNG 이미지로 바꿔요. 해상도(72·150·300dpi)와 페이지 범위를 고르고 ZIP으로 한 번에 저장해요. 업로드 없이 브라우저에서 변환해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/pdf-to-image/">
+<meta property="og:title" content="PDF 이미지 변환 - PDF를 JPG·PNG로, 페이지별 저장 | calcflow">
+<meta property="og:description" content="PDF의 각 페이지를 JPG나 PNG 이미지로 바꿔요. 해상도(72·150·300dpi)와 페이지 범위를 고르고 ZIP으로 한 번에 저장해요. 업로드 없이 브라우저에서 변환해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/pdf-to-image/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>📄→🖼️ PDF 이미지 변환</h1>
+    <p class="muted">PDF 페이지를 이미지로 바꿔서 카톡으로 보내거나, 블로그·SNS에 올리거나, 발표 자료에 붙일 수 있게 해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">📄</span><b>PDF 파일을 여기로 끌어오거나 눌러서 선택</b><span>PDF 한 개 · 파일은 전송되지 않아요</span></div>
+      <div id="editor" hidden>
+        <div class="stat-line inline" id="fileinfo"></div>
+        <div class="tool-row">
+          <div class="field"><label for="range">페이지</label><input type="text" id="range" placeholder="비우면 전체 (예: 1-3, 5)"></div>
+          <div class="field"><label for="dpi">해상도</label><select id="dpi"><option value="72">72dpi (화면용·작게)</option><option value="150" selected>150dpi (일반)</option><option value="300">300dpi (인쇄용·크게)</option></select></div>
+          <div class="field"><label for="fmt">형식</label><select id="fmt"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select></div>
+        </div>
+        <div class="btn-row"><button class="btn" id="run" type="button">이미지로 변환</button><button class="btn ghost" id="save" type="button" disabled>저장</button><button class="btn ghost" id="other" type="button">다른 PDF</button></div>
+        <div class="thumbs" id="thumbs" style="margin-top:12px"></div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>해상도는 어떻게 고를까</h2>
+    <p>PDF는 크기가 인치 단위로 정해진 문서라서, 이미지로 바꿀 때 '1인치에 몇 픽셀로 그릴지(dpi)'를 정해야 해요. A4 한 쪽을 <strong>72dpi</strong>로 바꾸면 약 595×842px로 휴대폰 화면에서 보기에 적당하고 용량이 작아요. <strong>150dpi</strong>는 약 1240×1754px로 확대해도 글자가 또렷해서 카톡 공유나 블로그 업로드에 알맞아요. <strong>300dpi</strong>는 약 2480×3508px로 인쇄용이나 작은 글씨를 확대해 봐야 할 때 써요.</p>
+    <h2>JPG와 PNG 중에서</h2>
+    <p>사진이 많은 카탈로그나 스캔 문서는 JPG가 용량이 훨씬 작아요. 글자와 표, 선으로 이뤄진 문서는 PNG가 가장자리가 깨끗하게 남지만 용량이 커요. 보통은 150dpi JPG로 충분하고, 발표 자료에 붙일 도표처럼 선명함이 중요할 때만 PNG를 고르면 돼요.</p>
+    <p>변환된 이미지는 아래에 썸네일로 쌓이고, 썸네일을 누르면 그 페이지만 저장돼요. 여러 쪽이면 '전체 저장'으로 ZIP 파일 하나에 담아 받을 수 있어요. 파일 이름에는 페이지 번호가 붙어서 순서가 섞이지 않아요. 반대로 이미지를 PDF로 묶으려면 <a href="/tools/image-to-pdf/">이미지 → PDF</a>를 쓰세요.</p>
+    <h2>이미지로 바꾸면 달라지는 점</h2>
+    <p>PDF 안의 글자는 원래 '글자 정보'라서 복사하거나 검색할 수 있지만, 이미지로 바꾸면 글자 모양을 그린 그림이 돼요. 그래서 이미지에서는 글자를 복사할 수 없고, 확대하면 해상도만큼만 선명해요. 대신 PDF 뷰어가 없는 곳에서도 바로 열리고, 카톡·인스타그램처럼 PDF를 올릴 수 없는 곳에 쓸 수 있어요. 문서의 한 부분만 필요하다면 변환한 이미지를 <a href="/tools/image-crop/">이미지 자르기</a>로 잘라 쓰면 돼요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>글자가 흐릿해요.</summary><p>해상도를 150dpi나 300dpi로 올려 보세요. 72dpi는 화면 미리보기용이라 작은 글씨가 뭉개질 수 있어요.</p></details>
+      <details><summary>페이지가 많으면 오래 걸리나요?</summary><p>300dpi로 수십 쪽을 바꾸면 기기에 따라 1분 이상 걸릴 수 있어요. 필요한 페이지만 번호로 지정하면 빨라요.</p></details>
+      <details><summary>폰트가 깨져 보여요.</summary><p>PDF 안에 글꼴이 포함되지 않은 문서는 기본 글꼴로 대체돼서 모양이 조금 달라질 수 있어요.</p></details>
+      <details><summary>PDF가 전송되나요?</summary><p>아니요. 브라우저 안의 PDF 엔진(pdf.js)으로 그려서 파일은 기기를 벗어나지 않아요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="pdf-to-image"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, file=null, bytes=null, doc=null, results=[];
+function parse(str,N){ var s=[]; if(!String(str).trim()){ for(var i=1;i<=N;i++) s.push(i); return s; }
+  var set=new Set(); String(str).split(/[,\s]+/).forEach(function(p){ var m=p.match(/^(\d+)(?:-(\d+))?$/); if(!m) return; var a=+m[1], b=m[2]?+m[2]:a; if(a>b){var t=a;a=b;b=t;} for(var i=Math.max(1,a);i<=Math.min(N,b);i++) set.add(i); });
+  return Array.from(set).sort(function(a,b){return a-b}); }
+var dz=K.dropzone(K.$("#drop"),{accept:"application/pdf,.pdf",filter:K.isPdf,rejectMsg:"PDF 파일만 넣을 수 있어요.",onFiles:async function(f){
+  try{ file=f[0]; bytes=new Uint8Array(await file.arrayBuffer()); var lib=await K.pdfjs(); doc=await lib.getDocument({data:bytes.slice()}).promise; }
+  catch(e){ return K.fail(new Error("PDF를 열 수 없어요. 암호가 걸렸거나 손상된 파일일 수 있어요.")); }
+  results=[]; K.$("#thumbs").innerHTML=""; K.$("#save").disabled=true;
+  K.$("#drop").hidden=true; K.$("#editor").hidden=false; K.$("#fileinfo").innerHTML="<b>"+K.esc(file.name)+"</b> · "+doc.numPages+"쪽";
+}});
+K.$("#run").addEventListener("click",async function(){
+  var btn=this, pages=parse(K.$("#range").value,doc.numPages), scale=(+K.$("#dpi").value)/72, fmt=K.$("#fmt").value, box=K.$("#thumbs"), base=K.baseName(file.name);
+  if(!pages.length) return K.toast("페이지 번호를 확인해 주세요.");
+  results=[]; box.innerHTML=""; K.$("#save").disabled=true; K.busy(btn,true);
+  try{
+    for(var i=0;i<pages.length;i++){ btn.textContent="변환 중… "+(i+1)+"/"+pages.length;
+      var page=await doc.getPage(pages[i]), vp=page.getViewport({scale:scale});
+      if(vp.width*vp.height>40e6){ vp=page.getViewport({scale:scale*Math.sqrt(40e6/(vp.width*vp.height))}); }
+      var cv=K.canvas(vp.width,vp.height), ctx=cv.getContext("2d"); ctx.fillStyle="#fff"; ctx.fillRect(0,0,cv.width,cv.height);
+      await page.render({canvasContext:ctx,viewport:vp}).promise;
+      var blob=await K.toBlob(cv,fmt,0.92), name=base+"_p"+String(pages[i]).padStart(String(doc.numPages).length,"0")+"."+K.extOf(fmt);
+      results.push({name:name,blob:blob});
+      var d=document.createElement("div"); d.className="thumb"; var im=new Image(); im.src=URL.createObjectURL(blob); d.appendChild(im);
+      var sp=document.createElement("span"); sp.textContent=pages[i]+"쪽 · "+cv.width+"×"+cv.height+" · "+K.fmtBytes(blob.size); d.appendChild(sp);
+      (function(r){ d.title="눌러서 이 페이지만 저장"; d.addEventListener("click",function(){ K.download(r.blob,r.name); }); })(results[results.length-1]);
+      box.appendChild(d);
+    }
+    K.$("#save").disabled=false; K.$("#save").textContent=results.length>1?"전체 저장 (ZIP)":"저장";
+  }catch(e){ K.fail(e); } finally{ K.busy(btn,false); }
+});
+K.$("#save").addEventListener("click",function(){ K.saveAll(results,K.baseName(file.name)+"_images.zip"); });
+K.$("#other").addEventListener("click",function(){ dz.open(); });
+})();
+
+</script>
+</body>
+</html>

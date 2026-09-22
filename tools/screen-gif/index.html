@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>화면 녹화 GIF 만들기 - PC 화면 캡처를 움짤로, 설치 없이 | calcflow</title>
+<meta name="description" content="PC 화면이나 창, 브라우저 탭을 녹화해서 바로 GIF로 만들어요. 프로그램 설치 없이 크롬·엣지에서 동작하고 영상(WEBM)으로도 저장할 수 있어요.">
+<link rel="canonical" href="https://calcflow.kr/tools/screen-gif/">
+<meta property="og:title" content="화면 녹화 GIF 만들기 - PC 화면 캡처를 움짤로, 설치 없이 | calcflow">
+<meta property="og:description" content="PC 화면이나 창, 브라우저 탭을 녹화해서 바로 GIF로 만들어요. 프로그램 설치 없이 크롬·엣지에서 동작하고 영상(WEBM)으로도 저장할 수 있어요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/screen-gif/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+<style>
+.vid{width:100%;max-height:52vh;background:#000;border-radius:10px;display:block}
+.segs{display:flex;flex-direction:column;gap:8px}
+.segrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px}
+.segrow b{min-width:52px}
+.segrow input{width:86px;padding:7px 8px;font-size:14px}
+.segrow .len{color:var(--muted);font-size:13px}
+.segrow .sp{flex:1}
+.vtabs{display:flex;gap:6px;flex-wrap:wrap}
+.vtabs button{font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 10px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vtabs button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:var(--brand);font-weight:600}
+.gifs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.gifs .thumb img{max-height:180px}
+.rec{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#d33}
+.rec::before{content:"";width:10px;height:10px;border-radius:50%;background:#d33;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.rec::before{animation:none}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🖥️ 화면 녹화 → GIF</h1>
+    <p class="muted">프로그램 사용법, 버그 재현 과정, 짧은 시연을 녹화해서 바로 움짤로 만들어요. 설치할 것 없이 크롬·엣지 브라우저만 있으면 돼요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="notice" id="nosup" hidden>이 브라우저는 화면 녹화를 지원하지 않아요. PC의 크롬이나 엣지에서 열어 주세요. 휴대폰 브라우저는 화면 녹화 기능을 제공하지 않아요.</div>
+      <div class="tool-row">
+        <div class="field"><label for="fps">초당 프레임</label><select id="fps"><option value="5">5 (가볍게)</option><option value="8">8</option><option value="10" selected>10 (추천)</option><option value="12">12</option></select></div>
+        <div class="field"><label for="gw">가로 크기</label><select id="gw"><option value="240">240px</option><option value="320">320px</option><option value="400">400px</option><option value="480" selected>480px (추천)</option><option value="640">640px</option><option value="800">800px</option></select></div>
+        <div class="field"><label for="speed">재생 속도</label><select id="speed"><option value="0.5">0.5배 (느리게)</option><option value="1" selected>1배</option><option value="1.5">1.5배</option><option value="2">2배 (빠르게)</option></select></div>
+        <div class="field"><label class="chk" style="margin-top:26px"><input type="checkbox" id="loop" checked> 무한 반복</label></div>
+      </div>
+      <div class="tool-row"><div class="field"><label for="maxs">최대 녹화 시간</label><select id="maxs"><option value="10">10초</option><option value="20" selected>20초</option><option value="30">30초</option></select></div></div>
+      <div class="btn-row"><button class="btn" id="start" type="button">● 녹화 시작</button><button class="btn ghost" id="stop" type="button" hidden>■ 녹화 끝내기</button><span id="state"></span></div>
+      <video class="vid" id="live" muted playsinline hidden></video>
+      <div class="gifs" id="gifs"></div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>녹화하는 순서</h2>
+    <p>'녹화 시작'을 누르면 브라우저가 무엇을 공유할지 물어봐요. <strong>전체 화면</strong>, 특정 <strong>창</strong>(예: 엑셀, 포토샵), 크롬의 특정 <strong>탭</strong> 중에서 고르면 바로 녹화가 시작돼요. 설명하고 싶은 동작을 한 뒤 '녹화 끝내기'나 브라우저 상단의 '공유 중지'를 누르면 GIF가 만들어져요. 최대 녹화 시간이 지나면 자동으로 멈춰요.</p>
+    <p>녹화한 화면은 GIF와 함께 영상(WEBM)으로도 저장할 수 있어요. GIF는 메신저·노션·깃허브 이슈에 붙이면 바로 재생돼서 편하고, 영상은 용량이 훨씬 작고 화질이 좋아서 길게 녹화했을 때 유리해요.</p>
+    <h2>보기 좋은 GIF를 위한 팁</h2>
+    <p>전체 화면보다 <strong>필요한 창 하나만</strong> 공유하면 글자가 크게 담기고 용량도 줄어요. 모니터 해상도가 높으면 가로 480~640px로 줄였을 때 작은 글자가 뭉개질 수 있으니, 녹화 전에 브라우저나 프로그램을 확대(Ctrl + 휠)해 두면 훨씬 잘 읽혀요. 마우스는 천천히 움직이고, 클릭한 뒤 결과가 보일 때까지 1초쯤 기다려 주면 보는 사람이 따라가기 쉬워요.</p>
+    <p>재생 속도를 1.5배나 2배로 두면 입력을 기다리는 지루한 구간이 빨리 지나가고 용량도 줄어요. 개인정보가 보이는 알림이나 메신저 창은 녹화 전에 꺼 두세요. 녹화된 화면은 브라우저 밖으로 전송되지 않고 이 기기 안에서만 GIF로 만들어져요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>휴대폰에서도 되나요?</summary><p>휴대폰 브라우저는 화면 녹화 기능을 제공하지 않아요. 휴대폰 기본 화면 녹화로 영상을 찍은 뒤 영상 → GIF 도구로 바꾸면 돼요.</p></details>
+      <details><summary>소리도 녹음되나요?</summary><p>GIF에는 소리를 담을 수 없어서 소리는 녹음하지 않아요.</p></details>
+      <details><summary>맥에서 화면 공유가 안 돼요.</summary><p>맥은 처음 한 번 시스템 설정 › 개인정보 보호 및 보안 › 화면 기록에서 크롬(또는 엣지)을 허용해야 해요. 허용한 뒤 브라우저를 다시 열어 주세요.</p></details>
+      <details><summary>녹화 내용이 어딘가로 전송되나요?</summary><p>아니요. 화면은 브라우저 안에서만 캡처되고 GIF도 기기 안에서 만들어져요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="screen-gif"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, stream=null, frames=[], timer=0, rec=null, chunks=[], t0=0, W=0, H=0, live=K.$("#live");
+if(!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia)){ K.$("#nosup").hidden=false; K.$("#start").disabled=true; }
+function stopAll(){ clearInterval(timer); if(rec&&rec.state!=="inactive") rec.stop(); if(stream) stream.getTracks().forEach(function(t){t.stop()}); stream=null; }
+K.$("#start").addEventListener("click",async function(){
+  var fps=+K.$("#fps").value, maxs=+K.$("#maxs").value, gw=+K.$("#gw").value;
+  try{ stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:Math.max(fps,10)},audio:false}); }
+  catch(e){ return K.toast("화면 공유가 취소됐어요."); }
+  live.srcObject=stream; live.hidden=false; await live.play();
+  W=Math.min(gw,live.videoWidth||gw); H=Math.round(W*(live.videoHeight||9)/(live.videoWidth||16)); frames=[]; chunks=[];
+  try{ rec=new MediaRecorder(stream,{mimeType:MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":"video/webm"}); rec.ondataavailable=function(e){ if(e.data.size) chunks.push(e.data); }; rec.start(); }catch(e){ rec=null; }
+  t0=performance.now(); K.$("#start").hidden=true; K.$("#stop").hidden=false;
+  timer=setInterval(function(){ var cv=K.canvas(W,H); cv.getContext("2d",{willReadFrequently:true}).drawImage(live,0,0,W,H); frames.push(cv);
+    var el=(performance.now()-t0)/1000; K.$("#state").innerHTML='<span class="rec">녹화 중 '+el.toFixed(1)+'초 / '+maxs+'초</span>'; if(el>=maxs) finish(); },1000/fps);
+  stream.getVideoTracks()[0].addEventListener("ended",finish);
+});
+async function finish(){
+  if(!stream&&!frames.length) return; var fps=+K.$("#fps").value, sp=+K.$("#speed").value; stopAll(); live.hidden=true; live.srcObject=null;
+  K.$("#start").hidden=false; K.$("#stop").hidden=true; K.$("#state").textContent="GIF 만드는 중…";
+  await new Promise(function(r){ setTimeout(r,300); });
+  try{
+    var g=await K.gif({loop:K.$("#loop").checked}), delay=Math.round(1000/fps/sp), box=K.$("#gifs");
+    for(var i=0;i<frames.length;i++){ g.add(frames[i],delay); if(i%5===4){ K.$("#state").textContent="GIF 만드는 중… "+Math.round(i/frames.length*100)+"%"; await new Promise(function(r){setTimeout(r,0)}); } }
+    var blob=g.finish(), name="screen_"+new Date().toISOString().slice(0,19).replace(/[-:T]/g,"")+".gif";
+    var d=document.createElement("div"); d.className="thumb"; var im=new Image(); im.src=URL.createObjectURL(blob); d.appendChild(im);
+    var s=document.createElement("span"); s.textContent=W+"×"+H+" · "+frames.length+"프레임 · "+K.fmtBytes(blob.size); d.appendChild(s);
+    var row=document.createElement("div"); row.className="btn-row"; row.innerHTML='<button class="btn sm" type="button">GIF 저장</button>'+(chunks.length?'<button class="btn ghost sm" type="button">영상(WEBM) 저장</button>':'');
+    var webm=chunks.length?new Blob(chunks,{type:"video/webm"}):null;
+    row.children[0].addEventListener("click",function(e){ e.stopPropagation(); K.download(blob,name); });
+    if(webm) row.children[1].addEventListener("click",function(e){ e.stopPropagation(); K.download(webm,name.replace(".gif",".webm")); });
+    d.appendChild(row); box.insertBefore(d,box.firstChild); K.$("#state").textContent="완료! 다시 녹화하면 아래에 계속 쌓여요."; frames=[];
+  }catch(e){ K.fail(e); K.$("#state").textContent=""; }
+}
+K.$("#stop").addEventListener("click",finish);
+})();
+
+</script>
+</body>
+</html>

@@ -58,8 +58,10 @@ if(popEl){
   if(host){
     host.innerHTML=CATS.map(function(cat){
       var items=CALCS.filter(function(c){return c.cat===cat.key});
+      var extra=items.length>8?items.length-8:0;
+      if(extra) items=items.filter(function(c){return c.popular}).concat(items.filter(function(c){return !c.popular})).slice(0,8);
       return '<section><div class="sec-head"><h2>'+cat.emoji+" "+cat.name+'</h2><p>'+cat.desc+'</p>'+
-        '<a class="more" href="'+cat.path+'">전체 보기 →</a></div>'+
+        '<a class="more" href="'+cat.path+'">'+(extra?"전체 "+(items.length+extra)+"개 보기 →":"전체 보기 →")+'</a></div>'+
         '<div class="cards">'+items.map(cardHTML).join("")+'</div></section>';
     }).join("");
   }
@@ -72,8 +74,15 @@ if(popEl){
 /* 카테고리 페이지 */
 var catEl=document.getElementById("cat-cards");
 if(catEl){
-  var key=catEl.getAttribute("data-cat");
-  renderInto(catEl,CALCS.filter(function(c){return c.cat===key}));
+  var key=catEl.getAttribute("data-cat"), inCat=CALCS.filter(function(c){return c.cat===key}), G=window.CALC_GROUPS;
+  if(G&&inCat.some(function(c){return c.group})){
+    var wrap=document.createElement("div"); wrap.style.cssText="display:flex;flex-direction:column;gap:30px";
+    wrap.innerHTML=Object.keys(G).map(function(g){
+      var list=inCat.filter(function(c){return c.group===g}); if(!list.length) return "";
+      return '<section><div class="sec-head"><h2>'+G[g].name+'</h2><p>'+G[g].desc+'</p></div><div class="cards">'+list.map(cardHTML).join("")+'</div></section>';
+    }).join("");
+    catEl.replaceWith(wrap);
+  } else renderInto(catEl,inCat);
 }
 
 /* 관련 계산기 (같은 카테고리 중 live 3개) */

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이미지 자르기 - 사진 원하는 비율로 크롭 (1:1, 4:5, 16:9) | calcflow</title>
+<meta name="description" content="사진에서 원하는 부분만 잘라요. 1:1, 4:5, 16:9 같은 비율을 고정하거나 픽셀 값을 직접 입력할 수 있어요. 업로드 없이 브라우저에서 처리해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/image-crop/">
+<meta property="og:title" content="이미지 자르기 - 사진 원하는 비율로 크롭 (1:1, 4:5, 16:9) | calcflow">
+<meta property="og:description" content="사진에서 원하는 부분만 잘라요. 1:1, 4:5, 16:9 같은 비율을 고정하거나 픽셀 값을 직접 입력할 수 있어요. 업로드 없이 브라우저에서 처리해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/image-crop/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>✂️ 이미지 자르기</h1>
+    <p class="muted">사진에서 필요한 부분만 남겨요. 인스타그램 1:1·4:5, 유튜브 16:9처럼 비율을 고정해 두고 상자를 움직이면 돼요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>JPG · PNG · WEBP · 한 장씩 · 붙여넣기(Ctrl+V)도 돼요</span></div>
+      <div id="editor" hidden>
+        <div class="tool-tabs" id="ratios" role="group" aria-label="비율">
+          <button type="button" data-r="0" aria-pressed="true">자유</button>
+          <button type="button" data-r="1" aria-pressed="false">1:1</button>
+          <button type="button" data-r="0.8" aria-pressed="false">4:5</button>
+          <button type="button" data-r="1.3333" aria-pressed="false">4:3</button>
+          <button type="button" data-r="0.75" aria-pressed="false">3:4</button>
+          <button type="button" data-r="1.7778" aria-pressed="false">16:9</button>
+          <button type="button" data-r="0.5625" aria-pressed="false">9:16</button>
+          <button type="button" data-r="1.5" aria-pressed="false">3:2</button>
+        </div>
+        <div class="stage" style="margin-top:12px"><canvas id="cv"></canvas><span class="hint">모서리를 끌어 크기 조절 · 안쪽을 끌어 이동</span></div>
+        <div class="tool-row" style="margin-top:12px">
+          <div class="field"><label for="cx">X</label><input type="number" id="cx" min="0"></div>
+          <div class="field"><label for="cy">Y</label><input type="number" id="cy" min="0"></div>
+          <div class="field"><label for="cw">가로 (px)</label><input type="number" id="cw" min="8"></div>
+          <div class="field"><label for="ch">세로 (px)</label><input type="number" id="ch" min="8"></div>
+          <div class="field"><label for="fmt">저장 형식</label><select id="fmt"><option value="keep">원본과 같게</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WEBP</option></select></div>
+        </div>
+        <div class="btn-row" style="margin-top:12px"><button class="btn" id="save" type="button">잘라서 저장</button><button class="btn ghost" id="other" type="button">다른 사진</button></div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>플랫폼별로 자주 쓰는 비율</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>용도</th><th>비율</th><th>권장 크기</th></tr></thead>
+      <tbody>
+        <tr><td>인스타그램 피드(정사각)</td><td>1:1</td><td>1080×1080</td></tr>
+        <tr><td>인스타그램 피드(세로)</td><td>4:5</td><td>1080×1350</td></tr>
+        <tr><td>릴스·쇼츠·스토리</td><td>9:16</td><td>1080×1920</td></tr>
+        <tr><td>유튜브 썸네일</td><td>16:9</td><td>1280×720</td></tr>
+        <tr><td>일반 카메라 사진</td><td>4:3 · 3:2</td><td>원본 유지</td></tr>
+      </tbody>
+    </table></div>
+    <p>인스타그램은 세로 사진을 4:5까지만 피드에 온전히 보여 주고, 그보다 긴 사진은 위아래를 잘라요. 미리 4:5로 잘라 두면 어떤 부분이 보일지 직접 정할 수 있어요. 자른 뒤 크기까지 정확히 맞추려면 <a href="/tools/image-resize/">이미지 크기 조절</a>에서 가로 1080px로 줄이면 돼요.</p>
+    <h2>픽셀 값으로 정밀하게</h2>
+    <p>상자를 끌어서 대략 맞춘 뒤 X·Y·가로·세로 칸에 숫자를 넣으면 픽셀 단위로 정확하게 맞출 수 있어요. X와 Y는 사진 왼쪽 위 모서리에서부터 잘라낼 상자의 시작점까지 거리예요. 여러 장을 같은 위치에서 잘라야 할 때 숫자를 기억해 두면 편해요.</p>
+    <p>자르기만 해도 화질은 떨어지지 않아요. 픽셀을 버릴 뿐 남은 부분은 그대로라서, 원본과 같은 형식으로 저장하면 남은 부분은 원본 화질 그대로예요.</p>
+    <h2>구도를 살리는 자르기</h2>
+    <p>사람이나 물건을 정가운데 두기보다 화면을 가로세로 3등분한 선이 만나는 지점 근처에 두면 사진이 안정감 있어 보여요. 자르기 상자 안에 보이는 흐린 격자선이 바로 그 3등분 선이에요. 인물 사진은 눈높이를 위쪽 3분의 1 선에 맞추고, 바라보는 방향 쪽에 여백을 조금 더 남기면 자연스러워요. 너무 바짝 자르면 나중에 다른 비율로 바꾸기 어려우니 원본은 따로 보관해 두세요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>상자를 사진 전체로 되돌리려면요?</summary><p>비율을 '자유'로 바꾸고 X·Y를 0, 가로·세로를 원본 크기로 입력하면 돼요. 사진을 다시 불러와도 처음 상태로 돌아가요.</p></details>
+      <details><summary>휴대폰에서도 되나요?</summary><p>네. 손가락으로 모서리를 끌어 크기를 바꾸고 안쪽을 끌어 옮길 수 있어요. 화면이 작으면 모서리를 조금 넉넉하게 눌러 주세요.</p></details>
+      <details><summary>여러 장을 한 번에 자를 수 있나요?</summary><p>자르기는 사진마다 구도가 달라서 한 장씩 해요. 같은 비율로 가운데만 자르면 되는 경우에는 이미지 크기 조절의 '꽉 채우고 자르기'로 여러 장을 한 번에 처리할 수 있어요.</p></details>
+      <details><summary>사진이 어디에 저장되나요?</summary><p>사진은 서버로 올라가지 않아요. 잘라서 저장을 누르면 기기의 다운로드 폴더에 바로 저장돼요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="image-crop"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, info=null, crop=null;
+var dz=K.dropzone(K.$("#drop"),{accept:"image/*",filter:K.isImage,onFiles:async function(f){
+  try{ info=await K.loadImage(f[0]); }catch(e){ return K.fail(e); }
+  K.$("#drop").hidden=true; K.$("#editor").hidden=false;
+  crop=K.cropper(K.$("#cv"),info.img,{ratio:+(K.$("#ratios [aria-pressed=true]").dataset.r)||null,onChange:function(r){
+    K.$("#cx").value=r.x; K.$("#cy").value=r.y; K.$("#cw").value=r.w; K.$("#ch").value=r.h; }});
+}});
+K.$$("#ratios button").forEach(function(b){b.addEventListener("click",function(){
+  K.$$("#ratios button").forEach(function(x){x.setAttribute("aria-pressed",x===b)}); if(crop) crop.setRatio(+b.dataset.r||null); });});
+K.$$("#cx,#cy,#cw,#ch").forEach(function(el){el.addEventListener("change",function(){
+  if(crop) crop.set({x:+K.$("#cx").value,y:+K.$("#cy").value,w:+K.$("#cw").value,h:+K.$("#ch").value}); });});
+K.$("#save").addEventListener("click",async function(){
+  var r=crop.get(), cv=K.canvas(r.w,r.h); cv.getContext("2d").drawImage(info.img,r.x,r.y,r.w,r.h,0,0,r.w,r.h);
+  var f=K.$("#fmt").value; if(f==="keep") f=/png|webp|jpeg/.test(info.type)?info.type:"image/png";
+  K.download(await K.toBlob(cv,f,0.93),K.baseName(info.name)+"_crop."+K.extOf(f));
+});
+K.$("#other").addEventListener("click",function(){ dz.open(); });
+})();
+
+</script>
+</body>
+</html>

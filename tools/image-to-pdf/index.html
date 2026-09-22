@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이미지 PDF 변환 - 사진·JPG·PNG 여러 장을 PDF 하나로 | calcflow</title>
+<meta name="description" content="사진이나 스캔 이미지 여러 장을 순서대로 PDF 하나로 만들어요. A4·원본 크기, 여백, 방향을 고를 수 있고 업로드 없이 브라우저에서 변환해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/image-to-pdf/">
+<meta property="og:title" content="이미지 PDF 변환 - 사진·JPG·PNG 여러 장을 PDF 하나로 | calcflow">
+<meta property="og:description" content="사진이나 스캔 이미지 여러 장을 순서대로 PDF 하나로 만들어요. A4·원본 크기, 여백, 방향을 고를 수 있고 업로드 없이 브라우저에서 변환해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/image-to-pdf/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🖼️→📄 이미지 PDF 변환</h1>
+    <p class="muted">휴대폰으로 찍은 서류 사진이나 캡처 이미지를 PDF 한 파일로 묶어요. A4 용지에 맞춰 넣거나 이미지 크기 그대로 페이지를 만들 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>JPG · PNG · WEBP · 여러 장 한 번에</span></div>
+      <div class="flist" id="list"></div>
+      <div class="tool-row">
+        <div class="field"><label for="size">용지</label><select id="size"><option value="a4">A4</option><option value="letter">레터</option><option value="fit">이미지 크기 그대로</option></select></div>
+        <div class="field"><label for="orient">방향</label><select id="orient"><option value="auto">사진에 맞춰 자동</option><option value="p">세로</option><option value="l">가로</option></select></div>
+        <div class="field"><label for="margin">여백</label><select id="margin"><option value="0">없음</option><option value="10" selected>좁게 (10mm)</option><option value="20">보통 (20mm)</option></select></div>
+        <div class="field"><label for="q">사진 화질</label><select id="q"><option value="0.95">높음</option><option value="0.85" selected>보통 (용량 절약)</option><option value="0.7">낮음 (작은 용량)</option></select></div>
+      </div>
+      <div class="btn-row"><button class="btn" id="run" type="button" disabled>PDF 만들기</button></div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>서류 사진을 PDF로 낼 때</h2>
+    <p>관공서·은행·학교에 서류를 온라인으로 낼 때 '사진 말고 PDF로 올려 주세요'라는 안내를 자주 만나요. 휴대폰으로 찍은 서류 사진을 순서대로 넣고 용지를 A4로 두면, 사진이 A4 페이지 가운데에 비율을 유지한 채 들어간 PDF가 만들어져요. 여백은 '좁게'가 인쇄했을 때 가장자리가 잘리지 않으면서 내용을 크게 보여 줘요.</p>
+    <p>방향을 '자동'으로 두면 가로로 긴 사진은 가로 페이지, 세로 사진은 세로 페이지로 만들어요. 영수증처럼 세로로 아주 긴 이미지나 화면 캡처는 '이미지 크기 그대로'를 고르면 잘리거나 작아지지 않고 원래 비율 그대로 한 페이지가 돼요.</p>
+    <h2>용량을 줄이고 싶다면</h2>
+    <p>휴대폰 사진 10장을 그대로 PDF로 만들면 30MB를 넘기 쉬워요. 이 도구는 A4 인쇄에 충분한 해상도(긴 변 2600px)로 맞춰 넣고, 사진 화질을 '보통'으로 두면 장당 300~600KB 정도로 줄어요. 제출 용량 제한이 빠듯하면 화질을 '낮음'으로 바꿔 보세요. 글자가 있는 서류는 '낮음'에서도 대부분 잘 읽혀요.</p>
+    <p>PNG 이미지는 화질 손실 없이 그대로 들어가요. 캡처 화면처럼 글자가 선명해야 하는 이미지는 PNG로 넣는 게 좋고, 사진은 JPG로 넣는 게 용량 면에서 유리해요. 만든 PDF에 다른 PDF를 붙여야 하면 <a href="/tools/pdf-merge/">PDF 합치기</a>를 이어서 쓰면 돼요.</p>
+    <h2>서류 사진을 깔끔하게 찍는 법</h2>
+    <p>서류는 어두운 책상 위에 올려 두고 창가처럼 밝은 곳에서, 휴대폰을 서류와 평행하게 들고 바로 위에서 찍으면 가장자리가 반듯하게 나와요. 플래시는 반사가 생기기 쉬우니 끄는 게 좋아요. 비스듬하게 찍혔다면 <a href="/tools/image-crop/">이미지 자르기</a>나 <a href="/tools/image-rotate/">회전</a>으로 먼저 정리한 뒤 PDF로 만드세요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>사진 순서를 바꿀 수 있나요?</summary><p>네. 목록 오른쪽의 ↑↓ 버튼으로 순서를 바꾸면 그 순서대로 페이지가 만들어져요.</p></details>
+      <details><summary>스캔한 것처럼 흰 배경으로 보정되나요?</summary><p>보정 없이 사진 그대로 들어가요. 밝은 곳에서 서류를 평평하게 두고 위에서 수직으로 찍으면 가장 깔끔해요.</p></details>
+      <details><summary>아이폰 HEIC 사진도 되나요?</summary><p>HEIC는 브라우저가 직접 열지 못하는 경우가 많아요. JPG로 바꾼 뒤 넣어 주세요.</p></details>
+      <details><summary>사진이 서버에 올라가나요?</summary><p>아니요. PDF는 이 브라우저 안에서 만들어지고 사진은 어디로도 전송되지 않아요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="image-to-pdf"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+function orderList(el, items, label, onChange){
+  el.innerHTML=items.map(function(it,i){
+    return '<div class="fitem"><div class="th">'+(it.thumb?'<img alt="" src="'+it.thumb+'">':'📄')+'</div><div class="meta"><b>'+CFK.esc(it.file.name)+'</b><span>'+label(it)+'</span></div>'+
+      '<div class="acts"><button type="button" data-up="'+i+'" aria-label="위로"'+(i?'':' disabled')+'>↑</button><button type="button" data-dn="'+i+'" aria-label="아래로"'+(i<items.length-1?'':' disabled')+'>↓</button><button type="button" data-rm="'+i+'" aria-label="빼기">✕</button></div></div>';
+  }).join("");
+  if(!el.dataset.bound){ el.dataset.bound=1; el.addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return; var i;
+    if(b.dataset.up){ i=+b.dataset.up; items.splice(i-1,0,items.splice(i,1)[0]); }
+    else if(b.dataset.dn){ i=+b.dataset.dn; items.splice(i+1,0,items.splice(i,1)[0]); }
+    else if(b.dataset.rm){ items.splice(+b.dataset.rm,1); }
+    onChange();
+  }); }
+}
+
+(function(){
+var K=CFK, items=[];
+function render(){ orderList(K.$("#list"),items,function(it){ return it.info?it.info.w+"×"+it.info.h+" · "+K.fmtBytes(it.file.size):"불러오는 중…"; },render); K.$("#run").disabled=!items.some(function(i){return i.info}); }
+K.dropzone(K.$("#drop"),{accept:"image/*",multiple:true,filter:K.isImage,onFiles:function(files){
+  files.forEach(function(f){ var it={file:f}; items.push(it); K.loadImage(f).then(function(info){ it.info=info; it.thumb=info.url; render(); }).catch(function(){ items.splice(items.indexOf(it),1); K.toast(f.name+"을(를) 열 수 없어요."); render(); }); });
+  render(); }});
+K.$("#run").addEventListener("click",async function(){
+  var L=await K.pdfLib(), btn=this; K.busy(btn,true,"만드는 중…");
+  try{
+    var doc=await L.PDFDocument.create(), MM=72/25.4, size=K.$("#size").value, orient=K.$("#orient").value, m=+K.$("#margin").value*MM, q=+K.$("#q").value;
+    for(var i=0;i<items.length;i++){ var it=items[i]; if(!it.info) continue;
+      var w=it.info.w, h=it.info.h, maxSide=size==="fit"?4000:2600, s=Math.min(1,maxSide/Math.max(w,h));
+      var cv=K.drawScaled(it.info.img,w,h,Math.round(w*s),Math.round(h*s)), img;
+      if(it.file.type==="image/png"){ img=await doc.embedPng(await (await K.toBlob(cv,"image/png")).arrayBuffer()); }
+      else { img=await doc.embedJpg(await (await K.toBlob(cv,"image/jpeg",q)).arrayBuffer()); }
+      var pw, ph;
+      if(size==="fit"){ pw=w*0.75+2*m; ph=h*0.75+2*m; }
+      else { var base=size==="a4"?[595.28,841.89]:[612,792]; var land=orient==="l"||(orient==="auto"&&w>h); pw=land?base[1]:base[0]; ph=land?base[0]:base[1]; }
+      var page=doc.addPage([pw,ph]), aw=pw-2*m, ah=ph-2*m, sc=Math.min(aw/img.width,ah/img.height);
+      var dw=img.width*sc, dh=img.height*sc; page.drawImage(img,{x:(pw-dw)/2,y:(ph-dh)/2,width:dw,height:dh});
+    }
+    K.download(new Blob([await doc.save()],{type:"application/pdf"}),"images_"+items.length+"p.pdf"); K.toast("PDF를 저장했어요.");
+  }catch(e){ K.fail(e); } finally{ K.busy(btn,false); }
+});
+render();
+})();
+
+</script>
+</body>
+</html>

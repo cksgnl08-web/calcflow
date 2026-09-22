@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사진 모자이크·블러 - 얼굴·번호판·개인정보 가리기 | calcflow</title>
+<meta name="description" content="사진에서 얼굴, 자동차 번호판, 주소, 전화번호처럼 가리고 싶은 부분을 붓이나 사각형으로 모자이크·블러 처리해요. 업로드 없이 브라우저에서 처리해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/mosaic/">
+<meta property="og:title" content="사진 모자이크·블러 - 얼굴·번호판·개인정보 가리기 | calcflow">
+<meta property="og:description" content="사진에서 얼굴, 자동차 번호판, 주소, 전화번호처럼 가리고 싶은 부분을 붓이나 사각형으로 모자이크·블러 처리해요. 업로드 없이 브라우저에서 처리해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/mosaic/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🟫 사진 모자이크·블러</h1>
+    <p class="muted">택배 송장, 자동차 번호판, 지나가는 사람 얼굴처럼 공개하면 안 되는 부분을 가려요. 붓으로 문지르거나 사각형으로 영역을 잡으면 돼요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>JPG · PNG · WEBP · 한 장 · 붙여넣기(Ctrl+V)도 돼요</span></div>
+      <div id="editor" hidden>
+        <div class="tool-row">
+          <div class="field"><label>효과</label><div class="seg" id="fx" role="group"><button type="button" data-v="pixel" aria-pressed="true">모자이크</button><button type="button" data-v="blur" aria-pressed="false">블러</button><button type="button" data-v="black" aria-pressed="false">검정 가림</button></div></div>
+          <div class="field"><label>도구</label><div class="seg" id="tool" role="group"><button type="button" data-v="rect" aria-pressed="true">▭ 사각형</button><button type="button" data-v="brush" aria-pressed="false">🖌 붓</button></div></div>
+        </div>
+        <div class="tool-row">
+          <div class="field"><label for="str">강도</label><div class="range-row"><input type="range" id="str" min="1" max="10" value="5"><output id="strv">5</output></div></div>
+          <div class="field" id="f-brush" hidden><label for="bs">붓 크기</label><div class="range-row"><input type="range" id="bs" min="1" max="20" value="6"><output id="bsv">6</output></div></div>
+        </div>
+        <div class="stage" style="margin-top:12px"><canvas id="cv" style="cursor:crosshair"></canvas><span class="hint" id="hint">끌어서 가릴 영역을 잡으세요</span></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn" id="save" type="button">저장</button>
+          <button class="btn ghost" id="undo" type="button" disabled>↶ 되돌리기</button>
+          <button class="btn ghost" id="reset" type="button">처음으로</button>
+          <button class="btn ghost" id="other" type="button">다른 사진</button>
+        </div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>무엇을 가려야 할까</h2>
+    <p>중고거래 사진, 택배 인증, 여행 사진을 올릴 때 생각보다 많은 개인정보가 함께 찍혀요. 택배 송장의 이름·주소·전화번호, 자동차 번호판, 아파트 동·호수가 보이는 현관, 창밖으로 보이는 건물 이름, 모니터에 떠 있는 메신저 창, 그리고 동의 없이 찍힌 다른 사람의 얼굴이 대표적이에요. 올리기 전에 한 번 훑어보고 이런 부분을 가리는 습관이 안전해요.</p>
+    <h2>모자이크, 블러, 검정 가림의 차이</h2>
+    <p><strong>모자이크</strong>는 영역을 큰 네모 칸으로 뭉개서 형태만 남겨요. 사진 분위기를 크게 해치지 않아서 얼굴이나 번호판에 흔히 써요. <strong>블러</strong>는 부드럽게 흐리게 만들어 배경 속 사람처럼 자연스럽게 가릴 때 좋아요. 다만 글자는 강도가 약하면 형태가 비쳐 보일 수 있어서, 주소·전화번호·계좌번호처럼 <strong>반드시 읽히면 안 되는 글자는 검정 가림</strong>이 가장 확실해요.</p>
+    <p>강도를 높일수록 모자이크 칸이 커지고 블러가 강해져요. 작은 글자는 강도 5 이상, 얼굴은 사진 크기에 따라 5~8 정도가 무난해요. 칸 크기는 사진 해상도에 비례해서 계산하기 때문에 큰 사진과 작은 사진에서 비슷하게 보여요.</p>
+    <h2>저장하면 되돌릴 수 없어요</h2>
+    <p>저장된 사진에서는 가린 부분의 원래 픽셀이 완전히 사라져요. 편집 중에는 되돌리기로 몇 번이든 취소할 수 있지만, 저장한 파일에서 원래 모습을 복원할 수는 없어요. 원본이 필요하면 따로 보관해 두세요. 반대로 말하면 가린 사진을 올려도 원본이 새어 나갈 걱정은 없어요.</p>
+    <h2>화면 캡처를 올리기 전에</h2>
+    <p>메신저 대화나 주문 내역을 캡처해 올릴 때는 상대방 이름·프로필 사진, 주문번호, 주소, 휴대폰 번호 뒷자리까지 빠짐없이 가렸는지 확인하세요. 사각형 도구로 가릴 줄마다 한 번씩 드래그하면 빠르고, 검정 가림을 쓰면 확대해도 글자가 비치지 않아요. 가린 뒤에는 저장한 파일을 한 번 열어 빠진 곳이 없는지 확인하는 습관이 안전해요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>얼굴을 자동으로 찾아 주나요?</summary><p>지금은 직접 영역을 잡는 방식만 지원해요. 사각형 도구로 얼굴을 한 번씩 드래그하면 빠르게 가릴 수 있어요.</p></details>
+      <details><summary>휴대폰에서도 붓을 쓸 수 있나요?</summary><p>네. 손가락으로 문지르면 돼요. 붓 크기를 키우면 넓은 영역을 빠르게 칠할 수 있어요.</p></details>
+      <details><summary>블러는 풀 수 있다던데요?</summary><p>약한 블러는 글자 형태가 비칠 수 있어요. 읽히면 안 되는 정보는 검정 가림을 쓰세요. 검정 가림은 원래 픽셀을 덮어써서 복원할 수 없어요.</p></details>
+      <details><summary>사진이 어딘가로 전송되나요?</summary><p>아니요. 모자이크는 브라우저 안에서만 처리되고 사진은 서버로 올라가지 않아요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="mosaic"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, info=null, cv=K.$("#cv"), ctx=cv.getContext("2d"), strokes=[], cur=null, fxCache={};
+function val(id){ return K.$("#"+id+" [aria-pressed=true]").dataset.v; }
+function unit(){ return Math.max(info.w,info.h)/100; }
+function effect(fx,str){
+  var key=fx+str; if(fxCache[key]) return fxCache[key];
+  var W=info.w,H=info.h,out=K.canvas(W,H),o=out.getContext("2d");
+  if(fx==="black"){ o.fillStyle="#111"; o.fillRect(0,0,W,H); }
+  else if(fx==="pixel"){ var b=Math.max(4,Math.round(unit()*str*0.6)), sm=K.canvas(W/b,H/b); sm.getContext("2d").drawImage(info.img,0,0,sm.width,sm.height);
+    o.imageSmoothingEnabled=false; o.drawImage(sm,0,0,sm.width,sm.height,0,0,W,H); }
+  else { var r=Math.max(2,unit()*str*0.35); o.drawImage(info.img,0,0); o.filter="blur("+r+"px)"; o.drawImage(info.img,0,0); o.filter="none";
+    if(!("filter" in o)){ var b2=Math.max(4,Math.round(r)), t=K.canvas(W/b2,H/b2); t.getContext("2d").drawImage(info.img,0,0,t.width,t.height); o.drawImage(t,0,0,W,H); } }
+  return (fxCache[key]=out);
+}
+function applyStroke(s){
+  var e=effect(s.fx,s.str); ctx.save(); ctx.beginPath();
+  if(s.tool==="rect"){ ctx.rect(Math.min(s.x0,s.x1),Math.min(s.y0,s.y1),Math.abs(s.x1-s.x0),Math.abs(s.y1-s.y0)); }
+  else { s.pts.forEach(function(p){ ctx.moveTo(p.x+s.r,p.y); ctx.arc(p.x,p.y,s.r,0,Math.PI*2); }); }
+  ctx.clip(); ctx.drawImage(e,0,0); ctx.restore();
+}
+function redraw(){ ctx.drawImage(info.img,0,0); strokes.forEach(applyStroke); if(cur&&cur.tool==="brush") applyStroke(cur);
+  if(cur&&cur.tool==="rect"){ applyStroke(cur); ctx.save(); ctx.strokeStyle="#35D6A4"; ctx.lineWidth=unit()*0.3; ctx.setLineDash([unit(),unit()*0.6]); ctx.strokeRect(Math.min(cur.x0,cur.x1),Math.min(cur.y0,cur.y1),Math.abs(cur.x1-cur.x0),Math.abs(cur.y1-cur.y0)); ctx.restore(); }
+  K.$("#undo").disabled=!strokes.length; }
+function pos(e){ var b=cv.getBoundingClientRect(); return {x:(e.clientX-b.left)*info.w/b.width, y:(e.clientY-b.top)*info.h/b.height}; }
+cv.addEventListener("pointerdown",function(e){ if(!info) return; var p=pos(e), t=val("tool");
+  cur={tool:t,fx:val("fx"),str:+K.$("#str").value,x0:p.x,y0:p.y,x1:p.x,y1:p.y,pts:[p],r:unit()*(+K.$("#bs").value)*0.6};
+  cv.setPointerCapture(e.pointerId); redraw(); e.preventDefault(); });
+cv.addEventListener("pointermove",function(e){ if(!cur) return; var p=pos(e); cur.x1=p.x; cur.y1=p.y;
+  if(cur.tool==="brush"){ var l=cur.pts[cur.pts.length-1], d=Math.hypot(p.x-l.x,p.y-l.y), n=Math.ceil(d/(cur.r*0.5));
+    for(var i=1;i<=n;i++) cur.pts.push({x:l.x+(p.x-l.x)*i/n,y:l.y+(p.y-l.y)*i/n}); }
+  redraw(); });
+function end(){ if(!cur) return; if(cur.tool==="brush"||(Math.abs(cur.x1-cur.x0)>3&&Math.abs(cur.y1-cur.y0)>3)) strokes.push(cur); cur=null; redraw(); }
+cv.addEventListener("pointerup",end); cv.addEventListener("pointercancel",end);
+function seg(id,cb){ K.$$("#"+id+" button").forEach(function(b){ b.addEventListener("click",function(){ K.$$("#"+id+" button").forEach(function(x){x.setAttribute("aria-pressed",x===b)}); cb&&cb(b.dataset.v); }); }); }
+seg("fx"); seg("tool",function(v){ K.$("#f-brush").hidden=v!=="brush"; K.$("#hint").textContent=v==="brush"?"가릴 부분을 문지르세요":"끌어서 가릴 영역을 잡으세요"; });
+K.$("#str").addEventListener("input",function(){K.$("#strv").textContent=this.value;});
+K.$("#bs").addEventListener("input",function(){K.$("#bsv").textContent=this.value;});
+K.$("#undo").addEventListener("click",function(){ strokes.pop(); redraw(); });
+K.$("#reset").addEventListener("click",function(){ strokes=[]; redraw(); });
+K.$("#save").addEventListener("click",async function(){ var f=/png|webp/.test(info.type)?info.type:"image/jpeg"; K.download(await K.toBlob(cv,f,0.93),K.baseName(info.name)+"_mosaic."+K.extOf(f)); });
+var dz=K.dropzone(K.$("#drop"),{accept:"image/*",filter:K.isImage,onFiles:async function(f){
+  try{ info=await K.loadImage(f[0]); }catch(e){ return K.fail(e); }
+  fxCache={}; strokes=[]; cv.width=info.w; cv.height=info.h; K.$("#drop").hidden=true; K.$("#editor").hidden=false; redraw(); }});
+K.$("#other").addEventListener("click",function(){ dz.open(); });
+})();
+
+</script>
+</body>
+</html>

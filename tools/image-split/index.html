@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사진 분할 - 2·4·9·16분할, 인스타 그리드 나누기 | calcflow</title>
+<meta name="description" content="사진 한 장을 2·3·4·9·16조각이나 원하는 가로×세로 칸으로 똑같이 나눠요. 인스타그램 그리드용 업로드 순서로 번호를 붙여 ZIP으로 저장해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/image-split/">
+<meta property="og:title" content="사진 분할 - 2·4·9·16분할, 인스타 그리드 나누기 | calcflow">
+<meta property="og:description" content="사진 한 장을 2·3·4·9·16조각이나 원하는 가로×세로 칸으로 똑같이 나눠요. 인스타그램 그리드용 업로드 순서로 번호를 붙여 ZIP으로 저장해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/image-split/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🧩 사진 분할</h1>
+    <p class="muted">사진 한 장을 여러 조각으로 똑같이 나눠요. 인스타그램 3×3 그리드, 긴 캡처를 페이지별로 자르기, 퍼즐 만들기에 쓸 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>JPG · PNG · WEBP · 한 장</span></div>
+      <div id="editor" hidden>
+        <div class="tool-tabs" id="presets" role="group" aria-label="분할 방식">
+          <button type="button" data-g="1x2" aria-pressed="false">2분할 (좌우)</button>
+          <button type="button" data-g="2x1" aria-pressed="false">2분할 (상하)</button>
+          <button type="button" data-g="1x3" aria-pressed="false">3분할 (가로)</button>
+          <button type="button" data-g="2x2" aria-pressed="false">4분할</button>
+          <button type="button" data-g="2x4" aria-pressed="false">8분할</button>
+          <button type="button" data-g="3x3" aria-pressed="true">9분할</button>
+          <button type="button" data-g="4x4" aria-pressed="false">16분할</button>
+        </div>
+        <div class="tool-row" style="margin-top:12px">
+          <div class="field"><label for="rows">세로 칸 (행)</label><input type="number" id="rows" value="3" min="1" max="20"></div>
+          <div class="field"><label for="cols">가로 칸 (열)</label><input type="number" id="cols" value="3" min="1" max="20"></div>
+          <div class="field"><label for="order">파일 번호</label><select id="order"><option value="normal">왼쪽 위부터 순서대로</option><option value="insta">인스타 업로드 순서 (오른쪽 아래부터)</option></select></div>
+          <div class="field"><label for="square">조각 모양</label><select id="square"><option value="0">원본 비율 그대로</option><option value="1">정사각형으로 (가운데 자르기)</option></select></div>
+        </div>
+        <div class="stage" style="margin-top:12px"><canvas id="pv"></canvas></div>
+        <div class="stat-line inline" id="info" style="margin-top:10px"></div>
+        <div class="btn-row" style="margin-top:12px"><button class="btn" id="save" type="button">조각 저장 (ZIP)</button><button class="btn ghost" id="other" type="button">다른 사진</button></div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>인스타그램 그리드로 올리는 순서</h2>
+    <p>인스타그램 프로필 피드는 가장 최근에 올린 사진이 왼쪽 위에 와요. 그래서 3×3으로 나눈 사진을 피드에서 원래 모습으로 보이게 하려면 <strong>오른쪽 아래 조각부터 거꾸로</strong> 올려야 해요. '인스타 업로드 순서'를 고르면 파일 이름에 1번부터 9번까지 올릴 순서대로 번호가 붙어서, 번호대로 하나씩 올리기만 하면 돼요.</p>
+    <p>인스타그램 프로필 그리드는 요즘 세로로 긴 3:4 비율 썸네일로 보여서, 정사각형 조각은 위아래가 조금 잘려 보일 수 있어요. 그리드 전체가 딱 맞게 보이길 원하면 원본 사진을 가로:세로 3:4 × 3칸 = 9:12 비율로 먼저 잘라 두고 나누는 게 좋아요. <a href="/tools/image-crop/">이미지 자르기</a>에서 3:4를 고른 뒤 가로 방향으로 늘리면 돼요.</p>
+    <h2>긴 캡처·웹툰 컷 나누기</h2>
+    <p>세로로 긴 화면 캡처나 상세페이지 이미지는 게시판 업로드 제한(가로·세로 최대 픽셀)에 걸리기 쉬워요. 가로 칸을 1로 두고 세로 칸만 3~5로 나누면 위에서부터 차례로 자른 조각이 만들어져요. 조각은 모두 같은 크기로 잘리고, 픽셀이 딱 나누어떨어지지 않으면 마지막 조각이 1픽셀 정도 차이 날 수 있어요.</p>
+    <p>조각은 원본 해상도 그대로 잘라서 화질이 떨어지지 않아요. 모든 조각은 ZIP 파일 하나로 묶여서 저장되고, 휴대폰에서는 파일 앱에서 ZIP을 열어 사진을 꺼낼 수 있어요.</p>
+    <h2>카드뉴스·슬라이드용으로 나누기</h2>
+    <p>가로로 긴 파노라마 사진을 1×3이나 1×5로 나눠 인스타그램 여러 장 게시물로 올리면, 옆으로 넘길 때 사진이 이어지는 효과가 나요. 조각 모양을 '정사각형으로'로 두면 각 장이 1:1이 돼서 게시물 틀에 딱 맞아요. 세로가 긴 인포그래픽을 4:5 조각으로 나누면 카드뉴스처럼 한 장씩 넘겨 보는 형식이 돼요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>조각이 몇 개까지 되나요?</summary><p>가로·세로 각각 20칸, 최대 400조각까지 나눌 수 있어요.</p></details>
+      <details><summary>휴대폰에서 ZIP을 어떻게 여나요?</summary><p>아이폰은 '파일' 앱에서 ZIP을 누르면 폴더로 풀리고, 안드로이드는 '내 파일' 앱에서 압축 해제를 누르면 돼요.</p></details>
+      <details><summary>정사각형으로 자르면 어디가 잘리나요?</summary><p>칸이 모두 정사각형이 되도록 가장 큰 영역을 사진 가운데에서 잡고, 넘치는 가장자리를 잘라요. 미리보기에서 어둡게 표시된 부분이 잘려 나가요.</p></details>
+      <details><summary>사진이 전송되나요?</summary><p>아니요. 분할과 ZIP 만들기 모두 브라우저 안에서 처리돼요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="image-split"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, info=null;
+function geom(){
+  var R=Math.max(1,Math.min(20,+K.$("#rows").value||1)), C=Math.max(1,Math.min(20,+K.$("#cols").value||1));
+  var sx=0, sy=0, sw=info.w, sh=info.h;
+  if(K.$("#square").value==="1"){ var cell=Math.min(sw/C,sh/R); var nw=cell*C, nh=cell*R; sx=(sw-nw)/2; sy=(sh-nh)/2; sw=nw; sh=nh; }
+  return {R:R,C:C,sx:sx,sy:sy,sw:sw,sh:sh,cw:sw/C,ch:sh/R};
+}
+function draw(){
+  var g=geom(), s=Math.min(1,900/Math.max(info.w,info.h)), pv=K.$("#pv"), c=pv.getContext("2d");
+  pv.width=info.w*s; pv.height=info.h*s; c.drawImage(info.img,0,0,pv.width,pv.height);
+  c.fillStyle="rgba(0,0,0,.45)";
+  if(g.sx||g.sy){ c.fillRect(0,0,pv.width,g.sy*s); c.fillRect(0,(g.sy+g.sh)*s,pv.width,pv.height); c.fillRect(0,0,g.sx*s,pv.height); c.fillRect((g.sx+g.sw)*s,0,pv.width,pv.height); }
+  c.strokeStyle="#fff"; c.lineWidth=2; c.setLineDash([8,6]); c.beginPath();
+  for(var i=1;i<g.C;i++){ var x=(g.sx+g.cw*i)*s; c.moveTo(x,g.sy*s); c.lineTo(x,(g.sy+g.sh)*s); }
+  for(var j=1;j<g.R;j++){ var y=(g.sy+g.ch*j)*s; c.moveTo(g.sx*s,y); c.lineTo((g.sx+g.sw)*s,y); }
+  c.stroke(); c.setLineDash([]); c.font="600 "+Math.max(12,Math.min(g.cw,g.ch)*s*0.18)+"px sans-serif"; c.textAlign="center"; c.textBaseline="middle";
+  var n=g.R*g.C, insta=K.$("#order").value==="insta";
+  for(var r=0;r<g.R;r++) for(var q=0;q<g.C;q++){ var idx=r*g.C+q+1; if(insta) idx=n-idx+1;
+    var cx=(g.sx+g.cw*(q+.5))*s, cy=(g.sy+g.ch*(r+.5))*s; c.fillStyle="rgba(0,0,0,.5)"; c.beginPath(); c.arc(cx,cy,Math.max(12,Math.min(g.cw,g.ch)*s*0.16),0,7); c.fill(); c.fillStyle="#fff"; c.fillText(idx,cx,cy); }
+  K.$("#info").innerHTML="조각 <b>"+n+"개</b> · 한 조각 <b>"+Math.round(g.cw)+"×"+Math.round(g.ch)+"px</b>"+(insta?" · 1번부터 차례로 올리면 피드에서 원래 사진처럼 보여요":"");
+}
+var dz=K.dropzone(K.$("#drop"),{accept:"image/*",filter:K.isImage,onFiles:async function(f){
+  try{ info=await K.loadImage(f[0]); }catch(e){ return K.fail(e); }
+  K.$("#drop").hidden=true; K.$("#editor").hidden=false; draw(); }});
+K.$$("#presets button").forEach(function(b){b.addEventListener("click",function(){
+  K.$$("#presets button").forEach(function(x){x.setAttribute("aria-pressed",x===b)}); var g=b.dataset.g.split("x");
+  K.$("#rows").value=g[0]; K.$("#cols").value=g[1]; if(info) draw(); });});
+K.$$("#rows,#cols,#order,#square").forEach(function(el){el.addEventListener("input",function(){ if(info) draw(); })});
+K.$("#save").addEventListener("click",async function(){
+  var g=geom(), files=[], n=g.R*g.C, insta=K.$("#order").value==="insta", pad=String(n).length, f=/png|webp/.test(info.type)?info.type:"image/jpeg";
+  K.busy(this,true);
+  try{
+    for(var r=0;r<g.R;r++) for(var q=0;q<g.C;q++){
+      var x0=Math.round(g.sx+g.cw*q), y0=Math.round(g.sy+g.ch*r), x1=Math.round(g.sx+g.cw*(q+1)), y1=Math.round(g.sy+g.ch*(r+1));
+      var cv=K.canvas(x1-x0,y1-y0); cv.getContext("2d").drawImage(info.img,x0,y0,x1-x0,y1-y0,0,0,x1-x0,y1-y0);
+      var idx=r*g.C+q+1; if(insta) idx=n-idx+1;
+      files.push({name:K.baseName(info.name)+"_"+String(idx).padStart(pad,"0")+"."+K.extOf(f),blob:await K.toBlob(cv,f,0.94)});
+    }
+    files.sort(function(a,b){return a.name<b.name?-1:1});
+    await K.saveAll(files,K.baseName(info.name)+"_split_"+g.R+"x"+g.C+".zip");
+  } finally { K.busy(this,false); }
+});
+K.$("#other").addEventListener("click",function(){ dz.open(); });
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>파일명 일괄 변경 - 사진·파일 이름 한 번에 바꾸기, 번호 붙이기 | calcflow</title>
+<meta name="description" content="여러 파일의 이름을 규칙에 따라 한 번에 바꿔요. 번호 붙이기, 날짜 넣기, 글자 찾아 바꾸기를 지원하고 ZIP으로 저장해요. 파일은 전송되지 않아요.">
+<link rel="canonical" href="https://calcflow.kr/tools/rename/">
+<meta property="og:title" content="파일명 일괄 변경 - 사진·파일 이름 한 번에 바꾸기, 번호 붙이기 | calcflow">
+<meta property="og:description" content="여러 파일의 이름을 규칙에 따라 한 번에 바꿔요. 번호 붙이기, 날짜 넣기, 글자 찾아 바꾸기를 지원하고 ZIP으로 저장해요. 파일은 전송되지 않아요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/rename/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🏷️ 파일명 일괄 변경</h1>
+    <p class="muted">사진 수십 장, 제출 서류 여러 개의 이름을 한 번에 정리해요. '제품사진_001'처럼 번호를 붙이거나 촬영 날짜를 넣고, 필요 없는 글자를 지울 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🗂️</span><b>파일을 여기로 끌어오거나 눌러서 선택</b><span>어떤 파일이든 · 여러 개 한 번에</span></div>
+      <div class="tool-row">
+        <div class="field" style="flex:2"><label for="pat">새 이름 규칙</label><input type="text" id="pat" value="사진_{번호}"><span class="hint">{번호} {원래이름} {날짜} {시간} 을 넣을 수 있어요 · 확장자는 자동으로 유지</span></div>
+        <div class="field"><label for="start">시작 번호</label><input type="number" id="start" value="1" min="0"></div>
+        <div class="field"><label for="pad">번호 자릿수</label><select id="pad"><option value="1">1, 2, 3</option><option value="2">01, 02</option><option value="3" selected>001, 002</option><option value="4">0001</option></select></div>
+      </div>
+      <div class="tool-row">
+        <div class="field"><label for="find">찾을 글자 (원래이름에서)</label><input type="text" id="find" placeholder="예: IMG_"></div>
+        <div class="field"><label for="repl">바꿀 글자</label><input type="text" id="repl" placeholder="비우면 삭제"></div>
+        <div class="field"><label for="sort">순서</label><select id="sort"><option value="added">추가한 순서</option><option value="name">이름순</option><option value="date">수정한 날짜순</option><option value="size">용량 작은 순</option></select></div>
+        <div class="field"><label for="ext">확장자</label><select id="ext"><option value="keep">그대로</option><option value="lower">소문자로 (.JPG→.jpg)</option></select></div>
+      </div>
+      <div class="table-wrap" id="tw" hidden><table><thead><tr><th>#</th><th>원래 이름</th><th>새 이름</th></tr></thead><tbody id="tb"></tbody></table></div>
+      <div class="btn-row"><button class="btn" id="run" type="button" disabled>이름 바꿔서 ZIP 저장</button><button class="btn ghost" id="clr" type="button">목록 비우기</button></div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>규칙은 이렇게 만들어요</h2>
+    <p>새 이름 칸에 원하는 글자를 쓰고, 파일마다 달라져야 하는 부분에 꼬리표를 넣어요. <strong>{번호}</strong>는 시작 번호부터 1씩 늘어나고, <strong>{원래이름}</strong>은 기존 파일 이름(확장자 제외), <strong>{날짜}</strong>와 <strong>{시간}</strong>은 파일을 마지막으로 수정한 날짜·시각(예: 20260921, 143005)으로 바뀌어요. 예를 들어 '제주여행_{날짜}_{번호}'라고 쓰면 '제주여행_20260921_001.jpg'처럼 만들어져요.</p>
+    <p>번호 자릿수를 001처럼 맞춰 두면 윈도·맥 탐색기에서 이름순 정렬을 했을 때 10번이 2번 앞에 오는 문제가 생기지 않아요. 파일이 100개가 넘는다면 3자리 이상을 고르세요.</p>
+    <h2>찾아 바꾸기로 지저분한 이름 정리</h2>
+    <p>카메라가 붙인 'IMG_'나 'KakaoTalk_Photo_' 같은 앞부분을 지우려면 찾을 글자에 넣고 바꿀 글자는 비워 두세요. 이 규칙은 {원래이름}에 적용되니, 새 이름 규칙을 '{원래이름}'으로 두면 해당 글자만 지운 이름이 돼요. 이름이 겹치면 뒤에 (2), (3)을 붙여 덮어쓰지 않게 해요. 윈도에서 파일 이름에 쓸 수 없는 기호(\ / : * ? " &lt; &gt; |)는 자동으로 밑줄로 바꿔요.</p>
+    <h2>원본 파일은 그대로예요</h2>
+    <p>브라우저는 보안상 컴퓨터에 있는 파일의 이름을 직접 바꿀 수 없어요. 그래서 이 도구는 이름을 바꾼 사본을 ZIP 하나로 묶어 내려받게 해요. ZIP을 풀면 새 이름의 파일이 나오고, 원본은 원래 자리에 그대로 남아 있어요. 파일 내용은 한 바이트도 바뀌지 않아요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>사진 말고 다른 파일도 되나요?</summary><p>네. PDF, 한글·워드 문서, 동영상 등 어떤 파일이든 이름을 바꿀 수 있어요.</p></details>
+      <details><summary>촬영한 날짜로 이름을 붙일 수 있나요?</summary><p>{날짜}는 파일의 마지막 수정 날짜를 써요. 휴대폰에서 바로 옮긴 사진은 대개 촬영 날짜와 같지만, 편집하거나 메신저로 받은 사진은 받은 날짜가 될 수 있어요.</p></details>
+      <details><summary>파일이 아주 많으면요?</summary><p>수백 개도 되지만 전체 용량이 수 GB라면 ZIP을 만드는 동안 기기 메모리가 부족할 수 있어요. 나눠서 처리하는 걸 권해요.</p></details>
+      <details><summary>파일이 서버로 올라가나요?</summary><p>아니요. 이름 바꾸기와 ZIP 만들기 모두 브라우저 안에서 이뤄져요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="rename"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, files=[];
+function p2(n){ return String(n).padStart(2,"0"); }
+function names(){
+  var list=files.map(function(f,i){ return {f:f,i:i}; }), s=K.$("#sort").value;
+  if(s==="name") list.sort(function(a,b){ return a.f.name.localeCompare(b.f.name,"ko",{numeric:true}); });
+  if(s==="date") list.sort(function(a,b){ return a.f.lastModified-b.f.lastModified; });
+  if(s==="size") list.sort(function(a,b){ return a.f.size-b.f.size; });
+  var pat=K.$("#pat").value||"{원래이름}", st=+K.$("#start").value||0, pad=+K.$("#pad").value, fnd=K.$("#find").value, rp=K.$("#repl").value, used={};
+  return list.map(function(o,k){
+    var m=o.f.name.match(/^(.*?)(\.[^.]+)?$/), base=m[1], ext=m[2]||"";
+    if(K.$("#ext").value==="lower") ext=ext.toLowerCase();
+    if(fnd) base=base.split(fnd).join(rp);
+    var d=new Date(o.f.lastModified);
+    var n=pat.replace(/\{번호\}/g,String(st+k).padStart(pad,"0")).replace(/\{원래이름\}/g,base)
+      .replace(/\{날짜\}/g,d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())).replace(/\{시간\}/g,p2(d.getHours())+p2(d.getMinutes())+p2(d.getSeconds()));
+    n=n.replace(/[\\/:*?"<>|]/g,"_").trim()||"file"; var full=n+ext, c=2; while(used[full.toLowerCase()]){ full=n+"("+(c++)+")"+ext; } used[full.toLowerCase()]=1;
+    return {f:o.f,old:o.f.name,neu:full};
+  });
+}
+function render(){ var r=names(); K.$("#tw").hidden=!r.length; K.$("#run").disabled=!r.length;
+  K.$("#tb").innerHTML=r.map(function(x,i){ return "<tr><td class=\"n\">"+(i+1)+"</td><td>"+K.esc(x.old)+"</td><td><b>"+K.esc(x.neu)+"</b></td></tr>"; }).join(""); }
+K.dropzone(K.$("#drop"),{multiple:true,onFiles:function(f){ files=files.concat(f); render(); }});
+K.$$("#pat,#start,#pad,#find,#repl,#sort,#ext").forEach(function(el){ el.addEventListener("input",render); el.addEventListener("change",render); });
+K.$("#clr").addEventListener("click",function(){ files=[]; render(); });
+K.$("#run").addEventListener("click",async function(){ var btn=this; K.busy(btn,true);
+  try{ await K.zip(names().map(function(x){ return {name:x.neu,blob:x.f}; }),"renamed_files.zip"); K.toast("이름을 바꾼 파일을 ZIP으로 저장했어요."); }
+  catch(e){ K.fail(e); } finally{ K.busy(btn,false); } });
+render();
+})();
+
+</script>
+</body>
+</html>

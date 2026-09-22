@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>증명사진·여권사진 규격 맞추기 - 3.5×4.5, 반명함, 비자 사진 자르기 | calcflow</title>
+<meta name="description" content="휴대폰 사진을 여권·증명·반명함·비자 규격(3.5×4.5cm 등)에 맞게 자르고 300dpi로 저장해요. 4×6 인화용 한 장에 여러 장 배치도 돼요.">
+<link rel="canonical" href="https://calcflow.kr/tools/id-photo/">
+<meta property="og:title" content="증명사진·여권사진 규격 맞추기 - 3.5×4.5, 반명함, 비자 사진 자르기 | calcflow">
+<meta property="og:description" content="휴대폰 사진을 여권·증명·반명함·비자 규격(3.5×4.5cm 등)에 맞게 자르고 300dpi로 저장해요. 4×6 인화용 한 장에 여러 장 배치도 돼요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/id-photo/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🪪 증명·여권사진 규격 맞추기</h1>
+    <p class="muted">찍어 둔 사진을 여권·주민등록증·운전면허·반명함·비자 규격에 맞게 잘라요. 얼굴 위치 가이드를 보며 맞추고, 사진관 인화용 4×6 한 장에 여러 장을 배치할 수도 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>정면 사진 한 장 · 배경이 밝고 균일할수록 좋아요</span></div>
+      <div id="editor" hidden>
+        <div class="tool-row">
+          <div class="field" style="flex:2"><label for="preset">규격</label><select id="preset">
+            <option value="35x45:passport">여권 · 3.5×4.5cm</option>
+            <option value="35x45:id">주민등록증·운전면허·일반 증명 · 3.5×4.5cm</option>
+            <option value="30x40:id">반명함 · 3×4cm</option>
+            <option value="50x70:id">명함판 · 5×7cm</option>
+            <option value="51x51:us">미국 비자 · 2×2인치(5.1×5.1cm)</option>
+            <option value="33x48:id">중국 비자 · 3.3×4.8cm</option>
+            <option value="45x45:id">일본 비자 · 4.5×4.5cm</option>
+            <option value="custom:id">직접 입력</option>
+          </select></div>
+          <div class="field" id="f-cw" hidden><label for="cw">가로 (mm)</label><input type="number" id="cw" value="35" min="10" max="150"></div>
+          <div class="field" id="f-ch" hidden><label for="ch">세로 (mm)</label><input type="number" id="ch" value="45" min="10" max="150"></div>
+        </div>
+        <div class="stage" style="margin-top:12px"><canvas id="cv"></canvas><span class="hint">상자를 움직여 얼굴을 가이드 안에 맞추세요</span></div>
+        <div class="stat-line inline" id="spec" style="margin-top:10px"></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn" id="save1" type="button">사진 한 장 저장 (JPG)</button>
+          <button class="btn ghost" id="save2" type="button">4×6 인화용 배치 저장</button>
+          <button class="btn ghost" id="other" type="button">다른 사진</button>
+        </div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>규격별 크기 한눈에 보기</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>용도</th><th>크기</th><th>300dpi 픽셀</th></tr></thead>
+      <tbody>
+        <tr><td>여권</td><td>3.5×4.5cm</td><td class="n">413×531</td></tr>
+        <tr><td>주민등록증·운전면허·자격증</td><td>3.5×4.5cm</td><td class="n">413×531</td></tr>
+        <tr><td>반명함(이력서)</td><td>3×4cm</td><td class="n">354×472</td></tr>
+        <tr><td>명함판</td><td>5×7cm</td><td class="n">591×827</td></tr>
+        <tr><td>미국 비자</td><td>5.1×5.1cm (2×2인치)</td><td class="n">600×600</td></tr>
+      </tbody>
+    </table></div>
+    <h2>여권사진은 얼굴 크기까지 정해져 있어요</h2>
+    <p>여권사진은 크기만 맞추면 되는 게 아니라 <strong>정수리부터 턱까지 길이가 3.2~3.6cm</strong>여야 해요. 사진을 불러오면 두 줄 점선과 타원 가이드가 보이는데, 정수리가 위 점선에, 턱이 아래 점선에 닿도록 상자 크기와 위치를 맞추면 이 기준에 들어와요. 배경은 흰색이어야 하고, 모자·색안경은 안 되며, 눈썹과 귀가 머리카락에 가리지 않아야 해요. 최근 6개월 안에 찍은 사진이어야 한다는 조건도 있어요.</p>
+    <p>이 도구는 규격에 맞게 자르고 크기를 맞추는 일을 해요. 배경을 바꾸거나 얼굴을 보정하지는 않으니, 흰 벽 앞에서 그림자 없이 정면으로 찍은 사진을 쓰는 게 가장 좋아요. 여권 발급 기관에 따라 휴대폰 사진이 반려되는 경우도 있으니 최종 기준은 외교부 여권 안내를 확인하세요.</p>
+    <h2>4×6 인화용 배치</h2>
+    <p>'4×6 인화용 배치 저장'을 누르면 흔히 쓰는 10×15cm(4×6인치) 인화지 한 장에 규격 사진을 최대한 많이 배치한 파일을 만들어요. 3.5×4.5cm 사진은 한 장에 6~8장이 들어가요. 편의점 사진 인화기나 온라인 인화 서비스에서 4×6(또는 10×15)으로 '원본 크기 그대로' 인화한 뒤 회색 선을 따라 자르면 돼요. 인화할 때 '용지에 맞춤'이나 '테두리 자르기'를 켜면 크기가 바뀌니 꼭 꺼 주세요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>온라인 제출용 용량도 맞춰 주나요?</summary><p>300dpi JPG로 저장하면 대개 100~300KB 사이예요. 제출처에 용량 제한이 있다면 이미지 용량 줄이기에서 목표 용량을 골라 한 번 더 줄이면 돼요.</p></details>
+      <details><summary>배경을 흰색으로 바꿀 수 있나요?</summary><p>지금은 자르기와 규격 맞추기만 지원해요. 흰 벽이나 밝은 단색 배경 앞에서 찍은 사진을 쓰는 걸 권해요.</p></details>
+      <details><summary>휴대폰으로 찍은 사진도 여권에 쓸 수 있나요?</summary><p>규격과 조건을 충족하면 가능하지만, 조명·그림자·해상도 때문에 반려되는 경우가 있어요. 중요한 신청이라면 사진관 촬영이 안전해요.</p></details>
+      <details><summary>사진이 어딘가에 남나요?</summary><p>아니요. 얼굴 사진은 서버로 전송되지 않고 브라우저 안에서만 처리돼요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="id-photo"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, info=null, crop=null, DPI=300;
+function spec(){
+  var v=K.$("#preset").value.split(":"), mm;
+  if(v[0]==="custom") mm=[+K.$("#cw").value||35,+K.$("#ch").value||45];
+  else { var p=v[0].split("x"); mm=[+p[0],+p[1]]; }
+  return {w:mm[0],h:mm[1],kind:v[1],pw:Math.round(mm[0]/25.4*DPI),ph:Math.round(mm[1]/25.4*DPI)};
+}
+function guide(ctx,r,scale){
+  var s=spec(); ctx.save(); ctx.strokeStyle="rgba(53,214,164,.95)"; ctx.lineWidth=2/scale; ctx.setLineDash([6/scale,5/scale]);
+  var headH = s.kind==="passport" ? r.h*(3.4/4.5) : s.kind==="us" ? r.h*0.6 : r.h*0.62;
+  var top = s.kind==="passport" ? r.y+r.h*0.09 : r.y+r.h*0.12;
+  var cx=r.x+r.w/2, ew=headH*0.37;
+  ctx.beginPath(); ctx.ellipse(cx,top+headH/2,ew,headH/2,0,0,Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(r.x,top); ctx.lineTo(r.x+r.w,top); ctx.moveTo(r.x,top+headH); ctx.lineTo(r.x+r.w,top+headH); ctx.stroke();
+  ctx.restore();
+}
+function refresh(){
+  var s=spec(); K.$("#f-cw").hidden=K.$("#f-ch").hidden=K.$("#preset").value.indexOf("custom")!==0;
+  K.$("#spec").innerHTML="저장 크기 <b>"+s.pw+"×"+s.ph+"px</b> · 300dpi · <b>"+(s.w/10)+"×"+(s.h/10)+"cm</b>"+(s.kind==="passport"?" · 정수리~턱 3.2~3.6cm (두 점선 사이)":"");
+  if(crop){ crop.setRatio(s.w/s.h); }
+}
+function cut(){
+  var s=spec(), r=crop.get(), cv=K.canvas(r.w,r.h); cv.getContext("2d").drawImage(info.img,r.x,r.y,r.w,r.h,0,0,r.w,r.h);
+  return K.drawScaled(cv,r.w,r.h,s.pw,s.ph);
+}
+var dz=K.dropzone(K.$("#drop"),{accept:"image/*",filter:K.isImage,onFiles:async function(f){
+  try{ info=await K.loadImage(f[0]); }catch(e){ return K.fail(e); }
+  K.$("#drop").hidden=true; K.$("#editor").hidden=false;
+  var s=spec(); crop=K.cropper(K.$("#cv"),info.img,{ratio:s.w/s.h,guide:guide}); refresh();
+}});
+K.$$("#preset,#cw,#ch").forEach(function(el){el.addEventListener("change",refresh)});
+K.$("#save1").addEventListener("click",async function(){ var s=spec(); K.download(await K.toBlob(cut(),"image/jpeg",0.95),"photo_"+s.w+"x"+s.h+"mm.jpg"); });
+K.$("#save2").addEventListener("click",async function(){
+  var s=spec(), one=cut(), W=1800, H=1200, gap=24; // 6×4인치 가로
+  var cols=Math.floor((W-gap)/(s.pw+gap)), rows=Math.floor((H-gap)/(s.ph+gap));
+  if(cols*rows<1){ W=1200; H=1800; cols=Math.floor((W-gap)/(s.pw+gap)); rows=Math.floor((H-gap)/(s.ph+gap)); }
+  if(cols*rows<1) return K.toast("이 규격은 4×6 용지에 들어가지 않아요.");
+  var sheet=K.canvas(W,H), c=sheet.getContext("2d"); c.fillStyle="#fff"; c.fillRect(0,0,W,H);
+  var ox=(W-cols*s.pw-(cols-1)*gap)/2, oy=(H-rows*s.ph-(rows-1)*gap)/2;
+  c.strokeStyle="#c8c8c8"; c.lineWidth=1;
+  for(var i=0;i<rows;i++) for(var j=0;j<cols;j++){ var x=ox+j*(s.pw+gap), y=oy+i*(s.ph+gap); c.drawImage(one,x,y); c.strokeRect(x-0.5,y-0.5,s.pw+1,s.ph+1); }
+  K.download(await K.toBlob(sheet,"image/jpeg",0.95),"photo_sheet_4x6_"+(cols*rows)+"ea.jpg");
+  K.toast(cols*rows+"장을 4×6 용지에 배치했어요.");
+});
+K.$("#other").addEventListener("click",function(){ dz.open(); });
+refresh();
+})();
+
+</script>
+</body>
+</html>

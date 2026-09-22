@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전자서명 만들기 - 손글씨 서명을 사진·PDF에 넣기 | calcflow</title>
+<meta name="description" content="손가락이나 마우스로 서명을 그리거나 이름을 손글씨체로 만들어, 사진이나 PDF 원하는 위치에 넣어요. 서명만 투명 PNG로 저장할 수도 있어요.">
+<link rel="canonical" href="https://calcflow.kr/tools/signature/">
+<meta property="og:title" content="전자서명 만들기 - 손글씨 서명을 사진·PDF에 넣기 | calcflow">
+<meta property="og:description" content="손가락이나 마우스로 서명을 그리거나 이름을 손글씨체로 만들어, 사진이나 PDF 원하는 위치에 넣어요. 서명만 투명 PNG로 저장할 수도 있어요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/signature/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&family=Nanum+Pen+Script&family=Gaegu:wght@700&display=swap">
+<style>
+.pad{width:100%;height:200px;background:#fff;border:1px solid var(--line-2);border-radius:10px;touch-action:none;cursor:crosshair;display:block}
+.sig-prev{background-color:#fff;border:1px dashed var(--line-2);border-radius:10px;min-height:90px;display:flex;align-items:center;justify-content:center;padding:10px}
+.sig-prev canvas{max-width:100%;max-height:120px}
+.place{position:relative;display:inline-block;max-width:100%;line-height:0;box-shadow:var(--shadow)}
+.place canvas{max-width:100%;height:auto;display:block}
+.sigbox{position:absolute;border:1.5px dashed var(--brand);cursor:move;touch-action:none}
+.sigbox img{width:100%;height:100%;display:block;pointer-events:none}
+.sigbox .hd{position:absolute;right:-8px;bottom:-8px;width:16px;height:16px;border-radius:50%;background:var(--brand);border:2px solid #fff;cursor:nwse-resize}
+.pager{display:flex;gap:8px;align-items:center;font-size:14px}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>✍️ 서명 만들기·문서에 넣기</h1>
+    <p class="muted">계약서·동의서·신청서에 서명해서 보내야 할 때 프린트하고 스캔할 필요 없이, 서명을 만들어 PDF나 사진에 바로 넣어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <h2 style="font-size:17px">1. 서명 만들기</h2>
+      <div class="seg" id="kind" role="group"><button type="button" data-v="draw" aria-pressed="true">✍️ 직접 그리기</button><button type="button" data-v="type" aria-pressed="false">🔤 이름으로</button><button type="button" data-v="img" aria-pressed="false">📷 서명 사진</button></div>
+      <div id="k-draw">
+        <canvas class="pad" id="pad"></canvas>
+        <div class="tool-row" style="margin-top:8px">
+          <div class="field"><label for="pcol">펜 색</label><select id="pcol"><option value="#111111">검정</option><option value="#1a3ea8">파랑</option><option value="#c01a1a">빨강</option></select></div>
+          <div class="field"><label for="pw">굵기</label><div class="range-row"><input type="range" id="pw" min="1" max="10" value="4"><output id="pwv">4</output></div></div>
+          <div class="field" style="flex:0 0 auto"><button class="btn ghost sm" id="clear" type="button">지우기</button></div>
+        </div>
+      </div>
+      <div id="k-type" hidden>
+        <div class="tool-row">
+          <div class="field" style="flex:2"><label for="name">이름</label><input type="text" id="name" value="홍길동" maxlength="20"></div>
+          <div class="field"><label for="font">글씨체</label><select id="font"><option value="Nanum Pen Script">나눔펜</option><option value="Nanum Brush Script">나눔붓</option><option value="Gaegu">개구</option></select></div>
+          <div class="field"><label for="tcol">색</label><select id="tcol"><option value="#111111">검정</option><option value="#1a3ea8">파랑</option><option value="#c01a1a">빨강</option></select></div>
+        </div>
+      </div>
+      <div id="k-img" hidden>
+        <div class="drop small" id="sigdrop"><span class="ico">📷</span><b>흰 종이에 쓴 서명 사진 선택</b></div>
+        <div class="field" style="margin-top:8px"><label for="th">배경 지우는 정도</label><div class="range-row"><input type="range" id="th" min="80" max="240" value="170"><output id="thv">170</output></div></div>
+      </div>
+      <div class="sig-prev"><canvas id="sigpv"></canvas></div>
+      <div class="btn-row"><button class="btn ghost sm" id="sigsave" type="button">서명만 투명 PNG로 저장</button></div>
+
+      <h2 style="font-size:17px;border-top:1px solid var(--line);padding-top:16px">2. 문서에 넣기</h2>
+      <div class="drop" id="docdrop"><span class="ico">📄</span><b>서명할 PDF나 사진 선택</b><span>PDF · JPG · PNG · 파일은 전송되지 않아요</span></div>
+      <div id="placer" hidden>
+        <div class="pager" id="pager" hidden><button class="btn ghost sm" id="prev" type="button">‹ 이전</button><span id="pno"></span><button class="btn ghost sm" id="next" type="button">다음 ›</button><label class="chk" style="margin-left:auto"><input type="checkbox" id="allp"> 모든 쪽에 같은 위치로</label></div>
+        <div style="text-align:center;margin-top:10px"><div class="place" id="place"><canvas id="doccv"></canvas><div class="sigbox" id="sigbox"><img id="sigimg" alt="서명"><span class="hd" id="hd"></span></div></div></div>
+        <p class="pw-hint" style="text-align:center;margin-top:6px">서명을 끌어서 옮기고, 오른쪽 아래 점을 끌어 크기를 바꾸세요.</p>
+        <div class="btn-row"><button class="btn" id="apply" type="button">서명 넣어 저장</button><button class="btn ghost" id="otherdoc" type="button">다른 파일</button></div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>서명은 세 가지 방법으로 만들어요</h2>
+    <p><strong>직접 그리기</strong>는 휴대폰이면 손가락으로, 컴퓨터면 마우스나 터치패드로 서명해요. 선이 부드럽게 이어지도록 보정하고, 여백은 자동으로 잘라서 서명 부분만 남겨요. <strong>이름으로</strong>는 손글씨 느낌의 글꼴로 이름을 써 줘서 마우스로 그리기 어려울 때 편해요. <strong>서명 사진</strong>은 흰 종이에 펜으로 쓴 서명을 찍어 올리면 종이 배경을 투명하게 지워서, 실제 필체 그대로 쓸 수 있어요. 배경이 덜 지워지면 '배경 지우는 정도'를 낮추고, 서명 선이 흐려지면 높여 보세요.</p>
+    <h2>PDF에 서명 넣기</h2>
+    <p>계약서 PDF를 올리면 마지막 쪽이 먼저 보여요. 서명란은 대개 끝에 있으니까요. 다른 쪽에 넣으려면 이전·다음으로 이동하고, 서명을 끌어 서명란 위에 놓은 뒤 오른쪽 아래 점으로 크기를 맞추면 돼요. 모든 쪽에 간인처럼 같은 위치로 서명해야 할 때는 '모든 쪽에 같은 위치로'를 켜세요. 원본 PDF의 글자와 페이지는 그대로 두고 서명 이미지만 위에 얹어서 저장하기 때문에 화질이 떨어지지 않아요.</p>
+    <h2>법적 효력은 이렇게 생각하세요</h2>
+    <p>서명 이미지를 넣은 문서는 상대방과 합의한 방식이라면 일상적인 동의서·확인서·견적 승인 등에 널리 쓰여요. 다만 이런 서명은 '누가 서명했는지'를 기술적으로 증명하는 공인 전자서명과는 달라요. 부동산 계약, 금융 거래, 공공기관 제출처럼 본인 확인이 중요한 문서는 해당 기관이 요구하는 방식(인증서 서명, 방문 서명 등)을 따르세요. 서명 이미지는 이 브라우저 밖으로 전송되지 않지만, 저장한 서명 PNG 파일은 다른 사람이 쓰지 않도록 잘 보관하세요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>서명을 저장해 두고 다시 쓸 수 있나요?</summary><p>'서명만 투명 PNG로 저장'으로 파일을 받아 두면 다음에 '서명 사진' 탭에서 불러와 바로 쓸 수 있어요.</p></details>
+      <details><summary>PDF의 서명 위치가 미리보기와 달라요.</summary><p>보기 화면과 같은 비율로 위치를 계산해요. 쪽이 회전된 PDF도 맞춰 넣지만, 특이한 구조의 PDF는 위치가 약간 어긋날 수 있으니 저장한 파일을 한 번 확인해 주세요.</p></details>
+      <details><summary>휴대폰으로 서명하기 편한 방법은요?</summary><p>휴대폰을 가로로 돌리면 서명 칸이 넓어져서 쓰기 편해요. 굵기를 5~6으로 올리면 작게 넣어도 잘 보여요.</p></details>
+      <details><summary>문서가 서버에 올라가나요?</summary><p>아니요. 서명과 문서 모두 브라우저 안에서만 처리돼요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="signature"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, kind="draw", pad=K.$("#pad"), pctx=pad.getContext("2d"), drawing=false, drew=false, sigImgSrc=null, sig=null;
+var doc={type:null,img:null,pdf:null,bytes:null,page:1,n:1,vp:null,name:""};
+function sizePad(){ var r=pad.getBoundingClientRect(), d=window.devicePixelRatio||1, keep=drew?pad.toDataURL():null;
+  pad.width=r.width*d; pad.height=r.height*d; pctx.setTransform(d,0,0,d,0,0); pctx.lineCap=pctx.lineJoin="round";
+  if(keep){ var im=new Image(); im.onload=function(){ pctx.drawImage(im,0,0,r.width,r.height); }; im.src=keep; } }
+function ppos(e){ var r=pad.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+var last=null;
+pad.addEventListener("pointerdown",function(e){ drawing=true; last=ppos(e); pad.setPointerCapture(e.pointerId); pctx.strokeStyle=K.$("#pcol").value; pctx.lineWidth=+K.$("#pw").value;
+  pctx.beginPath(); pctx.arc(last.x,last.y,pctx.lineWidth/2,0,7); pctx.fillStyle=pctx.strokeStyle; pctx.fill(); e.preventDefault(); });
+pad.addEventListener("pointermove",function(e){ if(!drawing) return; var p=ppos(e); pctx.beginPath(); pctx.moveTo(last.x,last.y);
+  var mx=(last.x+p.x)/2, my=(last.y+p.y)/2; pctx.quadraticCurveTo(last.x,last.y,mx,my); pctx.lineTo(p.x,p.y); pctx.stroke(); last=p; drew=true; });
+function up(){ if(drawing){ drawing=false; build(); } }
+pad.addEventListener("pointerup",up); pad.addEventListener("pointercancel",up);
+K.$("#clear").addEventListener("click",function(){ pctx.clearRect(0,0,pad.width,pad.height); drew=false; build(); });
+function trim(cv){ var c=cv.getContext("2d"), d=c.getImageData(0,0,cv.width,cv.height).data, W=cv.width, H=cv.height, x0=W, y0=H, x1=-1, y1=-1;
+  for(var y=0;y<H;y++) for(var x=0;x<W;x++) if(d[(y*W+x)*4+3]>10){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+  if(x1<0) return null; var p=Math.round(Math.max(W,H)*0.02); x0=Math.max(0,x0-p); y0=Math.max(0,y0-p); x1=Math.min(W-1,x1+p); y1=Math.min(H-1,y1+p);
+  var o=K.canvas(x1-x0+1,y1-y0+1); o.getContext("2d").drawImage(cv,x0,y0,o.width,o.height,0,0,o.width,o.height); return o; }
+async function build(){
+  var cv=null;
+  if(kind==="draw"){ cv=drew?trim(pad):null; }
+  else if(kind==="type"){ var f=K.$("#font").value, t=K.$("#name").value.trim(); if(t){ try{ await document.fonts.load("120px '"+f+"'",t); }catch(e){}
+      var m=K.canvas(1600,300), c=m.getContext("2d"); c.font="120px '"+f+"', cursive"; c.fillStyle=K.$("#tcol").value; c.textBaseline="middle"; c.fillText(t,30,150); cv=trim(m); } }
+  else if(sigImgSrc){ var im=sigImgSrc.img, s=Math.min(1,1400/Math.max(im.naturalWidth,im.naturalHeight)), c2=K.canvas(im.naturalWidth*s,im.naturalHeight*s), x=c2.getContext("2d");
+      x.drawImage(im,0,0,c2.width,c2.height); var id=x.getImageData(0,0,c2.width,c2.height), d=id.data, th=+K.$("#th").value;
+      for(var i=0;i<d.length;i+=4){ var l=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2]; if(l>th) d[i+3]=0; else { var a=Math.min(1,(th-l)/60); d[i+3]=Math.round(255*a); d[i]=d[i+1]=d[i+2]=Math.min(60,l*0.3); } }
+      x.putImageData(id,0,0); cv=trim(c2); }
+  sig=cv; var pv=K.$("#sigpv");
+  if(cv){ pv.width=cv.width; pv.height=cv.height; pv.getContext("2d").drawImage(cv,0,0); K.$("#sigimg").src=cv.toDataURL("image/png"); }
+  else { pv.width=1; pv.height=1; K.$("#sigimg").removeAttribute("src"); }
+  fitSig(false);
+}
+K.$$("#kind button").forEach(function(b){ b.addEventListener("click",function(){ kind=b.dataset.v; K.$$("#kind button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});
+  ["draw","type","img"].forEach(function(k){ K.$("#k-"+k).hidden=k!==kind; }); if(kind==="draw") sizePad(); build(); }); });
+K.$$("#name,#font,#tcol").forEach(function(el){ el.addEventListener("input",build); el.addEventListener("change",build); });
+K.$("#pw").addEventListener("input",function(){ K.$("#pwv").textContent=this.value; });
+K.$("#th").addEventListener("input",function(){ K.$("#thv").textContent=this.value; build(); });
+K.dropzone(K.$("#sigdrop"),{accept:"image/*",filter:K.isImage,paste:false,onFiles:async function(f){ try{ sigImgSrc=await K.loadImage(f[0]); build(); }catch(e){ K.fail(e); } }});
+K.$("#sigsave").addEventListener("click",async function(){ if(!sig) return K.toast("먼저 서명을 만들어 주세요."); K.download(await K.toBlob(sig,"image/png"),"signature.png"); });
+
+/* 배치 */
+var box=K.$("#sigbox"), place=K.$("#place"), dcv=K.$("#doccv"), pos={x:0.6,y:0.75,w:0.25};
+function fitSig(){ if(!sig||!dcv.clientWidth){ box.hidden=!sig; return; } box.hidden=false;
+  var W=dcv.clientWidth, H=dcv.clientHeight, w=pos.w*W, h=w*sig.height/sig.width;
+  if(pos.y*H+h>H) pos.y=Math.max(0,(H-h)/H); box.style.left=pos.x*W+"px"; box.style.top=pos.y*H+"px"; box.style.width=w+"px"; box.style.height=h+"px"; }
+var drag=null;
+box.addEventListener("pointerdown",function(e){ var W=dcv.clientWidth, H=dcv.clientHeight; drag={rs:e.target.id==="hd",sx:e.clientX,sy:e.clientY,p:{x:pos.x,y:pos.y,w:pos.w},W:W,H:H}; box.setPointerCapture(e.pointerId); e.preventDefault(); });
+box.addEventListener("pointermove",function(e){ if(!drag) return; var dx=(e.clientX-drag.sx)/drag.W, dy=(e.clientY-drag.sy)/drag.H;
+  if(drag.rs){ pos.w=Math.min(1,Math.max(0.04,drag.p.w+dx)); } else { pos.x=Math.min(1-pos.w,Math.max(0,drag.p.x+dx)); pos.y=Math.min(0.98,Math.max(0,drag.p.y+dy)); } fitSig(); });
+box.addEventListener("pointerup",function(){ drag=null; }); box.addEventListener("pointercancel",function(){ drag=null; });
+async function renderDoc(){
+  var maxW=Math.min(place.parentElement.clientWidth-4,820);
+  if(doc.type==="img"){ var s=Math.min(1,maxW/doc.img.w); dcv.width=doc.img.w*s; dcv.height=doc.img.h*s; dcv.getContext("2d").drawImage(doc.img.img,0,0,dcv.width,dcv.height); }
+  else { var page=await doc.pdf.getPage(doc.page), v1=page.getViewport({scale:1}), s2=maxW/v1.width, d=window.devicePixelRatio||1, vp=page.getViewport({scale:s2*d});
+    dcv.width=vp.width; dcv.height=vp.height; dcv.style.width=(vp.width/d)+"px"; await page.render({canvasContext:dcv.getContext("2d"),viewport:vp}).promise;
+    K.$("#pno").textContent=doc.page+" / "+doc.n+"쪽"; }
+  fitSig();
+}
+var ddz=K.dropzone(K.$("#docdrop"),{accept:"application/pdf,.pdf,image/*",filter:function(f){return K.isPdf(f)||K.isImage(f)},paste:false,onFiles:async function(f){
+  try{ doc.name=f[0].name;
+    if(K.isPdf(f[0])){ doc.type="pdf"; doc.bytes=new Uint8Array(await f[0].arrayBuffer()); var lib=await K.pdfjs(); doc.pdf=await lib.getDocument({data:doc.bytes.slice()}).promise; doc.n=doc.pdf.numPages; doc.page=doc.n; }
+    else { doc.type="img"; doc.img=await K.loadImage(f[0]); doc.n=1; doc.page=1; }
+    K.$("#docdrop").hidden=true; K.$("#placer").hidden=false; K.$("#pager").hidden=doc.type!=="pdf"; await renderDoc();
+    if(!sig) K.toast("위에서 서명을 먼저 만들어 주세요.");
+  }catch(e){ K.fail(new Error("파일을 열 수 없어요. 암호가 걸린 PDF는 지원하지 않아요.")); } }});
+K.$("#prev").addEventListener("click",function(){ if(doc.page>1){ doc.page--; renderDoc(); } });
+K.$("#next").addEventListener("click",function(){ if(doc.page<doc.n){ doc.page++; renderDoc(); } });
+K.$("#otherdoc").addEventListener("click",function(){ ddz.open(); });
+window.addEventListener("resize",function(){ if(doc.type) renderDoc(); });
+K.$("#apply").addEventListener("click",async function(){
+  if(!sig) return K.toast("먼저 서명을 만들어 주세요.");
+  var btn=this; K.busy(btn,true);
+  try{
+    var hRatio=sig.height/sig.width;
+    if(doc.type==="img"){ var W=doc.img.w, H=doc.img.h, cv=K.canvas(W,H), c=cv.getContext("2d"); c.drawImage(doc.img.img,0,0);
+      c.drawImage(sig,pos.x*W,pos.y*H,pos.w*W,pos.w*W*hRatio); var f=/png|webp/.test(doc.img.type)?doc.img.type:"image/jpeg";
+      K.download(await K.toBlob(cv,f,0.95),K.baseName(doc.name)+"_signed."+K.extOf(f)); }
+    else { var L=await K.pdfLib(), pdf=await L.PDFDocument.load(doc.bytes,{ignoreEncryption:true}), png=await pdf.embedPng(await (await K.toBlob(sig,"image/png")).arrayBuffer());
+      var pages=K.$("#allp").checked?pdf.getPages():[pdf.getPage(doc.page-1)];
+      pages.forEach(function(pg){ var sz=pg.getSize(), rot=(pg.getRotation().angle||0)%360, PW=sz.width, PH=sz.height, w, x, y;
+        if(rot===90||rot===270){ var vw=PH, vh=PW; w=pos.w*vw; var vx=pos.x*vw, vy=pos.y*vh, h=w*hRatio;
+          if(rot===90) pg.drawImage(png,{x:vy+h,y:vx,width:w,height:h,rotate:L.degrees(90)});
+          else pg.drawImage(png,{x:PW-vy-h,y:PH-vx,width:w,height:h,rotate:L.degrees(270)}); }
+        else if(rot===180){ w=pos.w*PW; var h2=w*hRatio; pg.drawImage(png,{x:PW-pos.x*PW,y:pos.y*PH+h2,width:w,height:h2,rotate:L.degrees(180)}); }
+        else { w=pos.w*PW; x=pos.x*PW; y=PH-pos.y*PH-w*hRatio; pg.drawImage(png,{x:x,y:y,width:w,height:w*hRatio}); } });
+      K.download(new Blob([await pdf.save()],{type:"application/pdf"}),K.baseName(doc.name)+"_signed.pdf"); }
+    K.toast("서명을 넣어 저장했어요.");
+  }catch(e){ K.fail(e); } finally{ K.busy(btn,false); }
+});
+window.addEventListener("resize",function(){ if(kind==="draw") sizePad(); });
+sizePad(); build();
+})();
+
+</script>
+</body>
+</html>

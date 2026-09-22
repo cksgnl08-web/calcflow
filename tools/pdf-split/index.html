@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF 나누기·페이지 추출 - 원하는 페이지만 뽑기, 쪽별 분할 | calcflow</title>
+<meta name="description" content="PDF에서 원하는 페이지만 골라 새 PDF로 저장하거나, 한 쪽씩 또는 N쪽씩 나눠요. 페이지 삭제도 돼요. 업로드 없이 브라우저에서 처리해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/pdf-split/">
+<meta property="og:title" content="PDF 나누기·페이지 추출 - 원하는 페이지만 뽑기, 쪽별 분할 | calcflow">
+<meta property="og:description" content="PDF에서 원하는 페이지만 골라 새 PDF로 저장하거나, 한 쪽씩 또는 N쪽씩 나눠요. 페이지 삭제도 돼요. 업로드 없이 브라우저에서 처리해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/pdf-split/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>✂️ PDF 나누기·페이지 추출</h1>
+    <p class="muted">PDF에서 필요한 페이지만 골라 새 파일로 만들거나, 모든 페이지를 한 쪽씩 나눠요. 필요 없는 페이지를 지운 PDF도 만들 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">📄</span><b>PDF 파일을 여기로 끌어오거나 눌러서 선택</b><span>PDF 한 개 · 파일은 전송되지 않아요</span></div>
+      <div id="editor" hidden>
+        <div class="stat-line inline" id="fileinfo"></div>
+        <div class="tool-row">
+          <div class="field" style="flex:2"><label for="range">페이지 선택</label><input type="text" id="range" placeholder="예: 1-3, 5, 8-10"><span class="hint">아래 썸네일을 눌러도 선택돼요</span></div>
+          <div class="field"><label for="mode">만들 방식</label><select id="mode">
+            <option value="extract">선택한 페이지로 새 PDF 1개</option>
+            <option value="each">선택한 페이지를 한 쪽씩 (ZIP)</option>
+            <option value="chunk">전체를 N쪽씩 나누기 (ZIP)</option>
+            <option value="delete">선택한 페이지를 뺀 PDF</option>
+          </select></div>
+          <div class="field" id="f-n" hidden><label for="n">몇 쪽씩</label><input type="number" id="n" value="2" min="1"></div>
+        </div>
+        <div class="btn-row"><button class="btn ghost sm" id="all" type="button">전체 선택</button><button class="btn ghost sm" id="none" type="button">선택 해제</button><button class="btn ghost sm" id="odd" type="button">홀수 쪽</button><button class="btn ghost sm" id="even" type="button">짝수 쪽</button></div>
+        <div class="thumbs" id="thumbs" style="margin-top:12px"></div>
+        <div class="btn-row" style="margin-top:12px"><button class="btn" id="run" type="button">만들기</button><button class="btn ghost" id="other" type="button">다른 PDF</button></div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>네 가지 나누기 방식</h2>
+    <p><strong>선택한 페이지로 새 PDF</strong>는 여러 쪽짜리 문서에서 필요한 부분만 뽑아 제출할 때 써요. 예를 들어 50쪽짜리 계약서에서 서명 페이지(12쪽, 48~50쪽)만 보내야 할 때 '12, 48-50'을 입력하면 4쪽짜리 PDF가 만들어져요. <strong>한 쪽씩</strong>은 선택한 페이지를 각각 별도 PDF로 만들어 ZIP으로 묶어 줘요. 스캔한 영수증 묶음을 한 장씩 나눠 올려야 할 때 편해요.</p>
+    <p><strong>N쪽씩 나누기</strong>는 선택과 상관없이 전체 문서를 앞에서부터 N쪽 단위로 잘라요. 용량 제한 때문에 큰 PDF를 여러 파일로 나눠 보내야 할 때 쓰면 돼요. <strong>선택한 페이지를 뺀 PDF</strong>는 빈 페이지나 광고 페이지, 개인정보가 담긴 페이지를 지운 사본을 만들어요.</p>
+    <h2>페이지 번호 입력하는 법</h2>
+    <p>쉼표로 구분해서 한 쪽씩(3, 7) 또는 범위(5-9)로 적어요. 썸네일을 누르면 입력칸이 자동으로 채워지고, 입력칸을 고치면 썸네일 선택이 바뀌어요. 홀수 쪽·짝수 쪽 버튼은 양면 스캔 파일에서 앞면이나 뒷면만 골라낼 때 유용해요.</p>
+    <p>페이지는 원본을 그대로 복사해서 새 파일을 만들기 때문에 화질이 떨어지지 않고 글자도 그대로 선택할 수 있어요. 원본 PDF는 바뀌지 않아요.</p>
+    <h2>개인정보가 담긴 페이지를 뺄 때</h2>
+    <p>보험 청구나 회사 제출용으로 서류를 보낼 때, 필요 없는 주민등록번호 뒷자리나 가족 정보가 담긴 페이지까지 함께 보내는 경우가 많아요. '선택한 페이지를 뺀 PDF'로 해당 쪽을 지운 사본을 만들어 보내면 불필요한 정보 노출을 줄일 수 있어요. 한 페이지 안의 일부만 가려야 한다면 <a href="/tools/pdf-to-image/">PDF → 이미지</a>로 바꾼 뒤 <a href="/tools/mosaic/">모자이크</a>로 가리는 방법도 있어요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>썸네일이 늦게 떠요.</summary><p>페이지가 많으면 앞에서부터 차례로 그려요. 썸네일이 다 뜨기 전에도 번호로 선택하고 만들 수 있어요. 300쪽이 넘는 문서는 앞 300쪽만 썸네일을 그려요.</p></details>
+      <details><summary>나눈 파일 용량이 원본과 비슷해요.</summary><p>여러 페이지가 같은 글꼴·이미지를 함께 쓰는 PDF는 한 쪽만 뽑아도 그 자원이 같이 들어가서 용량이 크게 줄지 않을 수 있어요.</p></details>
+      <details><summary>암호 걸린 PDF는요?</summary><p>열람 암호가 있는 PDF는 열 수 없어요. 암호를 푼 사본으로 다시 시도해 주세요.</p></details>
+      <details><summary>파일이 서버에 저장되나요?</summary><p>아니요. PDF는 브라우저 안에서만 읽고 나눠요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="pdf-split"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, file=null, bytes=null, N=0, sel=new Set();
+function parse(str){ var s=new Set(); String(str).split(/[,\s]+/).forEach(function(p){ var m=p.match(/^(\d+)(?:-(\d+))?$/); if(!m) return;
+  var a=+m[1], b=m[2]?+m[2]:a; if(a>b){var t=a;a=b;b=t;} for(var i=Math.max(1,a);i<=Math.min(N,b);i++) s.add(i); }); return s; }
+function fmt(s){ var a=Array.from(s).sort(function(x,y){return x-y}), out=[], i=0; while(i<a.length){ var j=i; while(j+1<a.length&&a[j+1]===a[j]+1) j++; out.push(i===j?a[i]:a[i]+"-"+a[j]); i=j+1; } return out.join(", "); }
+function paint(){ K.$$("#thumbs .thumb").forEach(function(t){ t.classList.toggle("on",sel.has(+t.dataset.p)); }); K.$("#range").value=fmt(sel); }
+async function open(f){
+  file=f; bytes=new Uint8Array(await f.arrayBuffer());
+  var lib=await K.pdfjs(), doc=await lib.getDocument({data:bytes.slice()}).promise; N=doc.numPages; sel=new Set();
+  K.$("#drop").hidden=true; K.$("#editor").hidden=false; K.$("#fileinfo").innerHTML="<b>"+K.esc(f.name)+"</b> · "+N+"쪽 · "+K.fmtBytes(f.size);
+  var box=K.$("#thumbs"); box.innerHTML="";
+  for(var p=1;p<=N;p++){ var d=document.createElement("div"); d.className="thumb"; d.dataset.p=p; d.innerHTML='<canvas></canvas><span>'+p+'쪽</span>'; box.appendChild(d); }
+  paint();
+  for(var q=1;q<=Math.min(N,300);q++){ var page=await doc.getPage(q), vp=page.getViewport({scale:1}), s=140/Math.max(vp.width,vp.height), v2=page.getViewport({scale:s*(window.devicePixelRatio||1)});
+    var c=box.children[q-1].querySelector("canvas"); c.width=v2.width; c.height=v2.height; c.style.width=(v2.width/(window.devicePixelRatio||1))+"px";
+    await page.render({canvasContext:c.getContext("2d"),viewport:v2}).promise; }
+}
+var dz=K.dropzone(K.$("#drop"),{accept:"application/pdf,.pdf",filter:K.isPdf,rejectMsg:"PDF 파일만 넣을 수 있어요.",onFiles:function(f){ open(f[0]).catch(function(e){ K.fail(new Error("PDF를 열 수 없어요. 암호가 걸렸거나 손상된 파일일 수 있어요.")); }); }});
+K.$("#thumbs").addEventListener("click",function(e){ var t=e.target.closest(".thumb"); if(!t) return; var p=+t.dataset.p; sel.has(p)?sel.delete(p):sel.add(p); paint(); });
+K.$("#range").addEventListener("change",function(){ sel=parse(this.value); paint(); });
+K.$("#mode").addEventListener("change",function(){ K.$("#f-n").hidden=this.value!=="chunk"; });
+K.$("#all").addEventListener("click",function(){ sel=new Set(); for(var i=1;i<=N;i++) sel.add(i); paint(); });
+K.$("#none").addEventListener("click",function(){ sel=new Set(); paint(); });
+K.$("#odd").addEventListener("click",function(){ sel=new Set(); for(var i=1;i<=N;i+=2) sel.add(i); paint(); });
+K.$("#even").addEventListener("click",function(){ sel=new Set(); for(var i=2;i<=N;i+=2) sel.add(i); paint(); });
+K.$("#other").addEventListener("click",function(){ dz.open(); });
+K.$("#run").addEventListener("click",async function(){
+  var mode=K.$("#mode").value, btn=this, L=await K.pdfLib(), base=K.baseName(file.name);
+  var picked=Array.from(sel).sort(function(a,b){return a-b});
+  if(mode!=="chunk"&&!picked.length) return K.toast("페이지를 먼저 선택해 주세요.");
+  if(mode==="delete"&&picked.length>=N) return K.toast("모든 페이지를 뺄 수는 없어요.");
+  K.busy(btn,true);
+  try{
+    var src=await L.PDFDocument.load(bytes,{ignoreEncryption:true});
+    async function make(idx){ var d=await L.PDFDocument.create(); (await d.copyPages(src,idx)).forEach(function(p){d.addPage(p)}); return new Blob([await d.save()],{type:"application/pdf"}); }
+    if(mode==="extract") K.download(await make(picked.map(function(p){return p-1})),base+"_p"+fmt(sel).replace(/[, ]+/g,"_")+".pdf");
+    else if(mode==="delete"){ var keep=[]; for(var i=0;i<N;i++) if(!sel.has(i+1)) keep.push(i); K.download(await make(keep),base+"_edited.pdf"); }
+    else{ var files=[], groups=[];
+      if(mode==="each") picked.forEach(function(p){ groups.push([p-1]); });
+      else { var n=Math.max(1,+K.$("#n").value||1); for(var s=0;s<N;s+=n){ var g=[]; for(var k=s;k<Math.min(N,s+n);k++) g.push(k); groups.push(g); } }
+      for(var j=0;j<groups.length;j++){ var g2=groups[j], nm=g2.length>1?(g2[0]+1)+"-"+(g2[g2.length-1]+1):String(g2[0]+1);
+        files.push({name:base+"_p"+nm+".pdf",blob:await make(g2)}); }
+      await K.saveAll(files,base+"_split.zip"); }
+  }catch(e){ K.fail(e); } finally{ K.busy(btn,false); }
+});
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF 합치기 - 여러 PDF 파일 하나로 병합, 순서 변경 | calcflow</title>
+<meta name="description" content="여러 개의 PDF 파일을 원하는 순서로 하나로 합쳐요. 파일을 서버에 올리지 않고 브라우저에서 바로 병합해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/pdf-merge/">
+<meta property="og:title" content="PDF 합치기 - 여러 PDF 파일 하나로 병합, 순서 변경 | calcflow">
+<meta property="og:description" content="여러 개의 PDF 파일을 원하는 순서로 하나로 합쳐요. 파일을 서버에 올리지 않고 브라우저에서 바로 병합해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/pdf-merge/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>📎 PDF 합치기</h1>
+    <p class="muted">계약서, 증빙 서류, 스캔 파일처럼 나뉘어 있는 PDF를 하나로 합쳐요. 순서를 위아래로 바꾼 뒤 한 번에 병합할 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">📄</span><b>PDF 파일을 여기로 끌어오거나 눌러서 선택</b><span>여러 개 한 번에 · 파일은 전송되지 않아요</span></div>
+      <div class="flist" id="list"></div>
+      <div class="stat-line inline" id="sum"></div>
+      <div class="btn-row"><button class="btn" id="run" type="button" disabled>PDF 합치기</button></div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>합치기 전에 순서를 정하세요</h2>
+    <p>PDF는 목록에 보이는 순서대로 이어 붙여져요. 파일 오른쪽의 ↑↓ 버튼으로 순서를 바꾸고, 잘못 넣은 파일은 ✕로 빼면 돼요. 각 파일의 쪽수와 합쳤을 때 전체 쪽수가 함께 보여서, 빠진 파일이 없는지 확인하기 쉬워요. 파일 안의 일부 페이지만 넣고 싶다면 먼저 <a href="/tools/pdf-split/">PDF 나누기</a>로 필요한 페이지만 뽑은 뒤 합치세요.</p>
+    <h2>자주 쓰는 경우</h2>
+    <p>입사 지원이나 대출·전세 서류 제출처럼 '파일 1개로 첨부'를 요구하는 곳이 많아요. 주민등록등본, 재직증명서, 소득금액증명원을 각각 발급받으면 PDF가 여러 개가 되는데, 이 도구로 합쳐서 한 번에 올리면 돼요. 스캐너로 앞면과 뒷면을 따로 스캔한 경우에도 순서를 맞춰 합칠 수 있어요. 사진이나 캡처 이미지를 함께 넣어야 한다면 <a href="/tools/image-to-pdf/">이미지 → PDF</a>로 먼저 PDF로 바꾼 뒤 합치면 돼요.</p>
+    <h2>파일이 밖으로 나가지 않아요</h2>
+    <p>계약서나 증명서처럼 민감한 서류는 온라인 변환 사이트에 올리기가 꺼려져요. 이 도구는 PDF를 서버로 보내지 않고 브라우저 안에서 페이지를 복사해 새 파일을 만들어요. 원본 페이지를 그대로 복사하기 때문에 글자·이미지 화질이 떨어지지 않고, 글자 선택이나 검색도 원본처럼 동작해요.</p>
+    <h2>합친 파일이 너무 크다면</h2>
+    <p>스캔본이 섞여 있으면 합친 PDF가 수십 MB가 되기도 해요. 합치기는 페이지를 그대로 복사하기 때문에 용량이 줄지 않아요. 제출처 제한을 넘는다면 스캔할 때 해상도를 200~300dpi로 낮추거나, 사진으로 찍은 서류는 <a href="/tools/image-compress/">이미지 용량 줄이기</a>로 먼저 줄인 뒤 <a href="/tools/image-to-pdf/">이미지 → PDF</a>로 만들어 합치는 방법이 가장 효과적이에요. 반대로 합친 파일을 다시 쪼개야 한다면 PDF 나누기의 'N쪽씩 나누기'로 용량에 맞게 나눌 수 있어요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>암호가 걸린 PDF도 합칠 수 있나요?</summary><p>열람 암호가 걸린 PDF는 열 수 없어요. PDF 뷰어에서 암호를 풀고 다시 저장한 파일을 넣어 주세요.</p></details>
+      <details><summary>몇 개까지 합칠 수 있나요?</summary><p>개수 제한은 없어요. 다만 전체 용량이 수백 MB를 넘으면 기기에 따라 느려지거나 멈출 수 있어요.</p></details>
+      <details><summary>책갈피(목차)나 입력 양식은 유지되나요?</summary><p>페이지 내용과 링크 대부분은 유지되지만, 원본 파일의 책갈피 목록과 일부 입력 양식은 합친 파일에 옮겨지지 않을 수 있어요.</p></details>
+      <details><summary>휴대폰에서도 되나요?</summary><p>네. 파일 앱이나 다운로드 폴더의 PDF를 선택하면 돼요. 합친 파일은 다운로드 폴더에 저장돼요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="pdf-merge"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+function orderList(el, items, label, onChange){
+  el.innerHTML=items.map(function(it,i){
+    return '<div class="fitem"><div class="th">'+(it.thumb?'<img alt="" src="'+it.thumb+'">':'📄')+'</div><div class="meta"><b>'+CFK.esc(it.file.name)+'</b><span>'+label(it)+'</span></div>'+
+      '<div class="acts"><button type="button" data-up="'+i+'" aria-label="위로"'+(i?'':' disabled')+'>↑</button><button type="button" data-dn="'+i+'" aria-label="아래로"'+(i<items.length-1?'':' disabled')+'>↓</button><button type="button" data-rm="'+i+'" aria-label="빼기">✕</button></div></div>';
+  }).join("");
+  if(!el.dataset.bound){ el.dataset.bound=1; el.addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return; var i;
+    if(b.dataset.up){ i=+b.dataset.up; items.splice(i-1,0,items.splice(i,1)[0]); }
+    else if(b.dataset.dn){ i=+b.dataset.dn; items.splice(i+1,0,items.splice(i,1)[0]); }
+    else if(b.dataset.rm){ items.splice(+b.dataset.rm,1); }
+    onChange();
+  }); }
+}
+
+(function(){
+var K=CFK, items=[];
+function render(){
+  orderList(K.$("#list"),items,function(it){ return (it.pages?it.pages+"쪽 · ":"")+K.fmtBytes(it.file.size)+(it.err?' · <span style="color:var(--warn)">'+it.err+'</span>':''); },render);
+  var total=items.reduce(function(a,it){return a+(it.pages||0)},0);
+  K.$("#sum").innerHTML=items.length?"파일 <b>"+items.length+"개</b> · 합치면 <b>"+total+"쪽</b>":"";
+  K.$("#run").disabled=items.filter(function(i){return i.doc}).length<2;
+}
+K.dropzone(K.$("#drop"),{accept:"application/pdf,.pdf",multiple:true,filter:K.isPdf,rejectMsg:"PDF 파일만 넣을 수 있어요.",onFiles:async function(files){
+  var L=await K.pdfLib();
+  for(var i=0;i<files.length;i++){ var it={file:files[i]}; items.push(it); render();
+    try{ it.bytes=await files[i].arrayBuffer(); it.doc=await L.PDFDocument.load(it.bytes,{ignoreEncryption:true}); it.pages=it.doc.getPageCount(); }
+    catch(e){ it.err="열 수 없는 PDF예요(암호 또는 손상)"; }
+    render(); }
+}});
+K.$("#run").addEventListener("click",async function(){
+  var L=await K.pdfLib(), btn=this; K.busy(btn,true,"합치는 중…");
+  try{
+    var out=await L.PDFDocument.create();
+    for(var i=0;i<items.length;i++){ var it=items[i]; if(!it.doc) continue;
+      var pages=await out.copyPages(it.doc,it.doc.getPageIndices()); pages.forEach(function(p){out.addPage(p)}); }
+    var bytes=await out.save();
+    K.download(new Blob([bytes],{type:"application/pdf"}),"merged_"+items.length+"files.pdf"); K.toast("합친 PDF를 저장했어요.");
+  }catch(e){ K.fail(e); } finally{ K.busy(btn,false); }
+});
+render();
+})();
+
+</script>
+</body>
+</html>

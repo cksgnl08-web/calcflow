@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이미지 포맷 변환 - JPG PNG WEBP 서로 바꾸기, 여러 장 한 번에 | calcflow</title>
+<meta name="description" content="PNG를 JPG로, WEBP를 JPG·PNG로, JPG를 WEBP로 바꿔요. 여러 장 한 번에 변환하고 투명 배경 색도 고를 수 있어요.">
+<link rel="canonical" href="https://calcflow.kr/tools/image-convert/">
+<meta property="og:title" content="이미지 포맷 변환 - JPG PNG WEBP 서로 바꾸기, 여러 장 한 번에 | calcflow">
+<meta property="og:description" content="PNG를 JPG로, WEBP를 JPG·PNG로, JPG를 WEBP로 바꿔요. 여러 장 한 번에 변환하고 투명 배경 색도 고를 수 있어요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/image-convert/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🔁 이미지 포맷 변환</h1>
+    <p class="muted">JPG, PNG, WEBP를 서로 바꿔요. 웹에서 저장했더니 WEBP라서 안 열리는 사진, 용량이 너무 큰 PNG 캡처를 한 번에 정리할 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>JPG · PNG · WEBP · GIF(첫 장면) · BMP · 여러 장 한 번에</span></div>
+      <div class="tool-row">
+        <div class="field"><label for="fmt">바꿀 형식</label><select id="fmt"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WEBP</option></select></div>
+        <div class="field" id="f-q"><label for="q">화질</label><div class="range-row"><input type="range" id="q" min="40" max="100" value="92"><output id="qv">92%</output></div></div>
+        <div class="field" id="f-bg"><label for="bg">투명 부분 채울 색</label><input type="color" id="bg" value="#ffffff"></div>
+      </div>
+      <div class="flist" id="list"></div>
+      <div class="btn-row"><button class="btn" id="run" type="button" disabled>변환하기</button><button class="btn ghost" id="save" type="button" disabled>저장</button></div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>형식마다 잘 맞는 용도</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>형식</th><th>특징</th><th>잘 맞는 용도</th></tr></thead>
+      <tbody>
+        <tr><td>JPG</td><td>손실 압축, 투명 불가, 어디서나 열림</td><td>사진, 제출 서류, 카톡·메일 첨부</td></tr>
+        <tr><td>PNG</td><td>무손실, 투명 지원, 용량 큼</td><td>로고, 캡처 화면, 글자가 많은 이미지</td></tr>
+        <tr><td>WEBP</td><td>JPG보다 25~35% 작음, 투명 지원</td><td>웹사이트·블로그 이미지</td></tr>
+      </tbody>
+    </table></div>
+    <p>웹에서 내려받은 이미지가 WEBP라서 한글이나 오래된 사진 프로그램에서 안 열리는 경우가 많아요. 이럴 때 JPG로 바꾸면 거의 모든 프로그램에서 열려요. 반대로 휴대폰 화면 캡처는 PNG로 저장되는데, 글자가 없는 캡처라면 JPG로 바꾸는 것만으로 용량이 3~10배 줄어요.</p>
+    <h2>투명 배경은 어떻게 되나요</h2>
+    <p>PNG·WEBP의 투명한 부분은 JPG로 바꾸면 사라져요. JPG에는 투명이라는 개념이 없어서 어떤 색으로든 채워야 하거든요. 기본은 흰색이고, 어두운 배경에 올릴 로고라면 검정이나 배경색에 맞는 색을 골라 두면 가장자리가 자연스러워요. 투명을 살리고 싶다면 PNG나 WEBP로 변환하세요.</p>
+    <p>화질 값은 JPG와 WEBP에만 적용돼요. 90% 안팎이면 원본과 거의 구분이 안 되고, 용량을 더 줄이려면 <a href="/tools/image-compress/">이미지 용량 줄이기</a>에서 목표 용량을 정해 압축하는 편이 편해요.</p>
+    <h2>WEBP로 바꾸면 블로그가 빨라져요</h2>
+    <p>블로그나 쇼핑몰에 사진을 많이 올린다면 WEBP가 유리해요. 같은 화질에서 파일이 작아서 페이지가 빨리 뜨고, 모바일 데이터도 덜 써요. 네이버 블로그·티스토리·워드프레스 모두 WEBP 업로드를 지원해요. 다만 받은 사람이 다시 편집해야 하는 파일이나 관공서 제출용은 호환성이 가장 좋은 JPG로 보내는 게 안전해요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>GIF 움짤도 변환되나요?</summary><p>움직이는 GIF는 첫 장면 한 장만 정지 이미지로 바뀌어요. 영상에서 GIF를 만들려면 영상 → GIF 도구를 쓰세요.</p></details>
+      <details><summary>HEIC(아이폰 사진)는요?</summary><p>대부분의 브라우저가 HEIC를 직접 열지 못해서 이 도구에서도 열리지 않을 수 있어요. 아이폰에서 공유하거나 메일로 보내면 JPG로 바뀌는 경우가 많아요.</p></details>
+      <details><summary>변환하면 화질이 떨어지나요?</summary><p>PNG로 바꾸면 화질 손실이 없어요. JPG·WEBP는 화질 값에 따라 조금 손실이 있지만 90% 이상이면 눈으로 구분하기 어려워요.</p></details>
+      <details><summary>파일 이름은 어떻게 되나요?</summary><p>원래 이름은 그대로 두고 확장자만 바뀌어요. 여러 장이면 ZIP 하나로 묶어서 받을 수 있어요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="image-convert"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK;
+function sync(){ var f=K.$("#fmt").value; K.$("#f-q").hidden=f==="image/png"; K.$("#f-bg").hidden=f!=="image/jpeg"; }
+var b=K.batch({drop:K.$("#drop"),list:K.$("#list"),run:K.$("#run"),save:K.$("#save"),zipName:"converted-images.zip",
+  process:async function(it){
+    var f=K.$("#fmt").value, cv=K.canvas(it.info.w,it.info.h);
+    cv.getContext("2d").drawImage(it.info.img,0,0);
+    if(f==="image/jpeg") cv=K.fillBg(cv,K.$("#bg").value);
+    var blob=await K.toBlob(cv,f,(+K.$("#q").value)/100);
+    return {blob:blob,w:it.info.w,h:it.info.h,name:K.baseName(it.file.name)+"."+K.extOf(f)};
+  }});
+K.$("#q").addEventListener("input",function(){K.$("#qv").textContent=this.value+"%";});
+K.$$("#fmt,#q,#bg").forEach(function(el){el.addEventListener("change",function(){sync();b.stale();})});
+sync();
+})();
+
+</script>
+</body>
+</html>

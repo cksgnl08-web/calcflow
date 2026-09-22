@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이미지 용량 줄이기 - 사진 압축, 200KB·500KB·1MB 이하로 맞추기 | calcflow</title>
+<meta name="description" content="사진 용량을 원하는 KB 이하로 자동으로 맞추거나 화질을 골라 압축해요. 여러 장 한 번에, 파일 업로드 없이 브라우저에서 처리해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/image-compress/">
+<meta property="og:title" content="이미지 용량 줄이기 - 사진 압축, 200KB·500KB·1MB 이하로 맞추기 | calcflow">
+<meta property="og:description" content="사진 용량을 원하는 KB 이하로 자동으로 맞추거나 화질을 골라 압축해요. 여러 장 한 번에, 파일 업로드 없이 브라우저에서 처리해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/image-compress/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🗜️ 이미지 용량 줄이기</h1>
+    <p class="muted">제출 서류나 게시판에 '○○KB 이하' 제한이 있을 때 쓰는 도구예요. 목표 용량을 고르면 그 안에 들어오는 가장 좋은 화질을 자동으로 찾아 줘요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🖼️</span><b>사진을 여기로 끌어오거나 눌러서 선택</b><span>JPG · PNG · WEBP · 여러 장 한 번에 · 붙여넣기(Ctrl+V)도 돼요</span></div>
+      <div class="seg" role="group" aria-label="압축 방식">
+        <button type="button" data-mode="target" aria-pressed="true">목표 용량</button>
+        <button type="button" data-mode="quality" aria-pressed="false">화질 직접 선택</button>
+      </div>
+      <div class="tool-row">
+        <div class="field" id="f-target"><label for="target">최대 용량</label><select id="target"><option value="100">100KB 이하</option><option value="200" selected>200KB 이하</option><option value="300">300KB 이하</option><option value="500">500KB 이하</option><option value="1024">1MB 이하</option><option value="2048">2MB 이하</option><option value="custom">직접 입력</option></select></div>
+        <div class="field" id="f-custom" hidden><label for="custom">용량 (KB)</label><input type="number" id="custom" value="150" min="10" inputmode="numeric"></div>
+        <div class="field" id="f-q" hidden><label for="q">화질</label><div class="range-row"><input type="range" id="q" min="10" max="95" value="75"><output id="qv">75%</output></div></div>
+        <div class="field"><label for="fmt">저장 형식</label><select id="fmt"><option value="image/jpeg">JPG (사진 추천)</option><option value="image/webp">WEBP (더 작게)</option></select></div>
+        <div class="field"><label for="maxw">최대 가로</label><select id="maxw"><option value="0">줄이지 않음</option><option value="3000">3000px</option><option value="2000">2000px</option><option value="1600" selected>1600px</option><option value="1280">1280px</option><option value="1080">1080px</option><option value="800">800px</option></select></div>
+      </div>
+      <div class="flist" id="list"></div>
+      <div class="btn-row"><button class="btn" id="run" type="button" disabled>압축하기</button><button class="btn ghost" id="save" type="button" disabled>저장</button></div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>목표 용량에 맞추는 방법</h2>
+    <p>JPG와 WEBP는 '화질' 값을 낮출수록 눈에 덜 띄는 세부 정보를 버려서 용량을 줄여요. 목표 용량 모드는 화질 값을 여러 번 바꿔 가며 저장해 보고, <strong>제한 안에 들어오는 가장 높은 화질</strong>을 골라요. 화질을 가장 낮춰도 넘치면 가로·세로를 20%씩 줄여서 다시 시도해요. 그래서 결과가 항상 제한보다 조금 작게 나와요.</p>
+    <p>휴대폰 카메라 사진은 가로 4000px 안팎이라 한 장에 3~6MB씩 나와요. 대부분의 제출 용도에서는 가로 1600px이면 충분하고, 이 크기로만 줄여도 용량이 5분의 1 이하로 떨어져요. 기본값을 '최대 가로 1600px'로 둔 이유예요. 인쇄용이 아니라면 이 정도로도 화면에서 차이를 느끼기 어려워요.</p>
+    <h2>자주 만나는 용량 제한</h2>
+    <p>입사지원서 증명사진은 200~500KB, 공공기관 민원 첨부는 한 장에 1~2MB, 중고거래·커뮤니티 게시판은 1~10MB 제한이 흔해요. 여권·비자 온라인 신청처럼 픽셀 크기와 용량을 함께 요구하는 경우도 있으니, 규격이 정해진 사진은 <a href="/tools/id-photo/">증명·여권사진 만들기</a>로 크기를 먼저 맞춘 뒤 여기서 용량을 줄이세요.</p>
+    <h2>PNG는 왜 선택지에 없나요</h2>
+    <p>PNG는 화질을 버리지 않는 무손실 형식이라 '화질을 낮춰서' 용량을 줄일 수가 없어요. 사진을 PNG로 저장하면 오히려 JPG보다 몇 배 커져요. 투명 배경이 꼭 필요한 로고가 아니라면 JPG나 WEBP로 바꾸는 게 용량을 줄이는 가장 확실한 방법이에요. WEBP는 같은 화질에서 JPG보다 25~35% 작지만, 오래된 프로그램이나 일부 관공서 사이트는 받지 않을 수 있어요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>화질이 많이 떨어지나요?</summary><p>200KB 이상이면 휴대폰 화면에서 원본과 구분하기 어려운 수준이에요. 100KB 이하로 강하게 줄이면 하늘이나 피부처럼 매끈한 부분에 얼룩이 보일 수 있어요.</p></details>
+      <details><summary>투명 배경 PNG를 JPG로 줄이면요?</summary><p>JPG는 투명을 지원하지 않아서 투명한 부분이 흰색으로 채워져요. 투명을 살리려면 WEBP를 고르세요.</p></details>
+      <details><summary>원본 파일은 바뀌나요?</summary><p>아니요. 원본은 그대로 두고 압축된 사본을 새로 저장해요. 파일 이름 뒤에 _compressed가 붙어요.</p></details>
+      <details><summary>업로드한 사진이 어딘가에 남나요?</summary><p>사진은 서버로 전송되지 않고 이 브라우저 안에서만 처리돼요. 인터넷을 끊어도 압축은 그대로 동작해요.</p></details>
+      <details><summary>결과가 원본보다 커졌어요.</summary><p>이미 강하게 압축된 작은 JPG를 높은 화질로 다시 저장하면 커질 수 있어요. 목표 용량 모드를 쓰거나 화질 값을 낮춰 보세요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="image-compress"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, mode="target";
+function limit(){ var v=K.$("#target").value; return (v==="custom"?(+K.$("#custom").value||150):+v)*1024; }
+var b=K.batch({drop:K.$("#drop"),list:K.$("#list"),run:K.$("#run"),save:K.$("#save"),zipName:"compressed-images.zip",
+  process:async function(it){
+    var w=it.info.w, h=it.info.h, mw=+K.$("#maxw").value, f=K.$("#fmt").value;
+    var s=mw&&w>mw?mw/w:1, W=Math.round(w*s), H=Math.round(h*s);
+    var cv=K.drawScaled(it.info.img,w,h,W,H), blob;
+    if(mode==="quality"){ blob=await K.toBlob(cv,f,(+K.$("#q").value)/100); }
+    else{
+      var max=limit(), r=await K.toBlobUnder(cv,f,max), tries=0;
+      while(!r&&tries<6){ W=Math.round(W*0.8); H=Math.round(H*0.8); cv=K.drawScaled(it.info.img,w,h,W,H); r=await K.toBlobUnder(cv,f,max); tries++; }
+      if(!r) throw new Error("목표 용량까지 줄이지 못했어요. 용량을 조금 늘려 주세요.");
+      blob=r.blob;
+    }
+    return {blob:blob,w:W,h:H,name:K.baseName(it.file.name)+"_compressed."+K.extOf(f)};
+  }});
+K.$$(".seg button").forEach(function(bt){bt.addEventListener("click",function(){
+  mode=bt.dataset.mode; K.$$(".seg button").forEach(function(x){x.setAttribute("aria-pressed",x===bt)});
+  K.$("#f-target").hidden=mode!=="target"; K.$("#f-custom").hidden=mode!=="target"||K.$("#target").value!=="custom"; K.$("#f-q").hidden=mode!=="quality"; b.stale();
+});});
+K.$("#target").addEventListener("change",function(){K.$("#f-custom").hidden=this.value!=="custom";});
+K.$("#q").addEventListener("input",function(){K.$("#qv").textContent=this.value+"%";});
+K.$$("#target,#custom,#q,#fmt,#maxw").forEach(function(el){el.addEventListener("change",b.stale)});
+})();
+
+</script>
+</body>
+</html>

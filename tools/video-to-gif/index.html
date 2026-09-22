@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>영상 GIF 변환 - 동영상 원하는 구간만 움짤 만들기, 여러 구간·여러 영상 | calcflow</title>
+<meta name="description" content="MP4·MOV·WEBM 영상에서 원하는 구간을 골라 GIF(움짤)로 만들어요. 한 영상에서 여러 구간, 여러 영상을 한 번에 변환하고 업로드 없이 브라우저에서 처리해요.">
+<link rel="canonical" href="https://calcflow.kr/tools/video-to-gif/">
+<meta property="og:title" content="영상 GIF 변환 - 동영상 원하는 구간만 움짤 만들기, 여러 구간·여러 영상 | calcflow">
+<meta property="og:description" content="MP4·MOV·WEBM 영상에서 원하는 구간을 골라 GIF(움짤)로 만들어요. 한 영상에서 여러 구간, 여러 영상을 한 번에 변환하고 업로드 없이 브라우저에서 처리해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/tools/video-to-gif/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/tools.css">
+<script src="/assets/kit.js"></script>
+<style>
+.vid{width:100%;max-height:52vh;background:#000;border-radius:10px;display:block}
+.segs{display:flex;flex-direction:column;gap:8px}
+.segrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px}
+.segrow b{min-width:52px}
+.segrow input{width:86px;padding:7px 8px;font-size:14px}
+.segrow .len{color:var(--muted);font-size:13px}
+.segrow .sp{flex:1}
+.vtabs{display:flex;gap:6px;flex-wrap:wrap}
+.vtabs button{font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:6px 10px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vtabs button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:var(--brand);font-weight:600}
+.gifs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.gifs .thumb img{max-height:180px}
+.rec{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#d33}
+.rec::before{content:"";width:10px;height:10px;border-radius:50%;background:#d33;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.rec::before{animation:none}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/tools/">사진·문서 도구</a></nav>
+
+  <section>
+    <h1>🎞️ 영상 → GIF 만들기</h1>
+    <p class="muted">긴 영상에서 필요한 순간만 골라 움짤로 만들어요. 한 영상에서 여러 구간을 뽑거나, 영상 여러 개를 한 번에 GIF로 바꿀 수 있어요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="drop" id="drop"><span class="ico">🎬</span><b>영상을 여기로 끌어오거나 눌러서 선택</b><span>MP4 · MOV · WEBM · 여러 개 한 번에 · 파일은 전송되지 않아요</span></div>
+      <div id="editor" hidden>
+        <div class="vtabs" id="vtabs"></div>
+        <video class="vid" id="vid" controls playsinline muted style="margin-top:10px"></video>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn ghost sm" id="setA" type="button">⏮ 지금 위치를 시작으로</button>
+          <button class="btn ghost sm" id="setB" type="button">지금 위치를 끝으로 ⏭</button>
+          <button class="btn ghost sm" id="addseg" type="button">＋ 구간 추가</button>
+        </div>
+        <div class="segs" id="segs" style="margin-top:8px"></div>
+      <div class="tool-row">
+        <div class="field"><label for="fps">초당 프레임</label><select id="fps"><option value="5">5 (가볍게)</option><option value="8">8</option><option value="10" selected>10 (추천)</option><option value="12">12</option><option value="15">15 (부드럽게)</option></select></div>
+        <div class="field"><label for="gw">가로 크기</label><select id="gw"><option value="240">240px</option><option value="320">320px</option><option value="400">400px</option><option value="480" selected>480px (추천)</option><option value="640">640px</option><option value="800">800px</option></select></div>
+        <div class="field"><label for="speed">재생 속도</label><select id="speed"><option value="0.5">0.5배 (느리게)</option><option value="1" selected>1배</option><option value="1.5">1.5배</option><option value="2">2배 (빠르게)</option></select></div>
+        <div class="field"><label class="chk" style="margin-top:26px"><input type="checkbox" id="loop" checked> 무한 반복</label></div>
+      </div>
+        <div class="stat-line inline" id="est"></div>
+        <div class="btn-row"><button class="btn" id="run" type="button">GIF 만들기</button><button class="btn ghost" id="save" type="button" disabled>전체 저장</button><button class="btn ghost" id="more" type="button">영상 추가</button></div>
+        <div class="gifs" id="gifs"></div>
+      </div>
+      <p class="privacy-note">파일은 서버로 올라가지 않고 이 브라우저 안에서만 처리돼요.</p>
+    </div>
+  </section>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section class="prose">
+    <h2>구간을 고르는 방법</h2>
+    <p>영상을 재생하다가 원하는 장면에서 멈추고 '지금 위치를 시작으로', 끝낼 장면에서 '지금 위치를 끝으로'를 누르면 돼요. 숫자 칸에 초 단위로 직접 적어도 되고, '▶ 보기'로 고른 구간만 다시 재생해 확인할 수 있어요. 한 영상에서 여러 장면을 뽑고 싶으면 '구간 추가'를 누르고, 버튼들은 '선택됨' 표시가 된 구간에 적용돼요. 영상을 여러 개 넣으면 위쪽 탭으로 영상을 바꿔 가며 구간을 정한 뒤, 'GIF 만들기' 한 번으로 전부 변환해요.</p>
+    <h2>용량과 화질의 균형</h2>
+    <p>GIF는 오래된 형식이라 같은 길이의 MP4보다 용량이 5~10배 커요. 용량은 <strong>가로 크기 × 프레임 수</strong>에 거의 비례해요. 메신저나 커뮤니티에 올릴 움짤이라면 가로 480px, 초당 10프레임, 길이 3~6초가 무난하고 보통 1~5MB 안팎이에요. 게시판 용량 제한이 빠듯하면 가로를 320px로 줄이거나 프레임을 8로 낮추세요. 한 구간은 최대 30초까지 만들 수 있어요.</p>
+    <p>GIF는 한 장면에 256가지 색만 쓸 수 있어서, 하늘처럼 색이 부드럽게 이어지는 장면에서는 줄무늬가 보일 수 있어요. 대신 화면 녹화나 애니메이션처럼 색이 단순한 영상은 선명하게 나와요. 소리는 GIF에 담기지 않아요.</p>
+    <h2>재생 속도 바꾸기</h2>
+    <p>재생 속도를 2배로 두면 같은 구간을 절반 시간에 보여 주는 빠른 움짤이 되고, 0.5배면 슬로모션이 돼요. 속도를 올리면 프레임 수가 줄어서 용량도 작아져요. 반복 재생을 끄면 한 번만 재생되고 마지막 장면에서 멈춰요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div>
+      <details><summary>아이폰 영상(MOV)도 되나요?</summary><p>사파리와 크롬 최신 버전에서는 대부분 열려요. HEVC(H.265)로 찍은 영상은 일부 브라우저에서 안 열릴 수 있는데, 이때는 아이폰 설정 › 카메라 › 포맷을 '높은 호환성'으로 바꾸고 찍으면 돼요.</p></details>
+      <details><summary>변환이 오래 걸려요.</summary><p>프레임을 하나씩 찾아가며 그리기 때문에 영상 길이와 프레임 수에 비례해 시간이 걸려요. 구간을 짧게 하거나 초당 프레임을 낮추면 빨라져요.</p></details>
+      <details><summary>영상이 서버에 올라가나요?</summary><p>아니요. 영상은 브라우저 안에서만 재생·변환되고 어디로도 전송되지 않아요. 그래서 큰 영상도 업로드를 기다릴 필요가 없어요.</p></details>
+      <details><summary>글자나 워터마크를 넣을 수 있나요?</summary><p>지금은 구간·크기·속도만 조절할 수 있어요. 만든 GIF의 첫 장면에 글자를 넣고 싶다면 영상 편집 앱에서 먼저 넣은 뒤 변환하세요.</p></details>
+    </div>
+  </section>
+
+  <section>
+    <h2>이런 도구도 있어요</h2>
+    <div class="related" id="related-list" data-id="video-to-gif"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+
+(function(){
+var K=CFK, vids=[], cur=-1, active=0, results=[], vid=K.$("#vid");
+function V(){ return vids[cur]; }
+function tabs(){ K.$("#vtabs").hidden=vids.length<2; K.$("#vtabs").innerHTML=vids.map(function(v,i){ return '<button type="button" data-i="'+i+'" aria-pressed="'+(i===cur)+'">'+(i+1)+'. '+K.esc(v.file.name)+' ('+v.segs.length+')</button>'; }).join(""); }
+function segs(){
+  var v=V(); if(!v) return;
+  K.$("#segs").innerHTML=v.segs.map(function(s,i){ return '<div class="segrow"><b>구간 '+(i+1)+'</b><label>시작 <input type="number" step="0.1" min="0" data-a="'+i+'" value="'+s.a.toFixed(1)+'"></label><label>끝 <input type="number" step="0.1" min="0" data-b="'+i+'" value="'+s.b.toFixed(1)+'"></label>'+
+    '<span class="len">'+(s.b-s.a).toFixed(1)+'초</span><span class="sp"></span><button class="btn ghost sm" type="button" data-play="'+i+'">▶ 보기</button><button class="btn ghost sm" type="button" data-sel="'+i+'"'+(i===active?' disabled':'')+'>'+(i===active?'선택됨':'선택')+'</button>'+(v.segs.length>1?'<button class="btn ghost sm" type="button" data-del="'+i+'">✕</button>':'')+'</div>'; }).join("");
+  est(); tabs();
+}
+function est(){ var fps=+K.$("#fps").value, sp=+K.$("#speed").value, frames=0, w=+K.$("#gw").value;
+  vids.forEach(function(v){ v.segs.forEach(function(s){ frames+=Math.ceil((s.b-s.a)*fps/sp); }); });
+  var any=vids.reduce(function(a,v){return a+v.segs.length},0);
+  K.$("#est").innerHTML="만들 GIF <b>"+any+"개</b> · 총 <b>"+frames+"프레임</b> · 예상 용량 약 <b>"+K.fmtBytes(frames*w*w*0.5625*0.35)+"</b>"+(frames>400?' · <span style="color:var(--warn)">프레임이 많아서 오래 걸리거나 용량이 커질 수 있어요</span>':""); }
+function load(i){ cur=i; active=0; var v=V(); vid.src=v.url; vid.onloadedmetadata=function(){ v.dur=vid.duration||0; if(!v.segs.length) v.segs=[{a:0,b:Math.min(v.dur,4)}]; segs(); }; segs(); }
+function clampSeg(s,v){ var d=v.dur||1e9; s.a=Math.max(0,Math.min(s.a,d)); s.b=Math.max(s.a+0.1,Math.min(s.b,d)); if(s.b-s.a>30) s.b=s.a+30; }
+var dz=K.dropzone(K.$("#drop"),{accept:"video/*",multiple:true,filter:function(f){return /^video\//.test(f.type)||/\.(mp4|mov|webm|m4v|ogv)$/i.test(f.name)},rejectMsg:"영상 파일만 넣을 수 있어요.",onFiles:function(files){
+  files.slice(0,10).forEach(function(f){ vids.push({file:f,url:URL.createObjectURL(f),segs:[],dur:0}); });
+  if(files.length>10) K.toast("한 번에 10개까지만 추가돼요.");
+  K.$("#drop").hidden=true; K.$("#editor").hidden=false; if(cur<0) load(0); else tabs(); }});
+K.$("#vtabs").addEventListener("click",function(e){ var b=e.target.closest("[data-i]"); if(b) load(+b.dataset.i); });
+K.$("#segs").addEventListener("change",function(e){ var v=V(), t=e.target, i;
+  if(t.dataset.a!=null){ i=+t.dataset.a; v.segs[i].a=+t.value; } else if(t.dataset.b!=null){ i=+t.dataset.b; v.segs[i].b=+t.value; } else return;
+  clampSeg(v.segs[i],v); segs(); });
+K.$("#segs").addEventListener("click",function(e){ var v=V(), b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.del!=null){ v.segs.splice(+b.dataset.del,1); active=Math.min(active,v.segs.length-1); segs(); }
+  if(b.dataset.sel!=null){ active=+b.dataset.sel; segs(); }
+  if(b.dataset.play!=null){ var s=v.segs[+b.dataset.play]; vid.currentTime=s.a; vid.play(); var stop=function(){ if(vid.currentTime>=s.b){ vid.pause(); vid.removeEventListener("timeupdate",stop); } }; vid.addEventListener("timeupdate",stop); } });
+K.$("#setA").addEventListener("click",function(){ var v=V(), s=v.segs[active]; s.a=vid.currentTime; if(s.b<=s.a) s.b=s.a+3; clampSeg(s,v); segs(); });
+K.$("#setB").addEventListener("click",function(){ var v=V(), s=v.segs[active]; s.b=vid.currentTime; if(s.b<=s.a) s.a=Math.max(0,s.b-3); clampSeg(s,v); segs(); });
+K.$("#addseg").addEventListener("click",function(){ var v=V(), t=vid.currentTime; v.segs.push({a:t,b:t+3}); clampSeg(v.segs[v.segs.length-1],v); active=v.segs.length-1; segs(); });
+K.$$("#fps,#gw,#speed").forEach(function(el){ el.addEventListener("change",est); });
+K.$("#more").addEventListener("click",function(){ dz.open(); });
+async function encode(v,s,box){
+  var tmp=document.createElement("video"); tmp.muted=true; tmp.playsInline=true; tmp.preload="auto"; tmp.src=v.url;
+  await new Promise(function(r,j){ tmp.onloadeddata=r; tmp.onerror=function(){ j(new Error("이 영상 형식은 브라우저에서 열 수 없어요: "+v.file.name)); }; });
+  var fps=+K.$("#fps").value, sp=+K.$("#speed").value, W=Math.min(+K.$("#gw").value,tmp.videoWidth), H=Math.round(W*tmp.videoHeight/tmp.videoWidth);
+  var cv=K.canvas(W,H), c=cv.getContext("2d",{willReadFrequently:true}), g=await K.gif({loop:K.$("#loop").checked}), step=sp/fps, n=Math.max(1,Math.ceil((s.b-s.a)/step)), delay=Math.round(1000/fps);
+  for(var i=0;i<n;i++){ await K.seek(tmp,Math.min(s.a+i*step,s.b-0.01)); c.drawImage(tmp,0,0,W,H); g.add(cv,delay); if(box) box.textContent=Math.round((i+1)/n*100)+"%"; if(i%4===3) await new Promise(function(r){setTimeout(r,0)}); }
+  return {blob:g.finish(),w:W,h:H};
+}
+K.$("#run").addEventListener("click",async function(){
+  var btn=this, box=K.$("#gifs"); results=[]; box.innerHTML=""; K.$("#save").disabled=true; K.busy(btn,true,"만드는 중…");
+  try{
+    for(var vi=0;vi<vids.length;vi++){ var v=vids[vi];
+      for(var si=0;si<v.segs.length;si++){ var s=v.segs[si], d=document.createElement("div"); d.className="thumb"; var sp=document.createElement("span"); sp.textContent="0%"; d.appendChild(sp); box.appendChild(d);
+        var r=await encode(v,s,sp), name=K.baseName(v.file.name)+(v.segs.length>1?"_"+(si+1):"")+".gif";
+        var im=new Image(); im.src=URL.createObjectURL(r.blob); im.alt=name; d.insertBefore(im,sp); sp.textContent=r.w+"×"+r.h+" · "+K.fmtBytes(r.blob.size)+" · 눌러서 저장";
+        results.push({name:name,blob:r.blob}); (function(x){ d.addEventListener("click",function(){ K.download(x.blob,x.name); }); })(results[results.length-1]); } }
+    K.$("#save").disabled=false; K.$("#save").textContent=results.length>1?"전체 저장 (ZIP)":"저장";
+  }catch(e){ K.fail(e); } finally{ K.busy(btn,false); }
+});
+K.$("#save").addEventListener("click",function(){ K.saveAll(results,"gifs.zip"); });
+})();
+
+</script>
+</body>
+</html>

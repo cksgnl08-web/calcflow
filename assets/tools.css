@@ -1,0 +1,62 @@
+/* calcflow 도구 페이지 공통 스타일 (style.css 토큰 사용) */
+.drop{border:2px dashed var(--line-2);border-radius:var(--r);background:var(--surface-2);padding:34px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;cursor:pointer;transition:border-color .15s ease,background .15s ease}
+.drop:hover,.drop.over,.drop:focus-visible{border-color:var(--brand);background:var(--brand-soft)}
+.drop .ico{font-size:30px;line-height:1}
+.drop b{font-size:16px}
+.drop span{font-size:13.5px;color:var(--muted)}
+.drop.small{padding:16px;flex-direction:row;justify-content:center;gap:10px}
+.drop.small .ico{font-size:20px}
+
+.tool-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.tool-row .field{flex:1 1 150px;min-width:0}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn-row .btn{padding:11px 16px;font-size:15px}
+.btn:disabled{opacity:.55;cursor:not-allowed;filter:none}
+.btn.sm{padding:7px 12px;font-size:13.5px}
+
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink-2);cursor:pointer}
+.chk input{accent-color:var(--brand);width:16px;height:16px}
+.range-row{display:flex;gap:10px;align-items:center}
+.range-row input[type=range]{flex:1;min-width:0;width:100%;accent-color:var(--brand)}
+.range-row output{min-width:52px;text-align:right;font-variant-numeric:tabular-nums;font-size:14px;font-weight:600}
+input[type=color]{width:46px;height:42px;padding:3px;border:1px solid var(--line-2);border-radius:9px;background:var(--surface);cursor:pointer}
+
+/* 미리보기 */
+.stage{position:relative;background-color:var(--surface-2);background-image:linear-gradient(45deg,var(--raise) 25%,transparent 25%),linear-gradient(-45deg,var(--raise) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--raise) 75%),linear-gradient(-45deg,transparent 75%,var(--raise) 75%);background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0;border:1px solid var(--line);border-radius:var(--r);display:flex;align-items:center;justify-content:center;min-height:220px;overflow:hidden;padding:10px}
+.stage canvas,.stage img{max-width:100%;max-height:62vh;display:block;touch-action:none}
+.stage .hint{position:absolute;left:10px;bottom:8px;font-size:12px;color:var(--muted);background:var(--surface);border-radius:6px;padding:2px 8px}
+
+/* 파일 목록 */
+.flist{display:flex;flex-direction:column;gap:8px}
+.fitem{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.fitem .th{width:52px;height:52px;flex:none;border-radius:7px;background:var(--surface-2);object-fit:cover;display:grid;place-items:center;font-size:22px;overflow:hidden}
+.fitem .th img,.fitem .th canvas{width:100%;height:100%;object-fit:cover}
+.fitem .meta{flex:1;min-width:0;display:flex;flex-direction:column}
+.fitem .meta b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fitem .meta span{font-size:12.5px;color:var(--muted)}
+.fitem .meta .ok{color:var(--brand);font-weight:600}
+.fitem .acts{display:flex;gap:4px;flex:none}
+.fitem .acts button{font:inherit;width:32px;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--ink);cursor:pointer;font-size:14px}
+.fitem .acts button:hover{border-color:var(--brand)}
+.fitem .acts button:disabled{opacity:.35;cursor:default}
+
+/* 썸네일 그리드 */
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.thumb{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px;align-items:center;cursor:pointer}
+.thumb canvas,.thumb img{max-width:100%;max-height:150px;border-radius:4px;box-shadow:var(--shadow)}
+.thumb span{font-size:12.5px;color:var(--muted)}
+.thumb.on{border-color:var(--brand);background:var(--brand-soft)}
+.thumb.on span{color:var(--brand);font-weight:600}
+.thumb .x{position:absolute;top:4px;right:4px}
+
+.stat-line{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+.stat-line b{font-variant-numeric:tabular-nums}
+.stat-line .down{color:var(--brand);font-weight:700}
+.privacy-note{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.privacy-note::before{content:"🔒"}
+.tool-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tool-tabs button{font:inherit;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:7px 14px}
+.tool-tabs button[aria-pressed="true"]{border-color:var(--brand);color:var(--brand);background:var(--brand-soft)}
+.pw-hint{font-size:12.5px;color:var(--dim)}
+[hidden]{display:none!important}
+.stat-line.inline{display:block}
