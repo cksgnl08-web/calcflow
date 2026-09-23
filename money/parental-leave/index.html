@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>육아휴직 급여 계산기 2026 - 월 최대 250만원·6+6 부모육아휴직 | calcflow</title>
+<meta name="description" content="2026년 기준 육아휴직 급여를 월별로 계산해요. 1~3개월 월 250만원, 4~6개월 200만원, 7개월부터 160만원 상한과 부모가 함께 쓰는 6+6 특례, 한부모 특례를 반영해요.">
+<link rel="canonical" href="https://calcflow.kr/money/parental-leave/">
+<meta property="og:title" content="육아휴직 급여 계산기 2026 - 월 최대 250만원·6+6 부모육아휴직 | calcflow">
+<meta property="og:description" content="2026년 기준 육아휴직 급여를 월별로 계산해요. 1~3개월 월 250만원, 4~6개월 200만원, 7개월부터 160만원 상한과 부모가 함께 쓰는 6+6 특례, 한부모 특례를 반영해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/parental-leave/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+  <div id="set-bar"></div>
+
+  <section>
+    <h1>👶 육아휴직 급여 계산기</h1>
+    <p class="muted">육아휴직을 몇 개월 쓰면 달마다 얼마를 받는지 계산해요. 부모가 함께 쓰는 6+6 특례와 한부모 특례도 반영해요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="grid2">
+        <div class="field"><label for="salary">월 통상임금 (원)</label><input type="number" id="salary" min="0" step="10000" placeholder="예: 3000000" inputmode="numeric"><span class="hint">휴직 시작일 기준 (세전)</span></div>
+        <div class="field"><label for="pmonths">육아휴직 기간</label><select id="pmonths"></select></div>
+      </div>
+      <div class="seg" role="group" aria-label="가족 상황"><button type="button" id="k-one" aria-pressed="true">나만 사용</button><button type="button" id="k-both" aria-pressed="false">배우자도 사용 (6+6)</button><button type="button" id="k-single" aria-pressed="false">한부모</button></div>
+      <div class="grid2" id="spouse-box" hidden>
+        <div class="field"><label for="smonths">배우자 육아휴직 기간</label><select id="smonths"><option value="1">1개월</option><option value="2">2개월</option><option value="3">3개월</option><option value="4">4개월</option><option value="5">5개월</option><option value="6" selected>6개월 이상</option></select><span class="hint">아이가 생후 18개월이 되기 전에 사용</span></div>
+        <div class="field"><label for="ssalary">배우자 월 통상임금 (선택)</label><input type="number" id="ssalary" min="0" step="10000" placeholder="넣으면 부부 합계도 계산" inputmode="numeric"></div>
+      </div>
+      <input type="hidden" id="due">
+      <div id="err" class="notice" hidden></div>
+      <div class="result" id="res" hidden>
+        <div><div class="head">육아휴직 기간 동안 받는 돈</div><div class="big" id="r-total">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">월 평균</span><span class="v" id="r-avg">—</span></div>
+          <div class="cell"><span class="k">첫 달</span><span class="v" id="r-first">—</span></div>
+          <div class="cell"><span class="k">통상임금 대비</span><span class="v" id="r-rate">—</span></div>
+          <div class="cell" id="c-couple" hidden><span class="k">부부 합계 (6+6)</span><span class="v pos" id="r-couple">—</span></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>개월</th><th>기준</th><th class="n">받는 금액</th></tr></thead><tbody id="r-table"></tbody></table></div>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="btn ghost" type="button" id="share-link">🔗 결과 링크 복사</button>
+      <span class="carry" id="carry-badge" hidden>이전 계산기에서 입력값을 가져왔어요</span>
+    </div>
+  </section>
+
+  <div id="set-next"></div>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>계산 다음에 할 일</h2>
+    <div class="actions">
+      <div class="action"><span class="n">1</span><span class="b"><b>휴직 시작 1개월 뒤부터 매달 신청해요</b><p>육아휴직 급여는 휴직을 시작하고 1개월이 지난 뒤부터 한 달 단위로 신청해요. 몇 달치를 모아서 신청해도 되지만, 휴직이 끝난 날부터 12개월이 지나면 받을 수 없어요.</p><span class="meta">고용24 work24.go.kr · 고용센터 1350</span></span></div>
+      <div class="action"><span class="n">2</span><span class="b"><b>2025년부터는 매달 전액을 받아요</b><p>예전에는 급여의 25%를 복직 후 6개월을 일해야 받을 수 있었는데, 이 사후지급 제도가 없어져서 이제는 매달 전액이 나와요.</p></span></div>
+      <div class="action"><span class="n">3</span><span class="b"><b>부부가 모두 3개월 이상 쓰면 1년 6개월까지 가능해요</b><p>부모가 각각 육아휴직을 3개월 이상 쓰면 한 사람당 최대 1년 6개월까지 쓸 수 있어요. 한부모도 1년 6개월까지 가능해요.</p></span></div>
+      <div class="action"><span class="n">4</span><span class="b"><b>부모급여·아동수당도 함께 챙기세요</b><p>휴직 중에도 부모급여와 아동수당은 따로 나와요. 다음 단계에서 아이가 받는 지원금을 한 번에 계산해요.</p></span></div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>2026년 육아휴직 급여 기준</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>기간</th><th>지급률</th><th class="n">월 상한</th></tr></thead>
+      <tbody>
+        <tr><td>1~3개월</td><td>통상임금 100%</td><td class="n">250만원</td></tr>
+        <tr><td>4~6개월</td><td>통상임금 100%</td><td class="n">200만원</td></tr>
+        <tr><td>7개월 이후</td><td>통상임금 80%</td><td class="n">160만원</td></tr>
+      </tbody>
+    </table></div>
+    <p>모든 기간의 하한은 월 70만원이에요. 월급이 250만원이라면 처음 6개월은 거의 월급만큼(1~3개월 250만원, 4~6개월 200만원) 받고, 7개월부터는 160만원을 받아요. 월급이 많을수록 상한에 걸려서 통상임금 대비 받는 비율이 낮아져요.</p>
+    <h2>6+6 부모육아휴직제</h2>
+    <p>아이가 <strong>생후 18개월이 되기 전</strong>에 엄마와 아빠가 모두 육아휴직을 쓰면, 각자 처음 6개월 동안 통상임금 100%를 더 높은 상한으로 받아요. 상한은 첫째·둘째 달 250만원, 셋째 달 300만원, 넷째 달 350만원, 다섯째 달 400만원, 여섯째 달 450만원으로 달마다 올라가요. 둘이 함께 쓴 개월 수만큼만 특례가 적용되니, 배우자가 3개월만 쓰면 나도 처음 3개월만 특례를 받아요. 동시에 쓰든 차례로 쓰든 상관없어요.</p>
+    <p><strong>한부모</strong>는 처음 3개월 상한이 월 300만원으로 올라가요. 휴직 중에 회사에서 받는 돈이 있으면 급여와 합쳐 통상임금을 넘는 만큼 줄어들 수 있어요.</p>
+    <p class="source">기준: 고용보험법 시행령 제95조(육아휴직 급여), 제95조의3(부모 모두 육아휴직 특례), 2025년 2월 시행 개정.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>육아휴직 급여에도 세금을 떼나요?</summary><p>고용보험에서 받는 육아휴직 급여는 비과세예요. 건강보험료는 휴직 기간에 경감되거나 유예되는 경우가 많아 회사에 확인해 보세요.</p></details><details><summary>나눠서 쓸 수 있나요?</summary><p>육아휴직은 3번까지 나눠 쓸 수 있어요(2025년부터). 급여의 개월 순서는 실제로 쉰 달을 이어서 세요.</p></details><details><summary>출산휴가 기간도 육아휴직 기간에 들어가나요?</summary><p>아니요. 출산전후휴가 90일은 별도예요. 출산휴가가 끝나고 바로 육아휴직을 이어 쓰는 경우가 많아요.</p></details><details><summary>아빠가 먼저 써도 6+6이 되나요?</summary><p>네. 누가 먼저 쓰든, 동시에 쓰든 생후 18개월 안에 둘 다 쓰면 적용돼요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="parental-leave"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script src="/assets/profile.js"></script>
+<script>
+
+var $=function(i){return document.getElementById(i)};
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function man(n){var m=n/10000; return (Math.round(m*10)/10).toLocaleString("ko-KR")+"만원"}
+function num(id){var v=parseFloat(String($(id).value).replace(/,/g,""));return isNaN(v)?0:v}
+function pd(v){if(!v)return null;var p=v.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d)?null:d}
+function fd(d){return d.getFullYear()+"."+(d.getMonth()+1)+"."+d.getDate()}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+
+var F=["salary","pmonths","due"], kind="one";
+var SIX=[2500000,2500000,3000000,3500000,4000000,4500000];
+(function(){ var o=""; for(var i=1;i<=18;i++) o+='<option value="'+i+'"'+(i===12?" selected":"")+'>'+i+'개월'+(i>12?" (부부 모두 3개월 이상 또는 한부모)":"")+'</option>'; $("pmonths").innerHTML=o; })();
+function pay(s,i,special,single){
+  var rate,cap,label;
+  if(special&&i<=6){ rate=1; cap=SIX[i-1]; label="6+6 특례 100%"; }
+  else if(single&&i<=3){ rate=1; cap=3000000; label="한부모 100%"; }
+  else if(i<=3){ rate=1; cap=2500000; label="100%"; }
+  else if(i<=6){ rate=1; cap=2000000; label="100%"; }
+  else { rate=0.8; cap=1600000; label="80%"; }
+  return {v:Math.min(Math.max(s*rate,700000),cap),label:label,cap:cap};
+}
+function total(s,n,sp,single){ var t=0, rows=[]; for(var i=1;i<=n;i++){ var p=pay(s,i,i<=sp,single); t+=p.v; rows.push([i,p]); } return {t:t,rows:rows}; }
+function calc(){
+  var s=num("salary"), n=+$("pmonths").value;
+  if(!s){$("res").hidden=true;return;}
+  var both=kind==="both", single=kind==="single", sm=both?+$("smonths").value:0, msg=[];
+  if(n>12&&!single&&!(both&&sm>=3)){ msg.push("1년을 넘기려면 부모 모두 3개월 이상 쓰거나 한부모여야 해요. 12개월까지만 계산했어요."); n=12; }
+  var sp=both?Math.min(6,sm,n):0, r=total(s,n,sp,single);
+  $("r-total").textContent=won(r.t);
+  $("r-avg").textContent=won(r.t/n);
+  $("r-first").textContent=won(r.rows[0][1].v);
+  $("r-rate").textContent=Math.round(r.t/(s*n)*100)+"%";
+  $("r-sub").textContent="월 통상임금 "+won(s)+" · "+n+"개월"+(sp?" · 처음 "+sp+"개월 6+6 특례":single?" · 한부모 특례":"")+" 기준이에요.";
+  $("r-table").innerHTML=r.rows.map(function(x){ return '<tr><td>'+x[0]+'개월</td><td>'+x[1].label+' · 상한 '+man(x[1].cap)+'</td><td class="n">'+won(x[1].v)+'</td></tr>'; }).join("");
+  var ss=num("ssalary");
+  if(both&&ss){ var r2=total(ss,sm,Math.min(6,sm,n),false); $("r-couple").textContent=won(r.t+r2.t); $("c-couple").hidden=false; } else $("c-couple").hidden=true;
+  $("err").textContent=msg.join(" "); $("err").hidden=!msg.length;
+  $("res").hidden=false;
+}
+function setK(k){ kind=k; ["one","both","single"].forEach(function(x){ $("k-"+x).setAttribute("aria-pressed",x===k); }); $("spouse-box").hidden=k!=="both"; calc(); }
+["one","both","single"].forEach(function(x){ $("k-"+x).addEventListener("click",function(){setK(x)}); });
+CF.linkFields(F);
+["salary","pmonths","smonths","ssalary"].forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
+calc();
+CF.renderSet("baby","parental-leave",["due"]);
+
+</script>
+</body>
+</html>

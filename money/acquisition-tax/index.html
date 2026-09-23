@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>취득세 계산기 2026 - 주택 취득세율·생애최초 감면·다주택 중과 | calcflow</title>
+<meta name="description" content="주택 가격, 취득 후 주택 수, 조정대상지역 여부, 전용면적을 넣으면 취득세·지방교육세·농어촌특별세를 합쳐 계산해요. 생애최초 감면(최대 200만원)도 반영해요.">
+<link rel="canonical" href="https://calcflow.kr/money/acquisition-tax/">
+<meta property="og:title" content="취득세 계산기 2026 - 주택 취득세율·생애최초 감면·다주택 중과 | calcflow">
+<meta property="og:description" content="주택 가격, 취득 후 주택 수, 조정대상지역 여부, 전용면적을 넣으면 취득세·지방교육세·농어촌특별세를 합쳐 계산해요. 생애최초 감면(최대 200만원)도 반영해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calcflow.kr/money/acquisition-tax/">
+<meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7823611391668997" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="mark">cf</span><span>calc<i>flow</i></span></a>
+    <nav class="site-nav">
+      <a href="/money/">돈·금융</a>
+      <a href="/life/">날짜·생활</a>
+      <a href="/health/">건강</a>
+      <a href="/tools/">도구</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" id="search-trigger" type="button"><span aria-hidden="true">🔍</span><span>계산기 검색</span><kbd>⌘K</kbd></button>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="화면 밝기 전환">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb"><a href="/">calcflow</a> › <a href="/money/">돈·금융</a></nav>
+  <div id="set-bar"></div>
+
+  <section>
+    <h1>🔑 취득세 계산기</h1>
+    <p class="muted">집을 살 때 내는 취득세를 지방교육세, 농어촌특별세까지 합쳐 계산해요. 가진 집 수와 지역에 따라 1%부터 12%까지 달라지는 세율을 자동으로 골라요.</p>
+  </section>
+
+  <section>
+    <div class="calc">
+      <div class="grid2">
+        <div class="field"><label for="price">매매가 (원)</label><input type="number" id="price" min="0" step="1000000" placeholder="예: 700000000" inputmode="numeric"><span class="hint" id="price-kr"></span></div>
+        <div class="field"><label for="ptype">부동산 종류</label><select id="ptype"><option value="house">주택 (아파트·빌라·단독)</option><option value="etc">주택 외 (토지·상가·오피스텔)</option></select></div>
+        <div class="field"><label for="hcount">이 집을 사면 주택 수</label><select id="hcount"><option value="1">1주택</option><option value="2">2주택</option><option value="3">3주택</option><option value="4">4주택 이상</option></select></div>
+        <div class="field"><label for="own">자기자금 (선택)</label><input type="number" id="own" min="0" step="1000000" placeholder="예: 300000000" inputmode="numeric"><span class="hint">넣으면 필요한 대출금을 다음 단계로 넘겨요</span></div>
+      </div>
+      <div class="btn-row" style="gap:16px">
+        <label class="chk"><input type="checkbox" id="adj"> 조정대상지역</label>
+        <label class="chk"><input type="checkbox" id="temp"> 일시적 2주택 (기존 집을 3년 안에 처분)</label>
+        <label class="chk"><input type="checkbox" id="big"> 전용 85㎡ 초과</label>
+        <label class="chk"><input type="checkbox" id="first"> 생애최초 구입</label>
+      </div>
+      <input type="hidden" id="loan">
+      <div id="err" class="notice" hidden></div>
+      <div class="result" id="res" hidden>
+        <div><div class="head">내야 할 세금 합계</div><div class="big" id="r-total">—</div><div class="sub" id="r-sub"></div></div>
+        <div class="rgrid">
+          <div class="cell"><span class="k">취득세</span><span class="v" id="r-acq">—</span></div>
+          <div class="cell"><span class="k">지방교육세</span><span class="v" id="r-edu">—</span></div>
+          <div class="cell"><span class="k">농어촌특별세</span><span class="v" id="r-agr">—</span></div>
+          <div class="cell"><span class="k">실효세율</span><span class="v" id="r-rate">—</span></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>항목</th><th class="n">세율</th><th class="n">금액</th></tr></thead><tbody id="r-table"></tbody></table></div>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="btn ghost" type="button" id="share-link">🔗 결과 링크 복사</button>
+      <span class="carry" id="carry-badge" hidden>이전 계산기에서 입력값을 가져왔어요</span>
+    </div>
+  </section>
+
+  <div id="set-next"></div>
+
+  <div class="ad-slot">광고 자리</div>
+
+  <section>
+    <h2>계산 다음에 할 일</h2>
+    <div class="actions">
+      <div class="action"><span class="n">1</span><span class="b"><b>잔금일로부터 60일 안에 신고·납부해요</b><p>취득일(잔금일과 등기일 중 빠른 날)부터 60일 안에 내야 하고, 늦으면 가산세가 20% 붙어요. 보통 법무사가 등기하면서 함께 처리해요.</p><span class="meta">위택스 wetax.go.kr · 관할 시·군·구청 세무과</span></span></div>
+      <div class="action"><span class="n">2</span><span class="b"><b>생애최초 감면은 3개월 안에 전입해야 유지돼요</b><p>감면을 받은 뒤 3개월 안에 전입하지 않거나 3년 안에 팔거나 임대하면 감면받은 세금을 다시 내야 해요.</p></span></div>
+      <div class="action"><span class="n">3</span><span class="b"><b>부대비용도 함께 준비하세요</b><p>취득세 말고도 중개보수, 법무사 수수료, 국민주택채권 할인 비용, 이사비가 들어요. 중개보수는 부동산 중개수수료 계산기로 확인할 수 있어요.</p><span class="meta">calcflow 중개수수료 계산기</span></span></div>
+      <div class="action"><span class="n">4</span><span class="b"><b>대출 한도와 이자를 이어서 계산하세요</b><p>자기자금을 넣었다면 부족한 금액이 다음 단계 대출 이자 계산기로 넘어가요. 원리금균등·원금균등을 비교해 보세요.</p></span></div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>2026년 주택 취득세율</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>조정대상지역</th><th>그 외 지역</th></tr></thead>
+      <tbody>
+        <tr><td>1주택 · 6억원 이하</td><td colspan="2">1%</td></tr>
+        <tr><td>1주택 · 6억~9억원</td><td colspan="2">1~3% (가격에 따라 연속으로 올라감)</td></tr>
+        <tr><td>1주택 · 9억원 초과</td><td colspan="2">3%</td></tr>
+        <tr><td>2주택</td><td>8% (일시적 2주택은 1~3%)</td><td>1~3%</td></tr>
+        <tr><td>3주택</td><td>12%</td><td>8%</td></tr>
+        <tr><td>4주택 이상</td><td>12%</td><td>12%</td></tr>
+      </tbody>
+    </table></div>
+    <p>6억~9억원 구간 세율은 <strong>(취득가액 × 2 ÷ 3억원 − 3) %</strong>로 계산해요. 7억 5천만원이면 (7.5 × 2 ÷ 3 − 3) = 2%예요. 조정대상지역은 2025년 10월 대책 이후 서울 전역과 경기 일부 지역이 지정돼 있어요. 지정 여부는 바뀔 수 있으니 계약 전에 꼭 확인하세요.</p>
+    <h2>함께 내는 세금</h2>
+    <p><strong>지방교육세</strong>는 기본세율(1~3%) 주택이면 취득세율의 10%(0.1~0.3%), 중과세율(8·12%)이면 0.4%예요. <strong>농어촌특별세</strong>는 전용 85㎡ 이하 주택은 없고, 85㎡ 초과면 0.2%, 중과 시 8%는 0.6%, 12%는 1.0%예요. 토지·상가 같은 주택 외 부동산은 취득세 4%, 지방교육세 0.4%, 농어촌특별세 0.2%로 합계 4.6%예요.</p>
+    <h2>생애최초 감면</h2>
+    <p>본인과 배우자가 한 번도 집을 가져 본 적 없고, 12억원 이하 주택을 사면 취득세를 <strong>최대 200만원</strong>까지 깎아 줘요. 6억원 이하 주택은 취득세가 600만원 이하라 대부분 200만원이 줄어들어요. 소형 주택·인구감소지역 등은 한도가 더 큰 경우도 있으니 관할 구청에 확인하세요.</p>
+    <p class="source">기준: 지방세법 제11조·제13조의2(주택 유상취득·다주택 중과), 지방세특례제한법 제36조의3(생애최초). 개별 감면·특례는 반영하지 않은 예상치예요.</p>
+  </section>
+
+  <section>
+    <h2>자주 묻는 질문</h2>
+    <div><details><summary>분양권으로 산 아파트도 같은 세율인가요?</summary><p>분양받은 아파트는 잔금을 내고 소유권을 넘겨받을 때 취득세를 내요. 세율 판단 기준이 되는 주택 수는 분양권 계약 시점을 기준으로 보는 경우가 있어 복잡하니 세무 상담을 권해요.</p></details><details><summary>부부 공동명의면 세금이 줄어드나요?</summary><p>취득세는 전체 금액 기준 세율을 지분만큼 나눠 내서 총액은 같아요. 공동명의는 나중의 종합부동산세·양도세에서 차이가 나요.</p></details><details><summary>오피스텔은 주택 수에 들어가나요?</summary><p>살 때는 주택 외 부동산으로 4.6%를 내요. 다만 이미 가진 주거용 오피스텔은 다른 주택을 살 때 주택 수에 들어갈 수 있어요.</p></details><details><summary>상속·증여로 받는 집도 같나요?</summary><p>아니요. 상속은 2.8%, 증여는 3.5%(조정대상지역 3억원 이상은 12%) 등 세율이 따로 있어요. 이 계산기는 매매(유상취득) 기준이에요.</p></details></div>
+  </section>
+
+  <section>
+    <h2>이런 계산기도 있어요</h2>
+    <div class="related" id="related-list" data-id="acquisition-tax"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="/">전체 계산기</a>
+      <a href="/about/">소개</a>
+      <a href="/contact/">문의</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+    <p>계산 결과는 참고용이에요. 실제 금액이나 날짜는 기관의 공식 안내를 확인해 주세요.</p>
+    <p>&copy; 2026 calcflow.kr</p>
+  </div>
+</footer>
+<script src="/assets/data.js"></script>
+<script src="/assets/site.js"></script>
+<script src="/assets/profile.js"></script>
+<script>
+
+var $=function(i){return document.getElementById(i)};
+function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
+function man(n){var m=n/10000; return (Math.round(m*10)/10).toLocaleString("ko-KR")+"만원"}
+function num(id){var v=parseFloat(String($(id).value).replace(/,/g,""));return isNaN(v)?0:v}
+function pd(v){if(!v)return null;var p=v.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d)?null:d}
+function fd(d){return d.getFullYear()+"."+(d.getMonth()+1)+"."+d.getDate()}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+
+var F=["price","ptype","hcount","own","loan"];
+function baseRate(p){ if(p<=600000000) return 0.01; if(p>900000000) return 0.03; return Math.round((p*2/300000000-3)*100)/10000; }
+function kr(n){ var e=Math.floor(n/100000000), m=Math.round((n%100000000)/10000); return (e?e+"억 ":"")+(m?m.toLocaleString("ko-KR")+"만":"")+"원"; }
+function pct(r){ return (Math.round(r*10000)/100)+"%"; }
+function calc(){
+  var p=num("price"); $("price-kr").textContent=p?kr(p):"";
+  if(!p){$("res").hidden=true;return;}
+  var t=$("ptype").value, h=+$("hcount").value, adj=$("adj").checked, temp=$("temp").checked, big=$("big").checked, first=$("first").checked;
+  var r, edu, agr, heavy=false, note=[];
+  if(t==="etc"){ r=0.04; edu=0.004; agr=0.002; }
+  else {
+    if(h===1||(h===2&&(!adj||temp))) r=baseRate(p);
+    else if(h===2||(h===3&&!adj)){ r=0.08; heavy=true; }
+    else { r=0.12; heavy=true; }
+    edu=heavy?0.004:r*0.1;
+    agr=big?(r===0.08?0.006:r===0.12?0.01:0.002):0;
+  }
+  var acq=p*r, cut=0;
+  if(first&&t==="house"&&h===1&&p<=1200000000){ cut=Math.min(acq,2000000); }
+  else if(first) note.push("생애최초 감면은 12억원 이하 주택을 처음 살 때(1주택)만 받을 수 있어 반영하지 않았어요.");
+  var acqN=acq-cut, eduV=p*edu, agrV=p*agr, tot=acqN+eduV+agrV;
+  $("r-total").textContent=won(tot);
+  $("r-acq").textContent=won(acqN); $("r-edu").textContent=won(eduV); $("r-agr").textContent=won(agrV);
+  $("r-rate").textContent=pct(tot/p);
+  $("r-sub").textContent=kr(p)+" · "+(t==="etc"?"주택 외 부동산":h+"주택"+(adj?" · 조정대상지역":"")+(heavy?" · 중과세율":""))+" 기준이에요.";
+  $("r-table").innerHTML='<tr><td>취득세</td><td class="n">'+pct(r)+'</td><td class="n">'+won(acq)+'</td></tr>'+
+    (cut?'<tr><td>생애최초 감면</td><td class="n">최대 200만원</td><td class="n">−'+won(cut)+'</td></tr>':'')+
+    '<tr><td>지방교육세</td><td class="n">'+pct(edu)+'</td><td class="n">'+won(eduV)+'</td></tr>'+
+    '<tr><td>농어촌특별세</td><td class="n">'+pct(agr)+'</td><td class="n">'+won(agrV)+'</td></tr>'+
+    '<tr><td><strong>합계</strong></td><td class="n"><strong>'+pct(tot/p)+'</strong></td><td class="n"><strong>'+won(tot)+'</strong></td></tr>';
+  var own=num("own"); $("loan").value=own&&own<p?Math.round(p-own):"";
+  if(own&&own<p){ note.push("집값에서 자기자금을 뺀 "+kr(p-own)+"이 필요해요. 세금·부대비용 "+kr(tot)+"도 따로 준비하세요."); CF.saveProfile({loan:$("loan").value}); }
+  $("err").textContent=note.join(" "); $("err").hidden=!note.length;
+  $("res").hidden=false;
+}
+CF.linkFields(F);
+F.concat(["adj","temp","big","first"]).forEach(function(id){$(id).addEventListener("input",calc);$(id).addEventListener("change",calc)});
+calc();
+CF.renderSet("home","acquisition-tax",["loan"]);
+
+</script>
+</body>
+</html>

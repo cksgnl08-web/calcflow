@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>calcflow - 생활 계산기 모음</title>
-<meta name="description" content="전역일, 적금 이자, 만 나이, 글자수까지. 자주 쓰는 계산기를 한곳에 모았어요. 계산은 브라우저 안에서만 이뤄져요.">
+<meta name="description" content="연봉 실수령액, 퇴직금, 주휴수당, 육아휴직 급여, 청약 가점, 취득세부터 사진·PDF 도구까지. 입력값이 다음 계산으로 이어지는 생활 계산기 모음이에요.">
 <link rel="canonical" href="https://calcflow.kr/">
 <meta property="og:title" content="calcflow - 생활 계산기 모음">
-<meta property="og:description" content="전역일, 적금 이자, 만 나이, 글자수까지. 자주 쓰는 계산기를 한곳에 모았어요. 계산은 브라우저 안에서만 이뤄져요.">
+<meta property="og:description" content="연봉 실수령액, 퇴직금, 주휴수당, 육아휴직 급여, 청약 가점, 취득세부터 사진·PDF 도구까지. 입력값이 다음 계산으로 이어지는 생활 계산기 모음이에요.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://calcflow.kr/">
 <meta name="naver-site-verification" content="b93688eecc03230d4c3a4efe68bfbcda17d6f817">
@@ -35,30 +35,22 @@
 <main class="wrap">
   <section class="hero">
     <h1>계산이 필요할 때, calcflow</h1>
-    <p>전역일부터 적금 이자, 하루 필요 열량까지. 자주 찾는 계산을 한곳에 모았어요. 모든 계산은 브라우저 안에서만 이뤄지고 입력값은 저장되지 않아요.</p>
+    <p>월급·퇴직금·육아휴직부터 청약 가점, 사진·PDF 도구까지. 자주 찾는 계산을 한곳에 모았어요. 모든 계산은 브라우저 안에서만 이뤄지고 입력값은 서버로 보내지 않아요.</p>
     <div class="hero-search">
       <span class="mag" aria-hidden="true">🔍</span>
-      <input type="text" id="hero-search" placeholder="어떤 계산이 필요하세요? (예: 전역일, 적금, 글자수)" aria-label="계산기 검색">
+      <input type="text" id="hero-search" placeholder="어떤 계산이 필요하세요? (예: 주휴수당, 육아휴직, 취득세)" aria-label="계산기 검색">
     </div>
     <div class="stats-line">
-      <span>계산기 <b id="stat-live">0</b>개</span>
-      <span>상황별 세트 <b>3</b>개</span>
+      <span>계산기·도구 <b id="stat-live">0</b>개</span>
+      <span>상황별 세트 <b id="stat-set">0</b>개</span>
       <span><b id="stat-cat">0</b>개 분야</span>
     </div>
+    <nav class="quick" id="quick-links" aria-label="자주 찾는 계산기"></nav>
   </section>
 
   <section>
-    <div class="sec-head"><h2>인기 계산기</h2><p>가장 많이 찾는 계산기예요</p></div>
-    <div class="cards" id="popular-cards"></div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>상황별 세트</h2><p>하나의 상황을 처음부터 끝까지 이어서 계산해요</p></div>
-    <div class="cards">
-      <a class="card" href="/money/severance/"><span class="emoji">📤</span><span class="t"><b>퇴사 세트</b><span>퇴직금 → 실업급여 → 연봉 실수령액. 입력한 급여가 다음 계산기로 이어져요.</span></span></a>
-      <a class="card" href="/life/discharge/"><span class="emoji">🪖</span><span class="t"><b>전역 세트</b><span>전역일 → 군인 월급·적금 → 전역 후 예·적금. 전역할 때 모이는 돈까지 계산해요.</span></span></a>
-      <a class="card" href="/money/jeonse-conversion/"><span class="emoji">🏠</span><span class="t"><b>이사 세트</b><span>전월세 전환 → 중개수수료 → 대출 이자. 환산한 월세가 그대로 넘어가요.</span></span></a>
-    </div>
+    <div class="sec-head"><h2>상황별 세트</h2><p>입력한 값이 다음 계산기로 이어져서, 한 상황을 처음부터 끝까지 계산해요</p></div>
+    <div class="cards" id="set-cards"></div>
   </section>
 
   <div id="category-sections" style="display:flex;flex-direction:column;gap:38px"></div>

@@ -3,6 +3,11 @@
 "use strict";
 var THEME_KEY="calcflow-theme";
 
+/* 기본 배포 주소(pages.dev)로 들어오면 calcflow.kr로 보내기 (미리보기 주소는 제외) */
+if(/^(www\.)?calcflow-2o7\.pages\.dev$/.test(location.hostname)){
+  location.replace("https://calcflow.kr"+location.pathname+location.search+location.hash);
+}
+
 /* ---------- 테마 ---------- */
 function applyTheme(t){
   if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme",t);
@@ -35,13 +40,22 @@ if(!window.__cfAds){
   }
 }
 
+/* 현재 카테고리 메뉴 표시 */
+var navA=document.querySelectorAll(".site-nav a");
+for(var ni=0;ni<navA.length;ni++){ var hrf=navA[ni].getAttribute("href"); if(hrf&&hrf!=="/"&&location.pathname.indexOf(hrf)===0) navA[ni].setAttribute("aria-current","page"); }
+
 /* ---------- 데이터 ---------- */
 var CALCS=window.CALCS||[], CATS=window.CALC_CATS||[];
 if(!window.CF_SHOW_SOON) CALCS=CALCS.filter(function(c){return c.status==="live"});
 function catOf(k){for(var i=0;i<CATS.length;i++){if(CATS[i].key===k) return CATS[i];}return{name:"",emoji:""}}
+function isNew(c){
+  if(!c.added) return false;
+  var p=c.added.split("-"), t=new Date(+p[0],+p[1]-1,+p[2]).getTime();
+  return (Date.now()-t)<30*86400000;
+}
 function cardHTML(c){
   var soon=c.status!=="live";
-  var badge=soon?'<span class="badge">준비 중</span>':(c.isNew?'<span class="badge new">NEW</span>':"");
+  var badge=soon?'<span class="badge">준비 중</span>':(isNew(c)?'<span class="badge new">NEW</span>':"");
   return '<a class="card'+(soon?" soon":"")+'" href="'+(soon?"#":c.path)+'"'+(soon?' aria-disabled="true" tabindex="-1"':"")+'>'+
     '<span class="emoji">'+c.emoji+'</span>'+
     '<span class="t"><b>'+c.name+badge+'</b><span>'+c.desc+'</span></span></a>';
@@ -49,20 +63,29 @@ function cardHTML(c){
 function renderInto(el,list){ if(el) el.innerHTML=list.map(cardHTML).join(""); }
 
 /* 홈 */
-var popEl=document.getElementById("popular-cards");
+var popEl=document.getElementById("quick-links");
 if(popEl){
   var live=CALCS.filter(function(c){return c.status==="live"});
-  var pop=CALCS.filter(function(c){return c.popular});
-  renderInto(popEl,pop.slice(0,8));
+  var pop=CALCS.filter(function(c){return c.popular&&c.status==="live"});
+  popEl.innerHTML=pop.slice(0,12).map(function(c){return '<a href="'+c.path+'">'+c.emoji+" "+c.name.replace(/ 계산기$/,"")+'</a>';}).join("");
+  var setEl=document.getElementById("set-cards"), SETS=window.CALC_SETS||{};
+  if(setEl){
+    setEl.innerHTML=Object.keys(SETS).map(function(k){var st=SETS[k];
+      return '<a class="card set-card" href="'+st.steps[0].path+'?set='+k+'"><span class="emoji">'+st.emoji+'</span><span class="t"><b>'+st.name+'</b><span>'+(st.desc||"")+'</span></span></a>';}).join("");
+  }
+  var sSet=document.getElementById("stat-set"); if(sSet) sSet.textContent=Object.keys(SETS).length;
   var host=document.getElementById("category-sections");
   if(host){
     host.innerHTML=CATS.map(function(cat){
-      var items=CALCS.filter(function(c){return c.cat===cat.key});
-      var extra=items.length>8?items.length-8:0;
-      if(extra) items=items.filter(function(c){return c.popular}).concat(items.filter(function(c){return !c.popular})).slice(0,8);
+      var items=CALCS.filter(function(c){return c.cat===cat.key}), G=window.CALC_GROUPS, body;
+      if(G&&items.some(function(c){return c.group})){
+        body=Object.keys(G).map(function(g){
+          var list=items.filter(function(c){return c.group===g}); if(!list.length) return "";
+          return '<h3 class="sub-h">'+G[g].name+'</h3><div class="cards">'+list.map(cardHTML).join("")+'</div>';
+        }).join("");
+      } else body='<div class="cards">'+items.map(cardHTML).join("")+'</div>';
       return '<section><div class="sec-head"><h2>'+cat.emoji+" "+cat.name+'</h2><p>'+cat.desc+'</p>'+
-        '<a class="more" href="'+cat.path+'">'+(extra?"전체 "+(items.length+extra)+"개 보기 →":"전체 보기 →")+'</a></div>'+
-        '<div class="cards">'+items.map(cardHTML).join("")+'</div></section>';
+        '<a class="more" href="'+cat.path+'">전체 보기 →</a></div>'+body+'</section>';
     }).join("");
   }
   var s1=document.getElementById("stat-live"), s2=document.getElementById("stat-total"), s3=document.getElementById("stat-cat");

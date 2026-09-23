@@ -69,7 +69,11 @@ CF.linkFields=function(ids){
 
 /* 세트 진행 바 + 다음 단계 */
 CF.renderSet=function(setKey,currentId,fieldIds){
-  var sets=window.CALC_SETS||{}, set=sets[setKey];
+  var sets=window.CALC_SETS||{};
+  /* 한 계산기가 여러 세트에 속하면(예: 퇴직금 → 퇴사·알바), 주소의 set= 값이 우선 */
+  var want=new URLSearchParams(location.search).get("set");
+  if(want&&sets[want]&&sets[want].steps.some(function(s){return s.id===currentId})) setKey=want;
+  var set=sets[setKey];
   if(!set) return;
   var bar=document.getElementById("set-bar");
   if(bar){
@@ -77,7 +81,7 @@ CF.renderSet=function(setKey,currentId,fieldIds){
     bar.innerHTML='<span class="title">'+set.emoji+" "+set.name+' · 입력값이 다음 계산기로 이어져요</span>'+
       '<div class="set-steps">'+set.steps.map(function(s,i){
         var cur=s.id===currentId;
-        return '<a href="'+s.path+'"'+(cur?' aria-current="page"':"")+'><span class="n">'+(i+1)+'</span>'+s.title+'</a>';
+        return '<a href="'+s.path+'?set='+setKey+'"'+(cur?' aria-current="page"':"")+'><span class="n">'+(i+1)+'</span>'+s.title+'</a>';
       }).join("")+'</div>';
   }
   var idx=-1;
@@ -89,7 +93,7 @@ CF.renderSet=function(setKey,currentId,fieldIds){
     box.innerHTML='<span class="t"><b>다음 단계 · '+next.title+'</b>'+next.hint+'</span>'+
       '<button class="btn" type="button" id="go-next">'+next.title+' 이어서 계산 →</button>';
     document.getElementById("go-next").addEventListener("click",function(){
-      var q=new URLSearchParams();
+      var q=new URLSearchParams(); q.set("set",setKey);
       (fieldIds||[]).forEach(function(id){
         var el=document.getElementById(id);
         if(el&&el.value!=="") q.set(id,el.value);
@@ -98,7 +102,7 @@ CF.renderSet=function(setKey,currentId,fieldIds){
     });
   }else if(box){
     box.className="set-next";
-    box.innerHTML='<span class="t"><b>'+set.name+' 완료</b>세 계산이 모두 끝났어요. 결과 링크를 복사해 두면 나중에 그대로 다시 볼 수 있어요.</span>';
+    box.innerHTML='<span class="t"><b>'+set.name+' 완료</b>계산이 모두 끝났어요. 결과 링크를 복사해 두면 나중에 그대로 다시 볼 수 있어요.</span>';
   }
 };
 })();
